@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:user_painting_tools/NavItemModel.dart';
 import 'package:user_painting_tools/card_avail_tools.dart';
 
 class AvailTools extends StatefulWidget {
@@ -31,14 +32,28 @@ class _AvailToolsState extends State<AvailTools> {
       ),
       bottomNavigationBar: SafeArea(
         child: Container(
+          height: 60,
           decoration: BoxDecoration(
+            color: Color(0xffDF042C),
             borderRadius: BorderRadius.only(
               topRight: Radius.circular(100),
               topLeft: Radius.circular(100),
             ),
-            color: Color(0xffDF042C),
           ),
-          height: 60,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: List.generate(
+              bottomNavItems.length,
+              (index) {
+                final iconNavBar = bottomNavItems[index].icon;
+                return SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: iconNavBar,
+                );
+              },
+            ),
+          ),
         ),
       ),
       body: SafeArea(
