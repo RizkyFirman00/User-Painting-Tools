@@ -1,16 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:user_painting_tools/card_avail_tools.dart';
-import 'package:user_painting_tools/profile_user.dart';
+import 'package:user_painting_tools/widgets/avail_tools.dart';
+import 'package:user_painting_tools/widgets/borrow_tools.dart';
+import 'package:user_painting_tools/widgets/card_avail_tools.dart';
+import 'package:user_painting_tools/pages/photo_qr.dart';
+import 'package:user_painting_tools/pages/profile_user.dart';
 
-class AvailTools extends StatefulWidget {
-  const AvailTools({super.key});
+class Home extends StatefulWidget {
+  const Home({super.key});
 
   @override
-  State<AvailTools> createState() => _AvailToolsState();
+  State<Home> createState() => _HomeState();
 }
 
-class _AvailToolsState extends State<AvailTools> {
+class _HomeState extends State<Home> {
+  int _selectedIndex = 0;
+
+  final List<Widget> _pages = [
+    const AvailTools(),
+    const PhotoQr(),
+    const BorrowTools(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -31,7 +48,7 @@ class _AvailToolsState extends State<AvailTools> {
               padding: const EdgeInsets.only(right: 10),
               child: IconButton(
                 onPressed: () {
-                  Get.off(const ProfileUser());
+                  Get.to(const ProfileUser());
                 },
                 icon: const Icon(Icons.person_outline),
               ),
@@ -45,8 +62,8 @@ class _AvailToolsState extends State<AvailTools> {
           decoration: const BoxDecoration(
             color: Color(0xffDF042C),
             borderRadius: BorderRadius.only(
-              topRight: Radius.circular(100),
-              topLeft: Radius.circular(100),
+              topRight: Radius.circular(30),
+              topLeft: Radius.circular(30),
             ),
           ),
           child: Stack(
@@ -57,7 +74,9 @@ class _AvailToolsState extends State<AvailTools> {
                 children: [
                   Expanded(
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _onItemTapped(0);
+                      },
                       icon: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -79,9 +98,16 @@ class _AvailToolsState extends State<AvailTools> {
                   ),
                   Expanded(
                     child: Container(
+                      clipBehavior: Clip.hardEdge,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(100),
+                              topRight: Radius.circular(20))),
                       child: IconButton(
                         splashRadius: 20,
-                        onPressed: () {},
+                        onPressed: () {
+                          _onItemTapped(2);
+                        },
                         icon: const Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
@@ -121,7 +147,9 @@ class _AvailToolsState extends State<AvailTools> {
                     ],
                   ),
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _onItemTapped(1);
+                    },
                     icon: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -144,27 +172,9 @@ class _AvailToolsState extends State<AvailTools> {
             ],
           ),
         ),
-        body: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 30, right: 30, top: 35),
-                child: Text(
-                  "Barang yang tersedia :",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              Container(
-                  padding: const EdgeInsets.only(left: 30, right: 30, top: 10),
-                  child: const CardAvailTools()),
-            ],
-          ),
-        ),
+        body: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: _pages[_selectedIndex]),
       ),
     );
   }

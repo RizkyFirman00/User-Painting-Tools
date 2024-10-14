@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:user_painting_tools/avail_tools.dart';
+import 'package:user_painting_tools/pages/home.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -58,7 +58,7 @@ class SplashScreen extends StatelessWidget {
               InkWell(
                 customBorder: CircleBorder(),
                 onTap: () {
-                  Get.off(AvailTools());
+                  Get.off(const Home());
                 },
                 child: Image.asset(
                   "assets/images/logo.png",
