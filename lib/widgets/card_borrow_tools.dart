@@ -25,53 +25,63 @@ class _CardBorrowToolsState extends State<CardBorrowTools> {
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Pemecah Kacang",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Text("X512AA"),
+                  Container(
+                    child: const Text(
+                      "10.09.2024 - 10.09.2024",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: 70,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(
-                      children: [
-                        Text(
-                          "Nama Barang",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        ),
-                        Text(", X512AA"),
-                      ],
+                    Switch(
+                      activeColor: const Color(0xffDF042C),
+                      trackColor: const WidgetStatePropertyAll(Colors.white),
+                      trackOutlineColor:
+                          const WidgetStatePropertyAll(Colors.black45),
+                      value: light,
+                      onChanged: (bool value) {
+                        setState(() {
+                          light = value;
+                        });
+                      },
                     ),
-                    SizedBox(height: 5),
-                    Row(
-                      children: [
-                        Text(
-                          "10.09.2024 - 10.09.2024",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w300,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
+                    light
+                        ? const Text(
+                            "Dipinjam",
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontSize: 14,
+                            ),
+                          )
+                        : const Text("Selesai"),
                   ],
                 ),
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Switch(
-                    activeColor: Color(0xffDF042C),
-                    value: light,
-                    splashRadius: ,
-                    onChanged: (bool value) {
-                      setState(() {
-                        light = value;
-                      });
-                    },
-                  ),
-                  Text("Dipinjam"),
-                ],
               ),
             ],
           ),

@@ -9,15 +9,23 @@ class ProfileUser extends StatelessWidget {
       appBar: AppBar(
         foregroundColor: Colors.white,
         backgroundColor: Color(0xFFDF042C),
-        title: Center(
-          child: Text(
-            "Profil Pengguna",
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
+        centerTitle: true,
+        title: Text(
+          "Profil Pengguna",
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
           ),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10.0),
+            child: IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.logout_outlined),
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Column(
@@ -29,9 +37,13 @@ class ProfileUser extends StatelessWidget {
                 children: [
                   TextField(
                     decoration: InputDecoration(
-                      icon: Icon(Icons.email),
+                      icon: Icon(
+                        Icons.email,
+                        color: Color(0xffDF042C),
+                      ),
                       hintText: "Email",
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
                     ),
                   ),
                   SizedBox(
@@ -39,9 +51,10 @@ class ProfileUser extends StatelessWidget {
                   ),
                   TextField(
                     decoration: InputDecoration(
-                      icon: Icon(Icons.person),
+                      icon: Icon(Icons.person, color: Color(0xffDF042C)),
                       hintText: "Nama Lengkap",
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
                     ),
                   ),
                   SizedBox(
@@ -49,9 +62,10 @@ class ProfileUser extends StatelessWidget {
                   ),
                   TextField(
                     decoration: InputDecoration(
-                      icon: Icon(Icons.numbers),
+                      icon: Icon(Icons.numbers, color: Color(0xffDF042C)),
                       hintText: "NPK",
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
                     ),
                   ),
                 ],

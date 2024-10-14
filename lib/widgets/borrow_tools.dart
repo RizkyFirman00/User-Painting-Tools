@@ -15,18 +15,30 @@ class _BorrowToolsState extends State<BorrowTools> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 30, right: 30, top: 35),
-          child: Text(
-            "Barang yang dipinjam :",
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w500,
-            ),
+        Padding(
+          padding: const EdgeInsets.only(left: 30, right: 20, top: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "Barang yang dipinjam :",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              Container(
+                  child: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.delete_outlined,
+                        color: Color(0xffDF042C),
+                      )))
+            ],
           ),
         ),
         Container(
-          padding: const EdgeInsets.only(left: 30, right: 30, top: 10),
+          padding: const EdgeInsets.only(left: 30, right: 30, ),
           child: const Expanded(
             child: SingleChildScrollView(
               child: CardBorrowTools(),

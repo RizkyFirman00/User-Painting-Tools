@@ -27,7 +27,7 @@ class CardAvailTools extends StatelessWidget {
                       "Nama Barang",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 14,
+                        fontSize: 18,
                       ),
                     ),
                     SizedBox(height: 5),

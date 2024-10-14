@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:user_painting_tools/pages/filling_data.dart';
 import 'package:user_painting_tools/widgets/avail_tools.dart';
 import 'package:user_painting_tools/widgets/borrow_tools.dart';
-import 'package:user_painting_tools/widgets/card_avail_tools.dart';
 import 'package:user_painting_tools/pages/photo_qr.dart';
 import 'package:user_painting_tools/pages/profile_user.dart';
 
@@ -35,11 +35,16 @@ class _HomeState extends State<Home> {
         appBar: AppBar(
           title: Container(
             padding: const EdgeInsets.only(left: 10),
-            child: const Text(
-              "Halaman Persediaan Barang",
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
+            child: InkWell(
+              onTap: () {
+                Get.to(FillingData());
+              },
+              child: const Text(
+                "Halaman Persediaan Barang",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),
