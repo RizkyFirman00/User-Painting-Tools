@@ -15,7 +15,7 @@ class _BorrowToolsState extends State<BorrowTools> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
+        Container(
           padding: const EdgeInsets.only(left: 30, right: 20, top: 20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -38,10 +38,25 @@ class _BorrowToolsState extends State<BorrowTools> {
           ),
         ),
         Container(
-          padding: const EdgeInsets.only(left: 30, right: 30, ),
+          padding: const EdgeInsets.only(left: 25, right: 25, bottom: 5),
+          height: MediaQuery.of(context).size.height - 208,
           child: const Expanded(
             child: SingleChildScrollView(
-              child: CardBorrowTools(),
+              physics: BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  CardBorrowTools(),
+                  CardBorrowTools(),
+                  CardBorrowTools(),
+                  CardBorrowTools(),
+                  CardBorrowTools(),
+                  CardBorrowTools(),
+                  CardBorrowTools(),
+                  CardBorrowTools(),
+                  CardBorrowTools(),
+                  CardBorrowTools(),
+                ],
+              ),
             ),
           ),
         ),

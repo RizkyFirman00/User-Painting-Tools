@@ -23,8 +23,10 @@ class AvailTools extends StatelessWidget {
         ),
         Container(
           padding: const EdgeInsets.only(left: 30, right: 30, top: 10),
+          height: MediaQuery.of(context).size.height - 208,
           child: const Expanded(
             child: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
               child: CardAvailTools(),
             ),
           ),

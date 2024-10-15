@@ -5,6 +5,7 @@ import 'package:user_painting_tools/widgets/avail_tools.dart';
 import 'package:user_painting_tools/widgets/borrow_tools.dart';
 import 'package:user_painting_tools/pages/photo_qr.dart';
 import 'package:user_painting_tools/pages/profile_user.dart';
+import 'package:user_painting_tools/firebase_options.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -14,8 +15,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  
   int _selectedIndex = 0;
-
+  
   final List<Widget> _pages = [
     const AvailTools(),
     const PhotoQr(),
@@ -27,7 +29,7 @@ class _HomeState extends State<Home> {
       _selectedIndex = index;
     });
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -37,7 +39,7 @@ class _HomeState extends State<Home> {
             padding: const EdgeInsets.only(left: 10),
             child: InkWell(
               onTap: () {
-                Get.to(FillingData());
+                // Get.to(FillingData());
               },
               child: const Text(
                 "Halaman Persediaan Barang",
@@ -138,8 +140,8 @@ class _HomeState extends State<Home> {
               Positioned(
                 bottom: 10,
                 child: Container(
-                  height: 100,
-                  width: 100,
+                  height: 70,
+                  width: 70,
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.white,
@@ -160,13 +162,14 @@ class _HomeState extends State<Home> {
                       children: [
                         Icon(
                           Icons.qr_code_2_outlined,
-                          size: 37,
+                          color: Color(0xFFDF042C),
+                          size: 30,
                         ),
                         Text(
                           "Scan",
                           style: TextStyle(
                             color: Color(0xFFDF042C),
-                            fontSize: 14,
+                            fontSize: 12,
                           ),
                         ),
                       ],
