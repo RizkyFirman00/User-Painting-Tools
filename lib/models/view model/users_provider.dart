@@ -2,39 +2,104 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:simple_logger/simple_logger.dart';
+import 'package:user_painting_tools/helper/shared_preferences.dart';
 import 'package:user_painting_tools/models/users.dart';
 
 class UsersProvider with ChangeNotifier {
-  List<Users> _users = [];
-
   Users? _currentUser;
+  bool _isLoading = false;
 
   Users? get currentUser => _currentUser;
 
-  List<Users> get users => _users;
+  bool get isLoading => _isLoading;
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
   final SimpleLogger _simpleLogger = SimpleLogger();
 
   Future<bool> loginUser(String emailUser, String npkUser) async {
+    _setLoading(true);
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
           email: emailUser.trim(), password: npkUser.trim());
+      String? uid = userCredential.user?.uid;
+
+      await _saveUserToFirestore(uid, emailUser, npkUser);
+      await _fetchUserData(uid);
+      await SharedPreferencesUsers.saveLoginData(emailUser, npkUser);
+
+      //HELPER
       _simpleLogger.info(userCredential.user?.email);
-      await _fetchUserData(userCredential.user?.email);
+      _setLoading(false);
       return true;
     } catch (e) {
       _simpleLogger.info("Login Gagal: ${e.toString()}");
+      _setLoading(false);
       return false;
     }
   }
 
-  Future<void> _fetchUserData(String? email) async {
-    if (email != null) {
+  Future<void> updateNamaLengkap(String namaLengkap) async {
+    if (_currentUser != null) {
+      String? npk = _currentUser?.npkUser;
+
+      await _firestore.collection('users')
+          .where('npk', isEqualTo: npk)
+          .limit(1)
+          .get()
+          .then((snapshot) {
+        if (snapshot.docs.isNotEmpty) {
+          snapshot.docs.first.reference.update({
+            'nama_lengkap': namaLengkap
+          });
+        }
+      });
+
+      _currentUser = Users(
+        emailUser: _currentUser!.emailUser,
+        npkUser: _currentUser!.npkUser,
+        namaLengkap: namaLengkap,
+      );
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchUserDataFromFirestoreWithNpk(String npk) async {
+    if (npk.isNotEmpty) {
+      QuerySnapshot snapshot = await _firestore
+          .collection('users')
+          .where('npk', isEqualTo: npk)
+          .limit(1)
+          .get();
+      if (snapshot.docs.isNotEmpty) {
+        DocumentSnapshot doc = snapshot.docs.first;
+        _currentUser = Users.fromDocument(doc);
+        notifyListeners();
+      } else {
+        print('User dengan NPK tersebut tidak ditemukan.');
+      }
+    }
+  }
+
+  // FUNCTION PENDUKUNG
+  Future<void> _saveUserToFirestore(
+      String? uid, String emailUser, String npkUser) async {
+    if (uid == null) return;
+    DocumentSnapshot doc = await _firestore.collection('users').doc(uid).get();
+
+    if (!doc.exists) {
+      await _firestore.collection('users').doc(uid).set({
+        'email': emailUser,
+        'npk': npkUser,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+    }
+  }
+
+  Future<void> _fetchUserData(String? uid) async {
+    if (uid != null) {
       DocumentSnapshot doc =
-          await _firestore.collection('users').doc(email).get();
+          await _firestore.collection('users').doc(uid).get();
       if (doc.exists) {
         _currentUser = Users.fromDocument(doc);
         notifyListeners();
@@ -42,15 +107,8 @@ class UsersProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchCurrentUser() async {
-    String? email = FirebaseAuth.instance.currentUser?.email;
-    if (email != null) {
-      DocumentSnapshot doc = await _firestore.collection('users').doc(email).get();
-      if (doc.exists) {
-        _currentUser = Users.fromDocument(doc);
-        notifyListeners();
-      }
-    }
+  void _setLoading(bool value) {
+    _isLoading = value;
+    notifyListeners();
   }
-
 }

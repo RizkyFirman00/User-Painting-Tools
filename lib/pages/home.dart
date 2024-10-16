@@ -34,6 +34,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Container(
             padding: const EdgeInsets.only(left: 10),
@@ -55,7 +56,7 @@ class _HomeState extends State<Home> {
               padding: const EdgeInsets.only(right: 10),
               child: IconButton(
                 onPressed: () {
-                  Get.to(const ProfileUser());
+                  Get.to(() => const ProfileUser());
                 },
                 icon: const Icon(Icons.person_outline),
               ),

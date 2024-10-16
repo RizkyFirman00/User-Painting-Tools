@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:user_painting_tools/models/view%20model/users_provider.dart';
-import 'pages/splash_screen.dart';
+import 'package:user_painting_tools/pages/splash_screen.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 
