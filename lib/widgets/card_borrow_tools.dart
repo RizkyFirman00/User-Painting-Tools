@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:user_painting_tools/widgets/confirmation_box.dart';
 
 class CardBorrowTools extends StatefulWidget {
   const CardBorrowTools({super.key});
@@ -9,6 +10,7 @@ class CardBorrowTools extends StatefulWidget {
 
 class _CardBorrowToolsState extends State<CardBorrowTools> {
   bool light = true;
+  bool isCompleted = false;
 
   @override
   Widget build(BuildContext context) {
@@ -67,11 +69,37 @@ class _CardBorrowToolsState extends State<CardBorrowTools> {
                         trackOutlineColor:
                             const WidgetStatePropertyAll(Colors.black45),
                         value: light,
-                        onChanged: (bool value) {
-                          setState(() {
-                            light = value;
-                          });
-                        },
+                        onChanged: isCompleted
+                            ? null
+                            : (bool value) {
+                                if (value == false) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return ConfirmationBox(
+                                            textTitle: "Pengembalian Barang",
+                                            textDescription:
+                                                "Apakah kamu yakin sudah selesai menggunakan barang?",
+                                            onConfirm: () {
+                                              setState(() {
+                                                light = false;
+                                                isCompleted = true;
+                                              });
+                                              Navigator.pop(context);
+                                            },
+                                            onCancel: () {
+                                              setState(() {
+                                                light = true;
+                                              });
+                                              Navigator.pop(context);
+                                            });
+                                      });
+                                } else {
+                                  setState(() {
+                                    light = true;
+                                  });
+                                }
+                              },
                       ),
                       light
                           ? const Text(

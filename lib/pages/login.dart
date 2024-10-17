@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:user_painting_tools/helper/shared_preferences.dart';
 import 'package:user_painting_tools/models/view%20model/users_provider.dart';
 import 'package:user_painting_tools/pages/home.dart';
 
@@ -23,27 +22,29 @@ class _LoginState extends State<Login> {
     String npk = npkController.text;
 
     if (email.isEmpty && npk.isEmpty) {
-      _showSnackBar(context, "Silahkan Isi Email & NPK terlebih dahulu");
+      Get.snackbar(
+          'Perhatikan lagi', 'Silahkan Isi Email & NPK terlebih dahulu');
       return;
     }
 
     if (email.isEmpty) {
-      _showSnackBar(context, "Silahkan Isi Email terlebih dahulu");
+      Get.snackbar('Perhatikan lagi', 'Silahkan Isi Email terlebih dahulu');
       return;
     }
 
     if (npk.isEmpty) {
-      _showSnackBar(context, "Silahkan Isi NPK terlebih dahulu");
+      Get.snackbar('Perhatikan lagi', 'Silahkan Isi NPK terlebih dahulu');
       return;
     }
 
     if (npk.length < 6) {
-      _showSnackBar(context, "NPK tidak boleh kurang dari 6 karakter");
+      Get.snackbar('Perhatikan lagi', 'NPK tidak boleh kurang dari 6 karakter');
       return;
     }
 
     if (!await _checkInternetConnection()) {
-      _showSnackBar(context, "Tidak ada koneksi internet, coba lagi nanti.");
+      Get.snackbar(
+          'Terjadi kesalahan', 'Tidak ada koneksi internet, coba lagi nanti');
       return;
     }
 
@@ -52,19 +53,16 @@ class _LoginState extends State<Login> {
 
       if (loginSuccess) {
         Get.off(const Home());
+        Get.snackbar(
+            'Selamat datang ', emailController.text);
       } else {
-        _showSnackBar(context, "Login gagal, silakan coba lagi");
+        Get.snackbar('Terjadi kesalahan', 'Password atau NPK salah');
         _clearInputFields();
       }
     } catch (e) {
-      _showSnackBar(context, "Terjadi kesalahan: ${e.toString()}");
+      Get.snackbar('Terjadi kesalahan', e.toString());
       _clearInputFields();
     }
-  }
-
-  void _showSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   void _clearInputFields() {
@@ -85,15 +83,22 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = Provider.of<UsersProvider>(context, listen: false).isLoading;
+    final userProvider = Provider.of<UsersProvider>(context, listen: true);
+    final isLoading = userProvider.isLoading;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         physics: const NeverScrollableScrollPhysics(),
         child: ConstrainedBox(
           constraints: BoxConstraints(
-            minWidth: MediaQuery.of(context).size.width,
-            minHeight: MediaQuery.of(context).size.height,
+            minWidth: MediaQuery
+                .of(context)
+                .size
+                .width,
+            minHeight: MediaQuery
+                .of(context)
+                .size
+                .height,
           ),
           child: IntrinsicHeight(
             child: Column(
@@ -165,7 +170,9 @@ class _LoginState extends State<Login> {
                             height: 50,
                           ),
                           ElevatedButton(
-                            onPressed: () => _login(context),
+                            onPressed: () {
+                              _login(context);
+                            },
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.white,
                               backgroundColor: const Color(0xffDF042C),
@@ -177,19 +184,19 @@ class _LoginState extends State<Login> {
                             ),
                             child: isLoading
                                 ? Container(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white,
-                                    ),
-                                  )
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            )
                                 : Text(
-                                    'Masuk',
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                              'Masuk',
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ],
                       ),

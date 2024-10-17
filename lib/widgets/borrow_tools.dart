@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:user_painting_tools/widgets/card_borrow_tools.dart';
+import 'package:user_painting_tools/widgets/confirmation_box.dart';
 
 class BorrowTools extends StatefulWidget {
   const BorrowTools({super.key});
@@ -29,7 +31,22 @@ class _BorrowToolsState extends State<BorrowTools> {
               ),
               Container(
                   child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return ConfirmationBox(
+                              textDescription:
+                                  "Apakah kamu yakin ingin menghapus daftar data yang sudah dikembalikan?",
+                              textTitle: "Hapus Data Pinjam",
+                              onCancel: () {
+                                Navigator.pop(context);
+                              },
+                              onConfirm: () {},
+                            );
+                          },
+                        );
+                      },
                       icon: const Icon(
                         Icons.delete_outlined,
                         color: Color(0xffDF042C),

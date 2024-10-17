@@ -40,6 +40,7 @@ class UsersProvider with ChangeNotifier {
   }
 
   Future<void> updateNamaLengkap(String namaLengkap) async {
+    _setLoading(true);
     if (_currentUser != null) {
       String? npk = _currentUser?.npkUser;
 
@@ -60,11 +61,13 @@ class UsersProvider with ChangeNotifier {
         npkUser: _currentUser!.npkUser,
         namaLengkap: namaLengkap,
       );
+      _setLoading(false);
       notifyListeners();
     }
   }
 
   Future<void> fetchUserDataFromFirestoreWithNpk(String npk) async {
+    _setLoading(true);
     if (npk.isNotEmpty) {
       QuerySnapshot snapshot = await _firestore
           .collection('users')
@@ -74,9 +77,11 @@ class UsersProvider with ChangeNotifier {
       if (snapshot.docs.isNotEmpty) {
         DocumentSnapshot doc = snapshot.docs.first;
         _currentUser = Users.fromDocument(doc);
+        _setLoading(false);
         notifyListeners();
       } else {
         print('User dengan NPK tersebut tidak ditemukan.');
+        _setLoading(false);
       }
     }
   }
