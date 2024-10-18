@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class PhotoQr extends StatefulWidget {
-  const PhotoQr({super.key});
+class PhotoQrUser extends StatefulWidget {
+  const PhotoQrUser({super.key});
 
   @override
-  State<PhotoQr> createState() => _PhotoQrState();
+  State<PhotoQrUser> createState() => _PhotoQrUserState();
 }
 
-class _PhotoQrState extends State<PhotoQr> {
+class _PhotoQrUserState extends State<PhotoQrUser> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -8,10 +8,12 @@ import 'package:user_painting_tools/models/users.dart';
 class UsersProvider with ChangeNotifier {
   Users? _currentUser;
   bool _isLoading = false;
+  bool _isAdmin = false;
 
   Users? get currentUser => _currentUser;
 
   bool get isLoading => _isLoading;
+  bool get isAdmin => _isAdmin;
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -96,7 +98,8 @@ class UsersProvider with ChangeNotifier {
       await _firestore.collection('users').doc(uid).set({
         'email': emailUser,
         'npk': npkUser,
-        'createdAt': FieldValue.serverTimestamp(),
+        'firstLogin': FieldValue.serverTimestamp(),
+        'isAdmin': false,
       });
     }
   }
@@ -107,6 +110,7 @@ class UsersProvider with ChangeNotifier {
           await _firestore.collection('users').doc(uid).get();
       if (doc.exists) {
         _currentUser = Users.fromDocument(doc);
+        _isAdmin = _currentUser!.isAdmin;
         notifyListeners();
       }
     }

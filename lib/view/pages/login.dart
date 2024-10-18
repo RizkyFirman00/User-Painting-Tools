@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:user_painting_tools/models/view%20model/users_provider.dart';
-import 'package:user_painting_tools/pages/home.dart';
+import 'package:user_painting_tools/view/pages/admin/home_admin.dart';
+import 'package:user_painting_tools/view/pages/user/home_user.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -52,9 +53,13 @@ class _LoginState extends State<Login> {
       bool loginSuccess = await usersProvider.loginUser(email, npk);
 
       if (loginSuccess) {
-        Get.off(const Home());
-        Get.snackbar(
-            'Selamat datang ', emailController.text);
+        if (usersProvider.isAdmin) {
+          Get.off(const HomeAdmin());
+          Get.snackbar('Selamat datang ', emailController.text);
+        } else {
+          Get.off(const HomeUser());
+          Get.snackbar('Selamat datang ', emailController.text);
+        }
       } else {
         Get.snackbar('Terjadi kesalahan', 'Password atau NPK salah');
         _clearInputFields();
@@ -91,14 +96,8 @@ class _LoginState extends State<Login> {
         physics: const NeverScrollableScrollPhysics(),
         child: ConstrainedBox(
           constraints: BoxConstraints(
-            minWidth: MediaQuery
-                .of(context)
-                .size
-                .width,
-            minHeight: MediaQuery
-                .of(context)
-                .size
-                .height,
+            minWidth: MediaQuery.of(context).size.width,
+            minHeight: MediaQuery.of(context).size.height,
           ),
           child: IntrinsicHeight(
             child: Column(
@@ -184,19 +183,19 @@ class _LoginState extends State<Login> {
                             ),
                             child: isLoading
                                 ? Container(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                              ),
-                            )
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                    ),
+                                  )
                                 : Text(
-                              'Masuk',
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                                    'Masuk',
+                                    style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                           ),
                         ],
                       ),

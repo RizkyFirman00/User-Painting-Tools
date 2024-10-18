@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:user_painting_tools/helper/shared_preferences.dart';
-import 'package:user_painting_tools/pages/home.dart';
-import 'package:user_painting_tools/pages/login.dart';
+import 'package:user_painting_tools/view/pages/login.dart';
+import 'package:user_painting_tools/view/pages/user/home_user.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> checkLoginStatus() async {
     bool isUserLoggedIn = await SharedPreferencesUsers.isLoggedIn();
     if (isUserLoggedIn) {
-      Get.off(() => const Home());
+      Get.off(() => const HomeUser());
     } else {
       Get.off(() => const Login());
     }
@@ -35,6 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Center(
           child: SizedBox(

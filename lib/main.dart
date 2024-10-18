@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:user_painting_tools/models/view%20model/users_provider.dart';
-import 'package:user_painting_tools/pages/splash_screen.dart';
+import 'package:user_painting_tools/view/pages/splash_screen.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -26,8 +26,11 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Color(0xFFDF042C),
+    final usersProvider = Provider.of<UsersProvider>(context, listen: true);
+    bool isAdmin = usersProvider.isAdmin;
+    Color colorStatusBar = isAdmin ? const Color(0xFF0099FF) : const Color(0xFFDF042C);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: colorStatusBar,
     ));
 
     return GetMaterialApp(
@@ -35,7 +38,7 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
-      home: SafeArea(child: SplashScreen()),
+      home: const SafeArea(child: SplashScreen()),
     );
   }
 }

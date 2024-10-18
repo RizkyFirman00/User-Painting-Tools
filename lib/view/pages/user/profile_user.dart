@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:user_painting_tools/helper/shared_preferences.dart';
-import 'package:user_painting_tools/pages/login.dart';
-import '../models/view model/users_provider.dart';
+import 'package:user_painting_tools/models/view%20model/users_provider.dart';
+import 'package:user_painting_tools/view/pages/login.dart';
 
 class ProfileUser extends StatefulWidget {
   const ProfileUser({super.key});

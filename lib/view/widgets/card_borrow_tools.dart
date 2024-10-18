@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:user_painting_tools/widgets/confirmation_box.dart';
+import 'package:user_painting_tools/view/widgets/confirmation_box.dart';
 
 class CardBorrowTools extends StatefulWidget {
   const CardBorrowTools({super.key});

@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:user_painting_tools/pages/filling_data.dart';
-import 'package:user_painting_tools/widgets/avail_tools.dart';
-import 'package:user_painting_tools/widgets/borrow_tools.dart';
-import 'package:user_painting_tools/pages/photo_qr.dart';
-import 'package:user_painting_tools/pages/profile_user.dart';
 import 'package:user_painting_tools/firebase_options.dart';
+import 'package:user_painting_tools/view/pages/user/photo_qr_user.dart';
+import 'package:user_painting_tools/view/pages/user/profile_user.dart';
+import 'package:user_painting_tools/view/widgets/avail_tools.dart';
+import 'package:user_painting_tools/view/widgets/borrow_tools.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class HomeUser extends StatefulWidget {
+  const HomeUser({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<HomeUser> createState() => _HomeUserState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeUserState extends State<HomeUser> {
   
   int _selectedIndex = 0;
   
   final List<Widget> _pages = [
     const AvailTools(),
-    const PhotoQr(),
+    const PhotoQrUser(),
     const BorrowTools(),
   ];
 
