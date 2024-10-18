@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:user_painting_tools/helper/shared_preferences.dart';
 import 'package:user_painting_tools/models/view%20model/users_provider.dart';
 import 'package:user_painting_tools/view/pages/admin/home_admin.dart';
 import 'package:user_painting_tools/view/pages/user/home_user.dart';
@@ -55,9 +57,11 @@ class _LoginState extends State<Login> {
       if (loginSuccess) {
         if (usersProvider.isAdmin) {
           Get.off(const HomeAdmin());
-          Get.snackbar('Selamat datang ', emailController.text);
+          _setStatusBarColor();
+          Get.snackbar('Selamat datang admin ', emailController.text);
         } else {
           Get.off(const HomeUser());
+          _setStatusBarColor();
           Get.snackbar('Selamat datang ', emailController.text);
         }
       } else {
@@ -68,6 +72,13 @@ class _LoginState extends State<Login> {
       Get.snackbar('Terjadi kesalahan', e.toString());
       _clearInputFields();
     }
+  }
+
+
+  Future<void> _setStatusBarColor() async {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Color(0xFFDF042C),
+    ));
   }
 
   void _clearInputFields() {
@@ -84,6 +95,12 @@ class _LoginState extends State<Login> {
       return false;
     }
     return false;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _setStatusBarColor();
   }
 
   @override

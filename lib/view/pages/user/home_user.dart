@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:user_painting_tools/firebase_options.dart';
 import 'package:user_painting_tools/view/pages/user/photo_qr_user.dart';
 import 'package:user_painting_tools/view/pages/user/profile_user.dart';
-import 'package:user_painting_tools/view/widgets/avail_tools.dart';
-import 'package:user_painting_tools/view/widgets/borrow_tools.dart';
+import 'package:user_painting_tools/view/widgets/user/avail_tools.dart';
+import 'package:user_painting_tools/view/widgets/user/loan_tools.dart';
 
 class HomeUser extends StatefulWidget {
   const HomeUser({super.key});
@@ -13,9 +14,15 @@ class HomeUser extends StatefulWidget {
   State<HomeUser> createState() => _HomeUserState();
 }
 
+Future<void> _setStatusBarColor() async {
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Color(0xFFDF042C),
+  ));
+}
+
 class _HomeUserState extends State<HomeUser> {
-  
-  int _selectedIndex = 0;
+
+  int _selectedPage = 0;
   
   final List<Widget> _pages = [
     const AvailTools(),
@@ -25,12 +32,19 @@ class _HomeUserState extends State<HomeUser> {
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      _selectedPage = index;
     });
   }
-  
+
+  @override
+  void initState() {
+    _setStatusBarColor();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    _setStatusBarColor();
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -106,7 +120,7 @@ class _HomeUserState extends State<HomeUser> {
                   Expanded(
                     child: Container(
                       clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(100),
                               topRight: Radius.circular(20))),
@@ -182,7 +196,7 @@ class _HomeUserState extends State<HomeUser> {
         ),
         body: SizedBox(
             height: MediaQuery.of(context).size.height,
-            child: _pages[_selectedIndex]),
+            child: _pages[_selectedPage]),
       ),
     );
   }

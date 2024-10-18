@@ -1,15 +1,24 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:user_painting_tools/helper/shared_preferences.dart';
 import 'package:user_painting_tools/models/view%20model/users_provider.dart';
 import 'package:user_painting_tools/view/pages/login.dart';
+import 'package:user_painting_tools/view/widgets/confirmation_box.dart';
 
 class ProfileUser extends StatefulWidget {
   const ProfileUser({super.key});
 
   @override
   State<ProfileUser> createState() => _ProfileUserState();
+}
+
+Future<void> _setStatusBarColor() async {
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Color(0xFFDF042C),
+  ));
 }
 
 class _ProfileUserState extends State<ProfileUser> {
@@ -31,10 +40,14 @@ class _ProfileUserState extends State<ProfileUser> {
           namaLengkapController.text = userProvider.currentUser!.namaLengkap!;
         }
       } else {
-        print('NPK tidak ditemukan di SharedPreferences.');
+        if (kDebugMode) {
+          print('NPK tidak ditemukan di SharedPreferences.');
+        }
       }
     } catch (e) {
-      print('Error fetching NPK or user data: $e');
+      if (kDebugMode) {
+        print('Error fetching NPK or user data: $e');
+      }
     }
   }
 
@@ -59,6 +72,7 @@ class _ProfileUserState extends State<ProfileUser> {
 
   @override
   Widget build(BuildContext context) {
+    _setStatusBarColor;
     final userProvider = Provider.of<UsersProvider>(context, listen: true);
     bool isLoading = userProvider.isLoading;
     return Scaffold(
@@ -79,9 +93,24 @@ class _ProfileUserState extends State<ProfileUser> {
             padding: const EdgeInsets.only(right: 10.0),
             child: IconButton(
               onPressed: () {
-                logoutUser();
-                Get.snackbar(
-                    'Logout', 'Akun berhasil keluar');
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return ConfirmationBox(
+                      textTitle: "Logout",
+                      textDescription: "Apakah kamu yakin ingin keluar dari akun ini?",
+                      textConfirm: "Iya",
+                      textCancel: "Tidak",
+                      onConfirm: () {
+                        logoutUser();
+                        Get.snackbar('Logout', 'Akun berhasil keluar');
+                      },
+                      onCancel: () {
+                        Navigator.pop(context);
+                      },
+                    );
+                  },
+                );
               },
               icon: Icon(Icons.logout_outlined),
             ),

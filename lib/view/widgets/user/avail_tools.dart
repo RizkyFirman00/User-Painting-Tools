@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'card_avail_tools.dart';
+import 'package:user_painting_tools/view/widgets/user/card_avail_tools.dart';
 
 class AvailTools extends StatelessWidget {
   const AvailTools({super.key});

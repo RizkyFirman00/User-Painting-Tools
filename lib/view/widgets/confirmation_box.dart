@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 class ConfirmationBox extends StatelessWidget {
   final String textTitle;
   final String textDescription;
+  final String textConfirm;
+  final String textCancel;
   final VoidCallback onConfirm;
   final VoidCallback onCancel;
 
@@ -13,6 +15,8 @@ class ConfirmationBox extends StatelessWidget {
     required this.textDescription,
     required this.onConfirm,
     required this.onCancel,
+    required this.textConfirm,
+    required this.textCancel,
   });
 
   @override
@@ -48,9 +52,14 @@ class ConfirmationBox extends StatelessWidget {
                   side: BorderSide(color: Color(0xffDF042C)),
                 ),
               ),
-              child: const Text(
-                'Belum',
-                style: TextStyle(color: Color(0xffDF042C)),
+              child: SizedBox(
+                width: 70,
+                child: Center(
+                  child: Text(
+                    textCancel,
+                    style: TextStyle(color: Color(0xffDF042C)),
+                  ),
+                ),
               ),
             ),
             ElevatedButton(
@@ -63,7 +72,8 @@ class ConfirmationBox extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
-              child: const Text('Sudah'),
+              child:
+                  SizedBox(width: 70, child: Center(child: Text(textConfirm))),
             ),
           ],
         ),

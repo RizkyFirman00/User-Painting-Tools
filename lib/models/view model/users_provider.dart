@@ -13,6 +13,7 @@ class UsersProvider with ChangeNotifier {
   Users? get currentUser => _currentUser;
 
   bool get isLoading => _isLoading;
+
   bool get isAdmin => _isAdmin;
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -28,7 +29,8 @@ class UsersProvider with ChangeNotifier {
 
       await _saveUserToFirestore(uid, emailUser, npkUser);
       await _fetchUserData(uid);
-      await SharedPreferencesUsers.saveLoginData(emailUser, npkUser);
+      await SharedPreferencesUsers.saveLoginData(
+          emailUser, npkUser, _currentUser?.namaLengkap ?? "", _isAdmin);
 
       //HELPER
       _simpleLogger.info(userCredential.user?.email);
@@ -46,15 +48,14 @@ class UsersProvider with ChangeNotifier {
     if (_currentUser != null) {
       String? npk = _currentUser?.npkUser;
 
-      await _firestore.collection('users')
+      await _firestore
+          .collection('users')
           .where('npk', isEqualTo: npk)
           .limit(1)
           .get()
           .then((snapshot) {
         if (snapshot.docs.isNotEmpty) {
-          snapshot.docs.first.reference.update({
-            'nama_lengkap': namaLengkap
-          });
+          snapshot.docs.first.reference.update({'nama_lengkap': namaLengkap});
         }
       });
 

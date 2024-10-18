@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:user_painting_tools/view/widgets/card_borrow_tools.dart';
+import 'package:user_painting_tools/view/widgets/user/card_loan_tools.dart';
 import 'package:user_painting_tools/view/widgets/confirmation_box.dart';
 
 class BorrowTools extends StatefulWidget {
@@ -39,6 +39,8 @@ class _BorrowToolsState extends State<BorrowTools> {
                               textDescription:
                                   "Apakah kamu yakin ingin menghapus daftar data yang sudah dikembalikan?",
                               textTitle: "Hapus Data Pinjam",
+                              textConfirm: "Iya",
+                              textCancel: "Tidak",
                               onCancel: () {
                                 Navigator.pop(context);
                               },

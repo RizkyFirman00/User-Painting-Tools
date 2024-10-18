@@ -80,6 +80,8 @@ class _CardBorrowToolsState extends State<CardBorrowTools> {
                                             textTitle: "Pengembalian Barang",
                                             textDescription:
                                                 "Apakah kamu yakin sudah selesai menggunakan barang?",
+                                            textConfirm: "Sudah",
+                                            textCancel: "Belum",
                                             onConfirm: () {
                                               setState(() {
                                                 light = false;

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:simple_logger/simple_logger.dart';
 import 'package:user_painting_tools/helper/shared_preferences.dart';
+import 'package:user_painting_tools/view/pages/admin/home_admin.dart';
 import 'package:user_painting_tools/view/pages/login.dart';
 import 'package:user_painting_tools/view/pages/user/home_user.dart';
 
@@ -12,6 +14,8 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  SimpleLogger _simpleLogger = SimpleLogger();
+
   @override
   void initState() {
     super.initState();
@@ -25,8 +29,14 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> checkLoginStatus() async {
     bool isUserLoggedIn = await SharedPreferencesUsers.isLoggedIn();
-    if (isUserLoggedIn) {
-      Get.off(() => const HomeUser());
+    bool? isAdmin = await SharedPreferencesUsers.getIsAdmin();
+    _simpleLogger.info(isAdmin);
+    if (isUserLoggedIn && isAdmin != null) {
+      if (isAdmin) {
+        Get.off(() => const HomeAdmin());
+      } else {
+        Get.off(() => const HomeUser());
+      }
     } else {
       Get.off(() => const Login());
     }
