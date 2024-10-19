@@ -7,8 +7,12 @@ import 'package:user_painting_tools/models/users.dart';
 
 class UsersProvider with ChangeNotifier {
   Users? _currentUser;
+
   bool _isLoading = false;
   bool _isAdmin = false;
+
+  List<Users> get listUsers => _listUsers;
+  List<Users> _listUsers = [];
 
   Users? get currentUser => _currentUser;
 
@@ -19,6 +23,22 @@ class UsersProvider with ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final SimpleLogger _simpleLogger = SimpleLogger();
+
+  Future<void> fetchAllUser() async {
+    _setLoading(true);
+    try {
+      QuerySnapshot querySnapshot = await _firestore.collection('users').get();
+      _listUsers = querySnapshot.docs.map((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        return Users.fromDocument(doc);
+      }).toList();
+      notifyListeners();
+      _setLoading(false);
+    } catch (e) {
+      _simpleLogger.info(e);
+      _setLoading(false);
+    }
+  }
 
   Future<bool> loginUser(String emailUser, String npkUser) async {
     _setLoading(true);

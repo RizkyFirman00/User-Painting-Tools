@@ -30,9 +30,13 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
+
   Future<void> _setStatusBarColor() async {
+    bool? isAdmin = await SharedPreferencesUsers.getIsAdmin();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Color(0xFFDF042C),
+      statusBarColor: (isAdmin != null && isAdmin == true)
+          ? Color(0xFF0099FF)
+          : Color(0xFFDF042C),
     ));
   }
 

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
-import 'package:user_painting_tools/helper/shared_preferences.dart';
 import 'package:user_painting_tools/view/widgets/admin/loans_page.dart';
 import 'package:user_painting_tools/view/widgets/admin/tools_page.dart';
 import 'package:user_painting_tools/view/widgets/admin/users_page.dart';
@@ -33,8 +32,8 @@ class _HomeAdminState extends State<HomeAdmin> {
 
   @override
   void initState() {
-    super.initState();
     _setStatusBarColor();
+    super.initState();
   }
 
   @override

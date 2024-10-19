@@ -52,7 +52,7 @@ class SharedPreferencesUsers {
     String? email = prefs.getString(_keyEmail);
     String? token = prefs.getString(_keyNpk);
     String? namaLengkap = prefs.getString(_keyNamaLengkap);
-    String? isAdmin = prefs.getString(_keyNpk);
+    bool? isAdmin = prefs.getBool(_keyIsAdmin);
     return email != null &&
         token != null &&
         namaLengkap != null &&

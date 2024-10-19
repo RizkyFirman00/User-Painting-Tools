@@ -18,7 +18,8 @@ class Users {
     return Users(
       emailUser: data['email'] ?? '',
       npkUser: data['npk'] ?? '',
-      namaLengkap: data.containsKey('nama_lengkap') ? data['nama_lengkap'] : null,
+      namaLengkap:
+          data.containsKey('nama_lengkap') ? data['nama_lengkap'] : null,
       isAdmin: data['isAdmin'] ?? false,
     );
   }

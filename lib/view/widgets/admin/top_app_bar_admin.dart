@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:user_painting_tools/helper/shared_preferences.dart';
+import 'package:user_painting_tools/view/pages/admin/profile_admin.dart';
 import 'package:user_painting_tools/view/pages/login.dart';
 
 class TopAppBarAdmin extends StatefulWidget implements PreferredSizeWidget {
@@ -57,11 +58,9 @@ class _TopAppBarAdminState extends State<TopAppBarAdmin> {
           padding: const EdgeInsets.only(right: 10.0),
           child: IconButton(
               onPressed: () {
-                SharedPreferencesUsers.clearLoginData();
-                Get.off(() => Login());
-                Get.snackbar('Selamat Tinggal', 'Akun admin berhasil keluar');
+                Get.to(() => ProfileAdmin());
               },
-              icon: Icon(Icons.logout)),
+              icon: Icon(Icons.person)),
         ),
       ],
     );
