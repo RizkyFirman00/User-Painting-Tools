@@ -82,7 +82,7 @@ class _CardBorrowToolsState extends State<CardBorrowTools> {
                                                 "Apakah kamu yakin sudah selesai menggunakan barang?",
                                             textConfirm: "Sudah",
                                             textCancel: "Belum",
-                                            onConfirm: () {
+                                            onConfirm: () async {
                                               setState(() {
                                                 light = false;
                                                 isCompleted = true;

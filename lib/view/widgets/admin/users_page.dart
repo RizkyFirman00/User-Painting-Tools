@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:user_painting_tools/models/view%20model/users_provider.dart';
 import 'package:user_painting_tools/view/pages/admin/add_users_admin.dart';
+import 'package:user_painting_tools/view/widgets/admin/card_users.dart';
 import 'package:user_painting_tools/view/widgets/admin/top_app_bar_admin.dart';
+import 'package:user_painting_tools/view/widgets/confirmation_box.dart';
 
 class UsersPage extends StatefulWidget {
   const UsersPage({super.key});
@@ -19,13 +21,13 @@ class _UsersPageState extends State<UsersPage> {
   void initState() {
     super.initState();
     Future.microtask(() =>
-        Provider.of<UsersProvider>(context, listen: false).fetchAllUser());
+        Provider.of<UsersProvider>(context, listen: true).fetchAllUser());
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    Provider.of<UsersProvider>(context, listen: false).fetchAllUser();
+    Provider.of<UsersProvider>(context, listen: true).fetchAllUser();
   }
 
   @override
@@ -76,37 +78,34 @@ class _UsersPageState extends State<UsersPage> {
                             crossAxisCount: 2, childAspectRatio: 2),
                     itemBuilder: (BuildContext context, int index) {
                       final userData = listUsers[index];
-                      return Card(
-                        child: Container(
-                          width: 176,
-                          height: 110,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                userData.emailUser,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
-                              ),
-                              Text(
-                                userData.namaLengkap ?? "Belum mengisi",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
-                              ),
-                              Text(
-                                userData.npkUser,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                      return CardUsers(
+                        emailUser: userData.emailUser,
+                        longNameUser: userData.namaLengkap ?? "Belum Mengisi",
+                        npkUser: userData.npkUser,
+                        onPressedDelete: () {
+                          return showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return ConfirmationBox(
+                                textTitle: "Hapus Akun",
+                                textDescription:
+                                    "Apakah kamu yakin ingin menghapus akun ${userData.emailUser}?",
+                                textConfirm: "Iya",
+                                textCancel: "Tidak",
+                                onConfirm: () async {
+                                  await userProvider.deleteUserOnAuth(userData.emailUser, userData.npkUser);
+                                  await userProvider.fetchAllUser();
+                                  Get.snackbar('Berhasil', 'Akun berhasil dihapus');
+                                  Navigator.pop(context);
+                                },
+                                onCancel: () {
+                                  Navigator.pop(context);
+                                },
+                              );
+                            },
+                          );
+                        },
                       );
                     }),
           );

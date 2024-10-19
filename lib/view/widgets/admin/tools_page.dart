@@ -10,7 +10,7 @@ class ToolsPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         // appBar: TopAppBarAdmin(title: "Halaman Barang"),
-        body: Center(child: Text("Users Page")),
+        body: Center(child: Text("Tools Page")),
         floatingActionButton: Padding(
           padding: EdgeInsets.only(bottom: 10, right: 10),
           child: Container(

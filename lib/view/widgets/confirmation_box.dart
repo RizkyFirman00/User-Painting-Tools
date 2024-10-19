@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ConfirmationBox extends StatelessWidget {
+class ConfirmationBox extends StatefulWidget {
   final String textTitle;
   final String textDescription;
   final String textConfirm;
   final String textCancel;
-  final VoidCallback onConfirm;
+  final Future<void> Function() onConfirm;
   final VoidCallback onCancel;
 
   const ConfirmationBox({
@@ -20,29 +20,61 @@ class ConfirmationBox extends StatelessWidget {
   });
 
   @override
+  State<ConfirmationBox> createState() => _ConfirmationBoxState();
+}
+
+class _ConfirmationBoxState extends State<ConfirmationBox> {
+  bool _isLoading = false;
+
+  void _handleConfirm() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    await widget.onConfirm();
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(40),
       ),
       title: Text(
-        textTitle,
+        widget.textTitle,
         textAlign: TextAlign.center,
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 16,
         ),
       ),
-      content: Text(
-        textDescription,
-        textAlign: TextAlign.center,
-      ),
+      content: _isLoading
+          ? SizedBox(
+          height: 80,
+          width: 80,
+          child: Center(child: CircularProgressIndicator()))
+          : Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  widget.textDescription,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
       actions: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             ElevatedButton(
-              onPressed: onCancel,
+              onPressed: widget.onCancel,
               style: ElevatedButton.styleFrom(
                 overlayColor: Colors.redAccent,
                 foregroundColor: Colors.white,
@@ -56,14 +88,14 @@ class ConfirmationBox extends StatelessWidget {
                 width: 70,
                 child: Center(
                   child: Text(
-                    textCancel,
+                    widget.textCancel,
                     style: TextStyle(color: Color(0xffDF042C)),
                   ),
                 ),
               ),
             ),
             ElevatedButton(
-              onPressed: onConfirm,
+              onPressed: _isLoading ? null : _handleConfirm,
               style: ElevatedButton.styleFrom(
                 overlayColor: Colors.white,
                 foregroundColor: Colors.white,
@@ -72,8 +104,8 @@ class ConfirmationBox extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
-              child:
-                  SizedBox(width: 70, child: Center(child: Text(textConfirm))),
+              child: SizedBox(
+                  width: 70, child: Center(child: Text(widget.textConfirm))),
             ),
           ],
         ),

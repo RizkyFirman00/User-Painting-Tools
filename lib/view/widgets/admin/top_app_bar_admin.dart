@@ -19,6 +19,13 @@ class TopAppBarAdmin extends StatefulWidget implements PreferredSizeWidget {
 class _TopAppBarAdminState extends State<TopAppBarAdmin> {
   final Color _lightBlue = const Color(0xff0099FF);
   bool isPressed = false;
+  TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +39,10 @@ class _TopAppBarAdminState extends State<TopAppBarAdmin> {
           onPressed: () {
             setState(() {
               isPressed = !isPressed;
+              if (!isPressed) {
+                _searchController.clear();
+                widget.onSearchChanged('');
+              }
             });
           },
           icon: Icon(isPressed ? Icons.close : Icons.search),
@@ -44,6 +55,7 @@ class _TopAppBarAdminState extends State<TopAppBarAdmin> {
                   color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(20))),
               child: TextField(
+                controller: _searchController,
                 onChanged: (value) {
                   widget.onSearchChanged(value);
                 },

@@ -10,12 +10,15 @@ class UsersProvider with ChangeNotifier {
   bool _isLoading = false;
   bool _isAdmin = false;
 
-  List<Users> get listUsers => _filteredUsers.isEmpty ? _listUsers : _filteredUsers;
+  List<Users> get listUsers =>
+      _filteredUsers.isEmpty ? _listUsers : _filteredUsers;
   List<Users> _listUsers = [];
   List<Users> _filteredUsers = [];
 
   Users? get currentUser => _currentUser;
+
   bool get isLoading => _isLoading;
+
   bool get isAdmin => _isAdmin;
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -25,7 +28,8 @@ class UsersProvider with ChangeNotifier {
   Future<void> fetchAllUser() async {
     _setLoading(true);
     try {
-      QuerySnapshot querySnapshot = await _firestore.collection('users').orderBy('email').get();
+      QuerySnapshot querySnapshot =
+          await _firestore.collection('users').orderBy('email').get();
       _listUsers = querySnapshot.docs.map((doc) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         return Users.fromDocument(doc);
@@ -44,7 +48,7 @@ class UsersProvider with ChangeNotifier {
     if (query.isNotEmpty) {
       _filteredUsers = _listUsers
           .where((user) =>
-          user.emailUser.toLowerCase().contains(query.toLowerCase()))
+              user.emailUser.toLowerCase().contains(query.toLowerCase()))
           .toList();
     } else {
       _filteredUsers = _listUsers;
@@ -64,11 +68,7 @@ class UsersProvider with ChangeNotifier {
       await _saveUserToFirestoreWhileLogin(uid, emailUser, npkUser);
       await _fetchUserData(uid);
       await SharedPreferencesUsers.saveLoginData(
-          emailUser,
-          npkUser,
-          _currentUser?.namaLengkap ?? "",
-          _isAdmin
-      );
+          emailUser, npkUser, _currentUser?.namaLengkap ?? "", _isAdmin);
 
       _simpleLogger.info(userCredential.user?.email);
       return true;
@@ -115,10 +115,8 @@ class UsersProvider with ChangeNotifier {
     _setLoading(true);
     try {
       if (email.isNotEmpty && npk.isNotEmpty) {
-        UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-            email: email,
-            password: npk
-        );
+        UserCredential userCredential = await _auth
+            .createUserWithEmailAndPassword(email: email, password: npk);
         String? uid = userCredential.user?.uid;
         await _saveUserToFirestoreInAdmin(uid, email, npk);
       }
@@ -154,11 +152,39 @@ class UsersProvider with ChangeNotifier {
     }
   }
 
+  Future<void> deleteUserOnAuth(String email, String npk) async {
+    _setLoading(true);
+    try {
+      QuerySnapshot querySnapshot = await _firestore
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        await querySnapshot.docs.first.reference.delete();
+      }
+
+      User? userToDelete =
+          (await _auth.signInWithEmailAndPassword(email: email, password: npk))
+              .user;
+      print('USER: $userToDelete');
+      if (userToDelete != null) {
+        await userToDelete.delete();
+      }
+    } catch (e) {
+      print('Error deleting user: $e');
+    } finally {
+      _setLoading(false);
+    }
+  }
+
   Future<void> _saveUserToFirestoreWhileLogin(
       String? uid, String emailUser, String npkUser) async {
     if (uid == null) return;
     try {
-      DocumentSnapshot doc = await _firestore.collection('users').doc(uid).get();
+      DocumentSnapshot doc =
+          await _firestore.collection('users').doc(uid).get();
       if (!doc.exists) {
         await _firestore.collection('users').doc(uid).set({
           'email': emailUser,
@@ -172,12 +198,12 @@ class UsersProvider with ChangeNotifier {
     }
   }
 
-
   Future<void> _saveUserToFirestoreInAdmin(
       String? uid, String emailUser, String npkUser) async {
     if (uid == null) return;
     try {
-      DocumentSnapshot doc = await _firestore.collection('users').doc(uid).get();
+      DocumentSnapshot doc =
+          await _firestore.collection('users').doc(uid).get();
       if (!doc.exists) {
         await _firestore.collection('users').doc(uid).set({
           'email': emailUser,
@@ -193,7 +219,8 @@ class UsersProvider with ChangeNotifier {
   Future<void> _fetchUserData(String? uid) async {
     if (uid != null) {
       try {
-        DocumentSnapshot doc = await _firestore.collection('users').doc(uid).get();
+        DocumentSnapshot doc =
+            await _firestore.collection('users').doc(uid).get();
         if (doc.exists) {
           _currentUser = Users.fromDocument(doc);
           _isAdmin = _currentUser!.isAdmin;

@@ -101,7 +101,7 @@ class _ProfileUserState extends State<ProfileUser> {
                       textDescription: "Apakah kamu yakin ingin keluar dari akun ini?",
                       textConfirm: "Iya",
                       textCancel: "Tidak",
-                      onConfirm: () {
+                      onConfirm: () async {
                         logoutUser();
                         Get.snackbar('Logout', 'Akun berhasil keluar');
                       },
