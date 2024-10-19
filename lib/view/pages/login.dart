@@ -57,10 +57,12 @@ class _LoginState extends State<Login> {
       if (loginSuccess) {
         if (usersProvider.isAdmin) {
           Get.off(const HomeAdmin());
+          print("isAdmin ${usersProvider.isAdmin}");
           _setStatusBarColor();
           Get.snackbar('Selamat datang admin ', emailController.text);
         } else {
           Get.off(const HomeUser());
+          print("isAdmin ${usersProvider.isAdmin}");
           _setStatusBarColor();
           Get.snackbar('Selamat datang ', emailController.text);
         }
@@ -74,9 +76,8 @@ class _LoginState extends State<Login> {
     }
   }
 
-
   Future<void> _setStatusBarColor() async {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Color(0xFFDF042C),
     ));
   }
@@ -151,7 +152,7 @@ class _LoginState extends State<Login> {
                               enabledBorder: themeTextForm(),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
-                                borderSide: BorderSide(
+                                borderSide: const BorderSide(
                                   color: Colors.transparent,
                                 ),
                               ),
@@ -168,7 +169,7 @@ class _LoginState extends State<Login> {
                               enabledBorder: themeTextForm(),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
-                                borderSide: BorderSide(
+                                borderSide: const BorderSide(
                                   color: Colors.transparent,
                                 ),
                               ),
@@ -199,14 +200,14 @@ class _LoginState extends State<Login> {
                                   vertical: 15.0, horizontal: 80.0),
                             ),
                             child: isLoading
-                                ? Container(
+                                ? const SizedBox(
                                     height: 20,
                                     width: 20,
                                     child: CircularProgressIndicator(
                                       color: Colors.white,
                                     ),
                                   )
-                                : Text(
+                                : const Text(
                                     'Masuk',
                                     style: TextStyle(
                                       fontSize: 16.0,

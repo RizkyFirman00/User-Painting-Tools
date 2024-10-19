@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:user_painting_tools/helper/shared_preferences.dart';
 import 'package:user_painting_tools/view/pages/admin/profile_admin.dart';
-import 'package:user_painting_tools/view/pages/login.dart';
 
 class TopAppBarAdmin extends StatefulWidget implements PreferredSizeWidget {
   final String title;
+  final Function(String) onSearchChanged;
 
-  const TopAppBarAdmin({super.key, required this.title});
+  const TopAppBarAdmin(
+      {super.key, required this.title, required this.onSearchChanged});
 
   @override
   State<TopAppBarAdmin> createState() => _TopAppBarAdminState();
@@ -19,6 +19,7 @@ class TopAppBarAdmin extends StatefulWidget implements PreferredSizeWidget {
 class _TopAppBarAdminState extends State<TopAppBarAdmin> {
   final Color _lightBlue = const Color(0xff0099FF);
   bool isPressed = false;
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -38,21 +39,24 @@ class _TopAppBarAdminState extends State<TopAppBarAdmin> {
       ),
       title: isPressed
           ? Container(
-        height: 40,
-        decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(20))),
-        child: const TextField(
-          decoration: InputDecoration(
-              contentPadding: EdgeInsets.fromLTRB(16, 20, 16, 8),
-              border: InputBorder.none,
-              hintText: "Search Pengguna..."),
-        ),
-      )
+              height: 40,
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              child: TextField(
+                onChanged: (value) {
+                  widget.onSearchChanged(value);
+                },
+                decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.fromLTRB(16, 20, 16, 8),
+                    border: InputBorder.none,
+                    hintText: "Search Pengguna..."),
+              ),
+            )
           : Text(
-        widget.title,
-        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-      ),
+              widget.title,
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+            ),
       actions: [
         Padding(
           padding: const EdgeInsets.only(right: 10.0),

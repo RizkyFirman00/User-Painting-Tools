@@ -9,7 +9,7 @@ class ToolsPage extends StatelessWidget {
     final Color _lightBlue = const Color(0xff0099FF);
     return SafeArea(
       child: Scaffold(
-        appBar: TopAppBarAdmin(title: "Halaman Barang"),
+        // appBar: TopAppBarAdmin(title: "Halaman Barang"),
         body: Center(child: Text("Users Page")),
         floatingActionButton: Padding(
           padding: EdgeInsets.only(bottom: 10, right: 10),

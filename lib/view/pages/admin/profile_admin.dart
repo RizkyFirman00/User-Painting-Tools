@@ -16,7 +16,7 @@ class ProfileAdmin extends StatefulWidget {
 }
 
 class _ProfileAdminState extends State<ProfileAdmin> {
-  final Color _lightBlue = Color(0xFF0099FF);
+  final Color _lightBlue = const Color(0xFF0099FF);
   final TextEditingController emailController = TextEditingController();
   final TextEditingController namaLengkapController = TextEditingController();
   final TextEditingController npkController = TextEditingController();
@@ -47,7 +47,7 @@ class _ProfileAdminState extends State<ProfileAdmin> {
   }
 
   Future<void> _setStatusBarColor() async {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Color(0xFF0099FF),
     ));
   }
@@ -68,6 +68,7 @@ class _ProfileAdminState extends State<ProfileAdmin> {
   @override
   void initState() {
     _setStatusBarColor();
+    fetchDataToInput();
     super.initState();
   }
 
@@ -83,7 +84,7 @@ class _ProfileAdminState extends State<ProfileAdmin> {
           foregroundColor: Colors.white,
           backgroundColor: _lightBlue,
           centerTitle: true,
-          title: Text(
+          title: const Text(
             "Profil Pengguna",
             style: TextStyle(
               fontSize: 14,
@@ -115,7 +116,7 @@ class _ProfileAdminState extends State<ProfileAdmin> {
                     },
                   );
                 },
-                icon: Icon(Icons.logout_outlined),
+                icon: const Icon(Icons.logout_outlined),
               ),
             ),
           ],
@@ -154,7 +155,7 @@ class _ProfileAdminState extends State<ProfileAdmin> {
                           decoration: InputDecoration(
                             icon: Icon(Icons.person, color: _lightBlue),
                             hintText: "Nama Lengkap",
-                            border: OutlineInputBorder(
+                            border: const OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
                           ),
@@ -168,7 +169,7 @@ class _ProfileAdminState extends State<ProfileAdmin> {
                           decoration: InputDecoration(
                             icon: Icon(Icons.numbers, color: _lightBlue),
                             hintText: "NPK",
-                            border: OutlineInputBorder(
+                            border: const OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
                           ),

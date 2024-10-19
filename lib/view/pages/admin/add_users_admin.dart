@@ -13,7 +13,6 @@ class AddUsersAdmin extends StatelessWidget {
     bool isLoading = userProvider.isLoading;
 
     final TextEditingController emailController = TextEditingController();
-    final TextEditingController namaLengkapController = TextEditingController();
     final TextEditingController npkController = TextEditingController();
 
     bool isThereLongName() {
@@ -90,9 +89,9 @@ class AddUsersAdmin extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 30),
               child: ElevatedButton(
                 onPressed: () async {
-                  await userProvider
-                      .updateNamaLengkap(namaLengkapController.text.trim());
-                  Get.snackbar('Sukses', 'Nama lengkap berhasil diperbarui');
+                  await userProvider.addUserToAuth(
+                      emailController.text.trim(), npkController.text.trim());
+                  Get.snackbar('Sukses', 'Berhasil menambahkan user baru');
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,

@@ -9,7 +9,7 @@ class LoansPage extends StatelessWidget {
     final Color _lightBlue = const Color(0xff0099FF);
     return SafeArea(
       child: Scaffold(
-        appBar: TopAppBarAdmin(title: "Halaman Peminjaman"),
+        // appBar: TopAppBarAdmin(title: "Halaman Peminjaman"),
         body: Center(child: Text("Loans Page")),
       ),
     );
