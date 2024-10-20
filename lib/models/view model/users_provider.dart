@@ -40,7 +40,6 @@ class UsersProvider with ChangeNotifier {
       _simpleLogger.info(e);
     } finally {
       _setLoading(false);
-      notifyListeners();
     }
   }
 
@@ -107,7 +106,6 @@ class UsersProvider with ChangeNotifier {
       _simpleLogger.info("Gagal mengupdate nama lengkap: ${e.toString()}");
     } finally {
       _setLoading(false);
-      notifyListeners();
     }
   }
 
@@ -148,7 +146,6 @@ class UsersProvider with ChangeNotifier {
       _simpleLogger.info("Gagal mengambil data user: ${e.toString()}");
     } finally {
       _setLoading(false);
-      notifyListeners();
     }
   }
 
@@ -234,6 +231,8 @@ class UsersProvider with ChangeNotifier {
 
   void _setLoading(bool value) {
     _isLoading = value;
-    notifyListeners();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      notifyListeners();
+    });
   }
 }

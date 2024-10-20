@@ -15,14 +15,6 @@ class AddUsersAdmin extends StatelessWidget {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController npkController = TextEditingController();
 
-    bool isThereLongName() {
-      if (emailController.text.isNotEmpty) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-
     final Color _lightBlue = Color(0xFF0099FF);
     return SafeArea(
       child: Scaffold(
@@ -53,7 +45,6 @@ class AddUsersAdmin extends StatelessWidget {
                       children: [
                         TextField(
                           controller: emailController,
-                          enabled: isThereLongName() ? false : true,
                           decoration: InputDecoration(
                             icon: Icon(
                               Icons.email,
@@ -70,7 +61,6 @@ class AddUsersAdmin extends StatelessWidget {
                         ),
                         TextField(
                           controller: npkController,
-                          enabled: isThereLongName() ? false : true,
                           decoration: InputDecoration(
                             icon: Icon(Icons.numbers, color: _lightBlue),
                             hintText: "NPK",
@@ -89,9 +79,14 @@ class AddUsersAdmin extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 30),
               child: ElevatedButton(
                 onPressed: () async {
-                  await userProvider.addUserToAuth(
-                      emailController.text.trim(), npkController.text.trim());
-                  Get.snackbar('Sukses', 'Berhasil menambahkan user baru');
+                  if (npkController.text.length < 6) {
+                    npkController.text = '';
+                    Get.snackbar('Gagal', 'NPK tidak boleh kurang dari 6 karakter');
+                  } else {
+                    await userProvider.addUserToAuth(
+                        emailController.text.trim(), npkController.text.trim());
+                    Get.snackbar('Sukses', 'Berhasil menambahkan user baru');
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,

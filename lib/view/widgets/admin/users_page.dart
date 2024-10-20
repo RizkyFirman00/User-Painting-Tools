@@ -25,12 +25,6 @@ class _UsersPageState extends State<UsersPage> {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    Provider.of<UsersProvider>(context, listen: true).fetchAllUser();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
