@@ -54,9 +54,9 @@ class _ConfirmationBoxState extends State<ConfirmationBox> {
       ),
       content: _isLoading
           ? SizedBox(
-          height: 80,
-          width: 80,
-          child: Center(child: CircularProgressIndicator()))
+              height: 80,
+              width: 150,
+              child: Center(child: CircularProgressIndicator()))
           : Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -85,7 +85,7 @@ class _ConfirmationBoxState extends State<ConfirmationBox> {
                 ),
               ),
               child: SizedBox(
-                width: 70,
+                width: 60,
                 child: Center(
                   child: Text(
                     widget.textCancel,
@@ -105,7 +105,7 @@ class _ConfirmationBoxState extends State<ConfirmationBox> {
                 ),
               ),
               child: SizedBox(
-                  width: 70, child: Center(child: Text(widget.textConfirm))),
+                  width: 60, child: Center(child: Text(widget.textConfirm))),
             ),
           ],
         ),

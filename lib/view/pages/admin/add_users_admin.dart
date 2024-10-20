@@ -78,16 +78,21 @@ class AddUsersAdmin extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 30),
               child: ElevatedButton(
-                onPressed: () async {
-                  if (npkController.text.length < 6) {
-                    npkController.text = '';
-                    Get.snackbar('Gagal', 'NPK tidak boleh kurang dari 6 karakter');
-                  } else {
-                    await userProvider.addUserToAuth(
-                        emailController.text.trim(), npkController.text.trim());
-                    Get.snackbar('Sukses', 'Berhasil menambahkan user baru');
-                  }
-                },
+                onPressed: isLoading
+                    ? null
+                    : () async {
+                        if (npkController.text.length < 6) {
+                          npkController.text = '';
+                          Get.snackbar('Gagal',
+                              'NPK tidak boleh kurang dari 6 karakter');
+                        } else {
+                          await userProvider.addUserToAuth(
+                              emailController.text.trim(),
+                              npkController.text.trim());
+                          Get.snackbar(
+                              'Sukses', 'Berhasil menambahkan user baru');
+                        }
+                      },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
                   backgroundColor: _lightBlue,
@@ -97,7 +102,7 @@ class AddUsersAdmin extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                       vertical: 15.0, horizontal: 100.0),
                 ),
-                child: const Text(
+                child: Text(
                   'Simpan',
                   style: TextStyle(
                     fontSize: 16.0,

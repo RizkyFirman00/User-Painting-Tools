@@ -20,8 +20,8 @@ class _UsersPageState extends State<UsersPage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() =>
-        Provider.of<UsersProvider>(context, listen: true).fetchAllUser());
+    Future.microtask(
+        () => Provider.of<UsersProvider>(context, listen: true).fetchAllUser());
   }
 
   @override
@@ -88,9 +88,11 @@ class _UsersPageState extends State<UsersPage> {
                                 textConfirm: "Iya",
                                 textCancel: "Tidak",
                                 onConfirm: () async {
-                                  await userProvider.deleteUserOnAuth(userData.emailUser, userData.npkUser);
+                                  await userProvider.deleteUserOnAuth(
+                                      userData.emailUser, userData.npkUser);
                                   await userProvider.fetchAllUser();
-                                  Get.snackbar('Berhasil', 'Akun berhasil dihapus');
+                                  Get.snackbar('Berhasil',
+                                      'Akun ${userData.emailUser} berhasil dihapus');
                                   Navigator.pop(context);
                                 },
                                 onCancel: () {

@@ -25,6 +25,25 @@ class UsersProvider with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final SimpleLogger _simpleLogger = SimpleLogger();
 
+  void _setLoading(bool value) {
+    _isLoading = value;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      notifyListeners();
+    });
+  }
+
+  void filterUsers(String query) {
+    if (query.isNotEmpty) {
+      _filteredUsers = _listUsers
+          .where((user) =>
+          user.emailUser.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    } else {
+      _filteredUsers = _listUsers;
+    }
+    notifyListeners();
+  }
+
   Future<void> fetchAllUser() async {
     _setLoading(true);
     try {
@@ -41,18 +60,6 @@ class UsersProvider with ChangeNotifier {
     } finally {
       _setLoading(false);
     }
-  }
-
-  void filterUsers(String query) {
-    if (query.isNotEmpty) {
-      _filteredUsers = _listUsers
-          .where((user) =>
-              user.emailUser.toLowerCase().contains(query.toLowerCase()))
-          .toList();
-    } else {
-      _filteredUsers = _listUsers;
-    }
-    notifyListeners();
   }
 
   Future<bool> loginUser(String emailUser, String npkUser) async {
@@ -227,12 +234,5 @@ class UsersProvider with ChangeNotifier {
         _simpleLogger.info("Gagal mengambil data user: ${e.toString()}");
       }
     }
-  }
-
-  void _setLoading(bool value) {
-    _isLoading = value;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      notifyListeners();
-    });
   }
 }
