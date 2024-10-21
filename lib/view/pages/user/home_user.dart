@@ -94,6 +94,7 @@ class _HomeUserState extends State<HomeUser> {
               Row(
                 children: [
                   Expanded(
+                    flex: 1,
                     child: IconButton(
                       onPressed: () {
                         _onItemTapped(0);

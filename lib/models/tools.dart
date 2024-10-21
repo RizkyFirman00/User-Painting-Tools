@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Tools {
   final String idAlat;
   final String namaAlat;
@@ -5,20 +7,22 @@ class Tools {
   final int kuantitasTersediaAlat;
   final String status;
 
-  Tools(
-      {required this.idAlat,
-      required this.namaAlat,
-      this.kuantitasAlat = 0,
-      this.kuantitasTersediaAlat = 0,
-      this.status = "Tidak Tersedia"});
+  Tools({
+    required this.idAlat,
+    required this.namaAlat,
+    this.kuantitasAlat = 0,
+    this.kuantitasTersediaAlat = 0,
+    this.status = "Tidak Tersedia",
+  });
 
-  factory Tools.fromMap(Map<String, dynamic> map, String idAlat) {
+  factory Tools.fromDocument(DocumentSnapshot doc) {
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return Tools(
-      idAlat: idAlat,
-      namaAlat: map['nama_alat'],
-      kuantitasAlat: map['kuantitas_alat'],
-      kuantitasTersediaAlat: map['kuantitas_tersedia_alat'],
-      status: map['status'],
+      idAlat: data['id_lat'],
+      namaAlat: data['nama_alat'],
+      kuantitasAlat: data['kuantitas_alat'],
+      kuantitasTersediaAlat: data['kuantitas_tersedia_alat'],
+      status: data['status'],
     );
   }
 

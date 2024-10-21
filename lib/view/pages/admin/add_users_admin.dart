@@ -86,9 +86,7 @@ class AddUsersAdmin extends StatelessWidget {
                           Get.snackbar('Gagal',
                               'NPK tidak boleh kurang dari 6 karakter');
                         } else {
-                          await userProvider.addUserToAuth(
-                              emailController.text.trim(),
-                              npkController.text.trim());
+                          await userProvider.addUserToAuth(emailController.text, npkController.text);
                           Get.snackbar(
                               'Sukses', 'Berhasil menambahkan user baru');
                         }

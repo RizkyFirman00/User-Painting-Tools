@@ -21,6 +21,7 @@ class _LoginState extends State<Login> {
 
   void _login(BuildContext context) async {
     final usersProvider = Provider.of<UsersProvider>(context, listen: false);
+
     String email = emailController.text;
     String npk = npkController.text;
 
@@ -55,14 +56,15 @@ class _LoginState extends State<Login> {
       bool loginSuccess = await usersProvider.loginUser(email, npk);
 
       if (loginSuccess) {
-        if (usersProvider.isAdmin) {
+        final bool? isAdminUser = await SharedPreferencesUsers.getIsAdmin();
+        if (isAdminUser != null) {
           Get.off(const HomeAdmin());
           print("isAdmin ${usersProvider.isAdmin}");
           _setStatusBarColor();
           Get.snackbar('Selamat datang admin ', emailController.text);
         } else {
           Get.off(const HomeUser());
-          print("isAdmin ${usersProvider.isAdmin}");
+          print("Admin Login ${usersProvider.isAdmin}");
           _setStatusBarColor();
           Get.snackbar('Selamat datang ', emailController.text);
         }
@@ -71,7 +73,7 @@ class _LoginState extends State<Login> {
         _clearInputFields();
       }
     } catch (e) {
-      Get.snackbar('Terjadi kesalahan', e.toString());
+      Get.snackbar('Login Gagal', e.toString());
       _clearInputFields();
     }
   }

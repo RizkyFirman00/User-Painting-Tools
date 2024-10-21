@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:user_painting_tools/view/pages/admin/add_tools_admin.dart';
 import 'package:user_painting_tools/view/widgets/admin/top_app_bar_admin.dart';
 
 class ToolsPage extends StatelessWidget {
@@ -9,8 +11,15 @@ class ToolsPage extends StatelessWidget {
     final Color _lightBlue = const Color(0xff0099FF);
     return SafeArea(
       child: Scaffold(
-        // appBar: TopAppBarAdmin(title: "Halaman Barang"),
-        body: Center(child: Text("Tools Page")),
+        appBar: TopAppBarAdmin(
+          title: "Halaman Barang",
+          onSearchChanged: (String) {
+            onSearchChanged:
+            () {
+
+            };
+          },
+        ),
         floatingActionButton: Padding(
           padding: EdgeInsets.only(bottom: 10, right: 10),
           child: Container(
@@ -22,7 +31,7 @@ class ToolsPage extends StatelessWidget {
             ),
             child: Center(
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {Get.to(() => const AddToolsAdmin());},
                 icon: Icon(
                   Icons.add,
                   color: Colors.white,
@@ -31,6 +40,7 @@ class ToolsPage extends StatelessWidget {
             ),
           ),
         ),
+        body: Center(child: Text("Tools Page")),
       ),
     );
   }

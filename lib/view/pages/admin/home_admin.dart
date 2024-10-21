@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
-import 'package:user_painting_tools/view/widgets/admin/loans_page.dart';
-import 'package:user_painting_tools/view/widgets/admin/tools_page.dart';
-import 'package:user_painting_tools/view/widgets/admin/users_page.dart';
+import 'package:user_painting_tools/view/pages/admin/loans_page.dart';
+import 'package:user_painting_tools/view/pages/admin/tools_page.dart';
+import 'package:user_painting_tools/view/pages/admin/users_page.dart';
 
 class HomeAdmin extends StatefulWidget {
   const HomeAdmin({super.key});

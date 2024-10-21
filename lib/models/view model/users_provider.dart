@@ -1,25 +1,30 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:user_painting_tools/models/services/users_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:simple_logger/simple_logger.dart';
 import 'package:user_painting_tools/helper/shared_preferences.dart';
 import 'package:user_painting_tools/models/users.dart';
 
 class UsersProvider with ChangeNotifier {
-  Users? _currentUser;
+  final UsersServices _usersServices = UsersServices();
+
   bool _isLoading = false;
-  bool _isAdmin = false;
-
-  List<Users> get listUsers =>
-      _filteredUsers.isEmpty ? _listUsers : _filteredUsers;
-  List<Users> _listUsers = [];
-  List<Users> _filteredUsers = [];
-
-  Users? get currentUser => _currentUser;
-
   bool get isLoading => _isLoading;
 
+  final bool _isAdmin = false;
   bool get isAdmin => _isAdmin;
+
+  List<Users> _listUsers = [];
+  List<Users?> get listUsers =>
+      _filteredUsers.isEmpty ? _listUsers : _filteredUsers;
+
+  Users? _currentUser;
+  Users? get currentUser => _currentUser;
+
+  List<Users?> _filteredUsers = [];
+  List<Users?> get filteredUser => _filteredUsers;
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -27,16 +32,14 @@ class UsersProvider with ChangeNotifier {
 
   void _setLoading(bool value) {
     _isLoading = value;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      notifyListeners();
-    });
+    notifyListeners();
   }
 
   void filterUsers(String query) {
     if (query.isNotEmpty) {
       _filteredUsers = _listUsers
           .where((user) =>
-          user.emailUser.toLowerCase().contains(query.toLowerCase()))
+              user.emailUser.toLowerCase().contains(query.toLowerCase()))
           .toList();
     } else {
       _filteredUsers = _listUsers;
@@ -44,15 +47,11 @@ class UsersProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchAllUser() async {
+  // User Sevices
+  Future<void> fetchUsers() async {
     _setLoading(true);
     try {
-      QuerySnapshot querySnapshot =
-          await _firestore.collection('users').orderBy('email').get();
-      _listUsers = querySnapshot.docs.map((doc) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-        return Users.fromDocument(doc);
-      }).toList();
+      _listUsers = await _usersServices.fetchAllUsers();
       _filteredUsers = _listUsers;
       notifyListeners();
     } catch (e) {
@@ -62,21 +61,29 @@ class UsersProvider with ChangeNotifier {
     }
   }
 
+  // User Sevices
   Future<bool> loginUser(String emailUser, String npkUser) async {
     _setLoading(true);
     try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: emailUser.trim(),
-        password: npkUser.trim(),
-      );
-      String? uid = userCredential.user?.uid;
+      UserCredential? userCredential =
+          await _usersServices.loginUser(emailUser, npkUser);
+      _simpleLogger.info(userCredential?.user?.email);
 
-      await _saveUserToFirestoreWhileLogin(uid, emailUser, npkUser);
-      await _fetchUserData(uid);
-      await SharedPreferencesUsers.saveLoginData(
-          emailUser, npkUser, _currentUser?.namaLengkap ?? "", _isAdmin);
+      if (userCredential != null) {
+        String uid = userCredential.user!.uid;
 
-      _simpleLogger.info(userCredential.user?.email);
+        _currentUser = await _usersServices.getUserById(uid);
+        await SharedPreferencesUsers.saveLoginData(
+          emailUser,
+          npkUser,
+          _currentUser?.namaLengkap ?? "Belum Mengisi",
+          _currentUser?.isAdmin ?? false,
+        );
+
+        print(
+            'Admin User Provider: ${_currentUser?.isAdmin}, ${_currentUser?.namaLengkap}');
+        notifyListeners();
+      }
       return true;
     } catch (e) {
       _simpleLogger.info("Login Gagal: ${e.toString()}");
@@ -86,44 +93,55 @@ class UsersProvider with ChangeNotifier {
     }
   }
 
+  // User Sevices
   Future<void> updateNamaLengkap(String namaLengkap) async {
+    if (_currentUser != null) {
+      _setLoading(true);
+      try {
+        String npk = _currentUser!.npkUser;
+
+        await _usersServices.updateNamaLengkap(npk, namaLengkap);
+
+        _currentUser = Users(
+          emailUser: _currentUser!.emailUser,
+          npkUser: _currentUser!.npkUser,
+          namaLengkap: namaLengkap,
+        );
+
+        await SharedPreferencesUsers.saveLoginData(
+          _currentUser!.emailUser,
+          _currentUser!.npkUser,
+          namaLengkap,
+          isAdmin,
+        );
+
+        _simpleLogger.info("Nama lengkap berhasil diperbarui: $namaLengkap");
+      } catch (e) {
+        _simpleLogger.severe("Error saat mengupdate nama lengkap: ${e.toString()}");
+      } finally {
+        _setLoading(false);
+      }
+    }
+  }
+
+  // User Sevices
+  Future<void> loadCurrentUser(String uid) async {
     _setLoading(true);
     try {
-      if (_currentUser != null) {
-        String? npk = _currentUser?.npkUser;
-
-        QuerySnapshot snapshot = await _firestore
-            .collection('users')
-            .where('npk', isEqualTo: npk)
-            .limit(1)
-            .get();
-
-        if (snapshot.docs.isNotEmpty) {
-          await snapshot.docs.first.reference.update({
-            'nama_lengkap': namaLengkap,
-          });
-          _currentUser = Users(
-            emailUser: _currentUser!.emailUser,
-            npkUser: _currentUser!.npkUser,
-            namaLengkap: namaLengkap,
-          );
-        }
-      }
+      _currentUser = await _usersServices.getUserById(uid);
     } catch (e) {
-      _simpleLogger.info("Gagal mengupdate nama lengkap: ${e.toString()}");
+      _simpleLogger.severe("Error loading current user: ${e.toString()}");
     } finally {
       _setLoading(false);
     }
   }
 
+  // User Sevices
   Future<void> addUserToAuth(String email, String npk) async {
     _setLoading(true);
     try {
       if (email.isNotEmpty && npk.isNotEmpty) {
-        UserCredential userCredential = await _auth
-            .createUserWithEmailAndPassword(email: email, password: npk);
-        String? uid = userCredential.user?.uid;
-        await _saveUserToFirestoreInAdmin(uid, email, npk);
+        await _usersServices.addDataUserToAuth(email, npk);
       }
     } catch (e) {
       _simpleLogger.info("Gagal menambah user: ${e.toString()}");
@@ -180,59 +198,6 @@ class UsersProvider with ChangeNotifier {
       print('Error deleting user: $e');
     } finally {
       _setLoading(false);
-    }
-  }
-
-  Future<void> _saveUserToFirestoreWhileLogin(
-      String? uid, String emailUser, String npkUser) async {
-    if (uid == null) return;
-    try {
-      DocumentSnapshot doc =
-          await _firestore.collection('users').doc(uid).get();
-      if (!doc.exists) {
-        await _firestore.collection('users').doc(uid).set({
-          'email': emailUser,
-          'npk': npkUser,
-          'firstLogin': FieldValue.serverTimestamp(),
-          'isAdmin': false,
-        });
-      }
-    } catch (e) {
-      _simpleLogger.info("Gagal menyimpan user ke Firestore: ${e.toString()}");
-    }
-  }
-
-  Future<void> _saveUserToFirestoreInAdmin(
-      String? uid, String emailUser, String npkUser) async {
-    if (uid == null) return;
-    try {
-      DocumentSnapshot doc =
-          await _firestore.collection('users').doc(uid).get();
-      if (!doc.exists) {
-        await _firestore.collection('users').doc(uid).set({
-          'email': emailUser,
-          'npk': npkUser,
-          'isAdmin': false,
-        });
-      }
-    } catch (e) {
-      _simpleLogger.info("Gagal menyimpan user ke Firestore: ${e.toString()}");
-    }
-  }
-
-  Future<void> _fetchUserData(String? uid) async {
-    if (uid != null) {
-      try {
-        DocumentSnapshot doc =
-            await _firestore.collection('users').doc(uid).get();
-        if (doc.exists) {
-          _currentUser = Users.fromDocument(doc);
-          _isAdmin = _currentUser!.isAdmin;
-          notifyListeners();
-        }
-      } catch (e) {
-        _simpleLogger.info("Gagal mengambil data user: ${e.toString()}");
-      }
     }
   }
 }
