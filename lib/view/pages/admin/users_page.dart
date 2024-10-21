@@ -25,12 +25,13 @@ class _UsersPageState extends State<UsersPage> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UsersProvider>(context, listen: false);
     return SafeArea(
       child: Scaffold(
         appBar: TopAppBarAdmin(
           title: "Halaman Pengguna",
           onSearchChanged: (query) {
-            Provider.of<UsersProvider>(context, listen: false).filterUsers(query);
+            userProvider.filterUsers(query);
           },
         ),
         floatingActionButton: Padding(
@@ -76,38 +77,41 @@ class _UsersPageState extends State<UsersPage> {
                           shrinkWrap: true,
                           itemBuilder: (BuildContext context, int index) {
                             final userData = listUsers[index];
-                            return CardUsers(
-                              emailUser: userData!.emailUser,
-                              longNameUser:
-                                  userData.namaLengkap ?? "Belum Mengisi",
-                              npkUser: userData.npkUser,
-                              onPressedDelete: () {
-                                return showDialog(
-                                  context: context,
-                                  barrierDismissible: false,
-                                  builder: (BuildContext context) {
-                                    return ConfirmationBox(
-                                      textTitle: "Hapus Akun",
-                                      textDescription:
-                                          "Apakah kamu yakin ingin menghapus akun ${userData.emailUser}?",
-                                      textConfirm: "Iya",
-                                      textCancel: "Tidak",
-                                      onConfirm: () async {
-                                        await userProvider.deleteUserOnAuth(
-                                            userData.emailUser,
-                                            userData.npkUser);
-                                        await userProvider.fetchUsers();
-                                        Get.snackbar('Berhasil',
-                                            'Akun ${userData.emailUser} berhasil dihapus');
-                                        Navigator.pop(context);
-                                      },
-                                      onCancel: () {
-                                        Navigator.pop(context);
-                                      },
-                                    );
-                                  },
-                                );
-                              },
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 10),
+                              child: CardUsers(
+                                emailUser: userData!.emailUser,
+                                longNameUser:
+                                    userData.namaLengkap ?? "Belum Mengisi",
+                                npkUser: userData.npkUser,
+                                onPressedDelete: () {
+                                  return showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (BuildContext context) {
+                                      return ConfirmationBox(
+                                        textTitle: "Hapus Akun",
+                                        textDescription:
+                                            "Apakah kamu yakin ingin menghapus akun ${userData.emailUser}?",
+                                        textConfirm: "Iya",
+                                        textCancel: "Tidak",
+                                        onConfirm: () async {
+                                          await userProvider.deleteUserOnAuth(
+                                              userData.emailUser,
+                                              userData.npkUser);
+                                          await userProvider.fetchUsers();
+                                          Get.snackbar('Berhasil',
+                                              'Akun ${userData.emailUser} berhasil dihapus');
+                                          Navigator.pop(context);
+                                        },
+                                        onCancel: () {
+                                          Navigator.pop(context);
+                                        },
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
                             );
                           }),
                 );

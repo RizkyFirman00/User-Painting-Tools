@@ -103,7 +103,7 @@ class UsersProvider with ChangeNotifier {
     _setLoading(true);
     try {
       _currentUser = await _usersServices.getUserByNpk(npk);
-      _simpleLogger.info("CURENT USER NPK: $_currentUser");
+      _simpleLogger.info("CURENT USER NPK: ${_currentUser?.npkUser}");
         } catch (e) {
       _simpleLogger.info("Gagal mengambil data user: ${e.toString()}");
     } finally {
@@ -149,7 +149,7 @@ class UsersProvider with ChangeNotifier {
     }
   }
 
-// User Sevices
+  // User Sevices
   Future<void> addUserToAuth(String email, String npk) async {
     _setLoading(true);
     try {
@@ -163,26 +163,11 @@ class UsersProvider with ChangeNotifier {
     }
   }
 
+  // User Services
   Future<void> deleteUserOnAuth(String email, String npk) async {
     _setLoading(true);
     try {
-      QuerySnapshot querySnapshot = await _firestore
-          .collection('users')
-          .where('email', isEqualTo: email)
-          .limit(1)
-          .get();
-
-      if (querySnapshot.docs.isNotEmpty) {
-        await querySnapshot.docs.first.reference.delete();
-      }
-
-      User? userToDelete =
-          (await _auth.signInWithEmailAndPassword(email: email, password: npk))
-              .user;
-      print('USER: $userToDelete');
-      if (userToDelete != null) {
-        await userToDelete.delete();
-      }
+      _usersServices.deleteUserOnAuth(email, npk);
     } catch (e) {
       print('Error deleting user: $e');
     } finally {

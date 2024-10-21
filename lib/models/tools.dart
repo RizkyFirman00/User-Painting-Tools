@@ -18,11 +18,11 @@ class Tools {
   factory Tools.fromDocument(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return Tools(
-      idAlat: data['id_lat'],
+      idAlat: data['id_alat'],
       namaAlat: data['nama_alat'],
       kuantitasAlat: data['kuantitas_alat'],
-      kuantitasTersediaAlat: data['kuantitas_tersedia_alat'],
-      status: data['status'],
+      kuantitasTersediaAlat: data.containsKey('kuantitas_tersedia_alat') ? data['kuantitas_tersedia_alat'] : 0,
+      status: data['status'] ?? 'Tidak Tersedia',
     );
   }
 

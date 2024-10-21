@@ -23,7 +23,8 @@ class UsersServices {
     }
   }
 
-  Future<void> addDataUserToFirestore(String? userId, String emailUser, String npkUser) async {
+  Future<void> addDataUserToFirestore(
+      String? userId, String emailUser, String npkUser) async {
     try {
       await _firestore.collection('users').doc(userId).set({
         'email': emailUser,
@@ -37,7 +38,8 @@ class UsersServices {
 
   Future<Users> getUserById(String uid) async {
     try {
-      DocumentSnapshot doc = await _firestore.collection('users').doc(uid).get();
+      DocumentSnapshot doc =
+          await _firestore.collection('users').doc(uid).get();
       if (doc.exists) {
         return Users.fromDocument(doc);
       } else {
@@ -96,7 +98,8 @@ class UsersServices {
       String? userId = userCredential.user?.uid;
 
       if (userId != null) {
-        DocumentSnapshot doc = await _firestore.collection('users').doc(userId).get();
+        DocumentSnapshot doc =
+            await _firestore.collection('users').doc(userId).get();
         if (!doc.exists) {
           await _firestore.collection('users').doc(userId).set({
             'email': emailUser,
@@ -128,5 +131,28 @@ class UsersServices {
     }
   }
 
+  Future<void> deleteUserOnAuth(String email, String npk) async {
+    try {
+      QuerySnapshot querySnapshot = await _firestore
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .limit(1)
+          .get();
 
+      if (querySnapshot.docs.isNotEmpty) {
+        await querySnapshot.docs.first.reference.delete();
+        _simpleLogger.info('User deleted from Firestore: $email');
+      }
+
+      User? userToDelete =
+          (await _auth.signInWithEmailAndPassword(email: email, password: npk))
+              .user;
+      if (userToDelete != null) {
+        await userToDelete.delete();
+        _simpleLogger.info('User deleted from Firebase Auth: $email');
+      }
+    } catch (e) {
+      _simpleLogger.severe('Error deleting user: $e');
+    }
+  }
 }

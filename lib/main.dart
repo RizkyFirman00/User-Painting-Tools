@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:user_painting_tools/helper/shared_preferences.dart';
+import 'package:user_painting_tools/models/view%20model/tools_provider.dart';
 import 'package:user_painting_tools/models/view%20model/users_provider.dart';
 import 'package:user_painting_tools/view/pages/splash_screen.dart';
 import 'firebase_options.dart';
@@ -17,6 +18,7 @@ void main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => UsersProvider()),
+      ChangeNotifierProvider(create: (_) => ToolsProvider()),
     ],
     child: const MainApp(),
   ));
