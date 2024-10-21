@@ -7,11 +7,39 @@ class SharedPreferencesUsers {
   static const String _keyIsAdmin = 'isAdmin';
 
   static Future<void> saveLoginData(
-      String email, String npk, String namaLengkap, bool isAdmin) async {
+    String email,
+    String npk,
+    String namaLengkap,
+    bool isAdmin,
+  ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keyEmail, email);
     await prefs.setString(_keyNpk, npk);
     await prefs.setString(_keyNamaLengkap, namaLengkap);
+    await prefs.setBool(_keyIsAdmin, isAdmin);
+  }
+
+  // Set email
+  static Future<void> setEmail(String email) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keyEmail, email);
+  }
+
+  // Set npk
+  static Future<void> setNpk(String npk) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keyNpk, npk);
+  }
+
+  // Set nama lengkap
+  static Future<void> setNamaLengkap(String namaLengkap) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_keyNamaLengkap, namaLengkap);
+  }
+
+  // Set isAdmin
+  static Future<void> setIsAdmin(bool isAdmin) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_keyIsAdmin, isAdmin);
   }
 

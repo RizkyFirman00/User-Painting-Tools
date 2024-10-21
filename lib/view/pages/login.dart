@@ -58,15 +58,16 @@ class _LoginState extends State<Login> {
       if (loginSuccess) {
         final bool? isAdminUser = await SharedPreferencesUsers.getIsAdmin();
         if (isAdminUser != null) {
-          Get.off(const HomeAdmin());
-          print("isAdmin ${usersProvider.isAdmin}");
-          _setStatusBarColor();
-          Get.snackbar('Selamat datang admin ', emailController.text);
+          if(isAdminUser) {
+            Get.off(const HomeAdmin());
+            Get.snackbar('Selamat datang admin ', emailController.text);
+          } else {
+            Get.off(const HomeUser());
+            Get.snackbar('Selamat datang ', emailController.text);
+          }
         } else {
-          Get.off(const HomeUser());
-          print("Admin Login ${usersProvider.isAdmin}");
-          _setStatusBarColor();
-          Get.snackbar('Selamat datang ', emailController.text);
+          Get.snackbar('Terjadi kesalahan', 'Password atau NPK salah');
+          _clearInputFields();
         }
       } else {
         Get.snackbar('Terjadi kesalahan', 'Password atau NPK salah');

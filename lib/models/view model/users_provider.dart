@@ -11,19 +11,24 @@ class UsersProvider with ChangeNotifier {
   final UsersServices _usersServices = UsersServices();
 
   bool _isLoading = false;
+
   bool get isLoading => _isLoading;
 
   final bool _isAdmin = false;
+
   bool get isAdmin => _isAdmin;
 
   List<Users> _listUsers = [];
+
   List<Users?> get listUsers =>
       _filteredUsers.isEmpty ? _listUsers : _filteredUsers;
 
   Users? _currentUser;
+
   Users? get currentUser => _currentUser;
 
   List<Users?> _filteredUsers = [];
+
   List<Users?> get filteredUser => _filteredUsers;
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -93,38 +98,45 @@ class UsersProvider with ChangeNotifier {
     }
   }
 
-  // User Sevices
-  Future<void> updateNamaLengkap(String namaLengkap) async {
+  Future<void> fetchUserDataWithNpk(String npk) async {
+    _setLoading(true);
+    try {
+      _currentUser = await _usersServices.getUserByNpk(npk);
+      _simpleLogger.info("CURENT USER NPK: $_currentUser");
+        } catch (e) {
+      _simpleLogger.info("Gagal mengambil data user: ${e.toString()}");
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+// User Sevices
+  Future<void> updateLongName(String namaLengkap) async {
     if (_currentUser != null) {
       _setLoading(true);
       try {
         String npk = _currentUser!.npkUser;
 
-        await _usersServices.updateNamaLengkap(npk, namaLengkap);
+        await _usersServices.updateLongName(npk, namaLengkap);
 
         _currentUser = Users(
           emailUser: _currentUser!.emailUser,
           npkUser: _currentUser!.npkUser,
           namaLengkap: namaLengkap,
         );
-
-        await SharedPreferencesUsers.saveLoginData(
-          _currentUser!.emailUser,
-          _currentUser!.npkUser,
-          namaLengkap,
-          isAdmin,
-        );
+        SharedPreferencesUsers.setNamaLengkap(namaLengkap);
 
         _simpleLogger.info("Nama lengkap berhasil diperbarui: $namaLengkap");
       } catch (e) {
-        _simpleLogger.severe("Error saat mengupdate nama lengkap: ${e.toString()}");
+        _simpleLogger
+            .severe("Error saat mengupdate nama lengkap: ${e.toString()}");
       } finally {
         _setLoading(false);
       }
     }
   }
 
-  // User Sevices
+// User Sevices
   Future<void> loadCurrentUser(String uid) async {
     _setLoading(true);
     try {
@@ -136,7 +148,7 @@ class UsersProvider with ChangeNotifier {
     }
   }
 
-  // User Sevices
+// User Sevices
   Future<void> addUserToAuth(String email, String npk) async {
     _setLoading(true);
     try {
@@ -145,30 +157,6 @@ class UsersProvider with ChangeNotifier {
       }
     } catch (e) {
       _simpleLogger.info("Gagal menambah user: ${e.toString()}");
-    } finally {
-      _setLoading(false);
-    }
-  }
-
-  Future<void> fetchUserDataFromFirestoreWithNpk(String npk) async {
-    _setLoading(true);
-    try {
-      if (npk.isNotEmpty) {
-        QuerySnapshot snapshot = await _firestore
-            .collection('users')
-            .where('npk', isEqualTo: npk)
-            .limit(1)
-            .get();
-
-        if (snapshot.docs.isNotEmpty) {
-          DocumentSnapshot doc = snapshot.docs.first;
-          _currentUser = Users.fromDocument(doc);
-        } else {
-          _simpleLogger.info('User dengan NPK tersebut tidak ditemukan.');
-        }
-      }
-    } catch (e) {
-      _simpleLogger.info("Gagal mengambil data user: ${e.toString()}");
     } finally {
       _setLoading(false);
     }

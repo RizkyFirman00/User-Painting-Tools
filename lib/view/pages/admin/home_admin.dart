@@ -13,7 +13,7 @@ class HomeAdmin extends StatefulWidget {
   State<HomeAdmin> createState() => _HomeAdminState();
 }
 
-Future<void> _setStatusBarColor() async {
+ void _setStatusBarColor() {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Color(0xFF0099FF),
   ));

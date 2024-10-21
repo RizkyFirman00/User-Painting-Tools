@@ -39,7 +39,6 @@ class UsersServices {
     try {
       DocumentSnapshot doc = await _firestore.collection('users').doc(uid).get();
       if (doc.exists) {
-        print("User dengan $uid dengan isi ${doc.toString()}");
         return Users.fromDocument(doc);
       } else {
         throw Exception("User tidak ditemukan");
@@ -49,7 +48,25 @@ class UsersServices {
     }
   }
 
-  Future<void> updateNamaLengkap(String npk, String namaLengkap) async {
+  Future<Users> getUserByNpk(String npk) async {
+    try {
+      QuerySnapshot snapshot = await _firestore
+          .collection('users')
+          .where('npk', isEqualTo: npk)
+          .limit(1)
+          .get();
+      if (snapshot.docs.isNotEmpty) {
+        DocumentSnapshot doc = snapshot.docs.first;
+        return Users.fromDocument(doc);
+      } else {
+        throw Exception("User tidak ditemukan");
+      }
+    } catch (e) {
+      throw Exception("Error fetching user: ${e.toString()}");
+    }
+  }
+
+  Future<void> updateLongName(String npk, String namaLengkap) async {
     try {
       QuerySnapshot snapshot = await _firestore
           .collection('users')

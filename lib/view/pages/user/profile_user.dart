@@ -26,13 +26,12 @@ class _ProfileUserState extends State<ProfileUser> {
   final TextEditingController namaLengkapController = TextEditingController();
   final TextEditingController npkController = TextEditingController();
 
-  Future<void> fetchDataToInput() async {
+  Future<void> loadCurrentUserData() async {
     try {
       String? npkUser = await SharedPreferencesUsers.getNpk();
-
       if (npkUser != null && npkUser.isNotEmpty) {
         final userProvider = Provider.of<UsersProvider>(context, listen: false);
-        await userProvider.fetchUserDataFromFirestoreWithNpk(npkUser);
+        await userProvider.fetchUserDataWithNpk(npkUser);
 
         if (userProvider.currentUser != null) {
           emailController.text = userProvider.currentUser!.emailUser;
@@ -66,7 +65,7 @@ class _ProfileUserState extends State<ProfileUser> {
 
   @override
   void initState() {
-    fetchDataToInput();
+    loadCurrentUserData();
     super.initState();
   }
 
@@ -176,7 +175,7 @@ class _ProfileUserState extends State<ProfileUser> {
                         ),
                         ElevatedButton(
                           onPressed: () async {
-                            await userProvider.updateNamaLengkap(
+                            await userProvider.updateLongName(
                                 namaLengkapController.text.trim());
                             Get.snackbar(
                                 'Sukses', 'Nama lengkap berhasil diperbarui');

@@ -31,24 +31,13 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
 
-  Future<void> _setStatusBarColor() async {
-    final usersProviderIsAdmin = Provider.of<UsersProvider>(context, listen: false).isAdmin;
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: usersProviderIsAdmin
-          ? const Color(0xFF0099FF)
-          : const Color(0xFFDF042C),
-    ));
-  }
-
   @override
   void initState() {
-    _setStatusBarColor();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    _setStatusBarColor();
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
