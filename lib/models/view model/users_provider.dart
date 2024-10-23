@@ -1,38 +1,28 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:user_painting_tools/models/services/users_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_logger/simple_logger.dart';
-import 'package:user_painting_tools/helper/shared_preferences.dart';
+import 'package:user_painting_tools/models/services/users_service.dart';
 import 'package:user_painting_tools/models/users.dart';
+import 'package:user_painting_tools/helper/shared_preferences.dart';
 
 class UsersProvider with ChangeNotifier {
   final UsersServices _usersServices = UsersServices();
 
   bool _isLoading = false;
-
   bool get isLoading => _isLoading;
 
   final bool _isAdmin = false;
-
   bool get isAdmin => _isAdmin;
 
   List<Users> _listUsers = [];
-
   List<Users?> get listUsers =>
       _filteredUsers.isEmpty ? _listUsers : _filteredUsers;
 
   Users? _currentUser;
-
   Users? get currentUser => _currentUser;
 
   List<Users?> _filteredUsers = [];
-
   List<Users?> get filteredUser => _filteredUsers;
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final SimpleLogger _simpleLogger = SimpleLogger();
 
   void _setLoading(bool value) {
@@ -44,7 +34,7 @@ class UsersProvider with ChangeNotifier {
     if (query.isNotEmpty) {
       _filteredUsers = _listUsers
           .where((user) =>
-              user.emailUser.toLowerCase().contains(query.toLowerCase()))
+          user!.npkUser.toLowerCase().contains(query.toLowerCase()))
           .toList();
     } else {
       _filteredUsers = _listUsers;
@@ -52,7 +42,7 @@ class UsersProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // User Sevices
+  // Fetch all users from Firestore
   Future<void> fetchUsers() async {
     _setLoading(true);
     try {
@@ -66,68 +56,67 @@ class UsersProvider with ChangeNotifier {
     }
   }
 
-  // User Sevices
-  Future<bool> loginUser(String emailUser, String npkUser) async {
+  Future<bool> loginUser(String npkUser, String passwordUser) async {
     _setLoading(true);
     try {
-      UserCredential? userCredential =
-          await _usersServices.loginUser(emailUser, npkUser);
-      _simpleLogger.info(userCredential?.user?.email);
+      Users user = await _usersServices.getUserByNpk(npkUser);
 
-      if (userCredential != null) {
-        String uid = userCredential.user!.uid;
+      if (user.passwordUser == passwordUser) {
+        _currentUser = user;
 
-        _currentUser = await _usersServices.getUserById(uid);
         await SharedPreferencesUsers.saveLoginData(
-          emailUser,
           npkUser,
+          passwordUser,
           _currentUser?.namaLengkap ?? "Belum Mengisi",
           _currentUser?.isAdmin ?? false,
         );
 
-        print(
-            'Admin User Provider: ${_currentUser?.isAdmin}, ${_currentUser?.namaLengkap}');
+        print('User berhasil login: ${_currentUser?.namaLengkap}');
         notifyListeners();
+        return true;
+      } else {
+        _simpleLogger.warning("Password salah.");
+        return false;
       }
-      return true;
     } catch (e) {
-      _simpleLogger.info("Login Gagal: ${e.toString()}");
+      _simpleLogger.info("Login gagal: ${e.toString()}");
       return false;
     } finally {
       _setLoading(false);
     }
   }
 
-  // User Sevices
+  // Fetch user data by NPK
   Future<void> fetchUserDataWithNpk(String npk) async {
     _setLoading(true);
     try {
       _currentUser = await _usersServices.getUserByNpk(npk);
-      _simpleLogger.info("CURENT USER NPK: ${_currentUser?.npkUser}");
-        } catch (e) {
+      _simpleLogger.info("Data user ditemukan: ${_currentUser?.passwordUser}");
+    } catch (e) {
       _simpleLogger.info("Gagal mengambil data user: ${e.toString()}");
     } finally {
       _setLoading(false);
     }
   }
 
-// User Sevices
+  // Update user's full name (nama lengkap)
   Future<void> updateLongName(String namaLengkap) async {
     if (_currentUser != null) {
       _setLoading(true);
       try {
-        String npk = _currentUser!.npkUser;
+        String npk = _currentUser!.passwordUser;
 
         await _usersServices.updateLongName(npk, namaLengkap);
 
         _currentUser = Users(
-          emailUser: _currentUser!.emailUser,
           npkUser: _currentUser!.npkUser,
+          passwordUser: _currentUser!.passwordUser,
           namaLengkap: namaLengkap,
         );
         SharedPreferencesUsers.setNamaLengkap(namaLengkap);
 
         _simpleLogger.info("Nama lengkap berhasil diperbarui: $namaLengkap");
+        notifyListeners();
       } catch (e) {
         _simpleLogger
             .severe("Error saat mengupdate nama lengkap: ${e.toString()}");
@@ -137,11 +126,12 @@ class UsersProvider with ChangeNotifier {
     }
   }
 
-// User Sevices
-  Future<void> loadCurrentUser(String uid) async {
+  // Load the current user by ID (for session management)
+  Future<void> loadCurrentUser(String npk) async {
     _setLoading(true);
     try {
-      _currentUser = await _usersServices.getUserById(uid);
+      _currentUser = await _usersServices.getUserByNpk(npk);
+      _simpleLogger.info("Current user loaded: ${_currentUser?.namaLengkap}");
     } catch (e) {
       _simpleLogger.severe("Error loading current user: ${e.toString()}");
     } finally {
@@ -149,12 +139,12 @@ class UsersProvider with ChangeNotifier {
     }
   }
 
-  // User Sevices
-  Future<void> addUserToAuth(String email, String npk) async {
+  // Add user to Firestore (Register new user)
+  Future<void> addUser(String npkUser, String passwordUser) async {
     _setLoading(true);
     try {
-      if (email.isNotEmpty && npk.isNotEmpty) {
-        await _usersServices.addDataUserToAuth(email, npk);
+      if (npkUser.isNotEmpty && passwordUser.isNotEmpty) {
+        await _usersServices.addDataUserToFirestore(npkUser, passwordUser);
       }
     } catch (e) {
       _simpleLogger.info("Gagal menambah user: ${e.toString()}");
@@ -163,13 +153,13 @@ class UsersProvider with ChangeNotifier {
     }
   }
 
-  // User Services
-  Future<void> deleteUserOnAuth(String email, String npk) async {
+  // Delete user from Firestore
+  Future<void> deleteUser(String npkUser) async {
     _setLoading(true);
     try {
-      _usersServices.deleteUserOnAuth(email, npk);
+      await _usersServices.deleteUserOnFirestore(npkUser);
     } catch (e) {
-      print('Error deleting user: $e');
+      _simpleLogger.severe("Error deleting user: ${e.toString()}");
     } finally {
       _setLoading(false);
     }

@@ -71,9 +71,9 @@ class _UsersPageState extends State<UsersPage> {
 
           return isThereQuery
               ? Center(
-              child: isLoading
-                  ? CircularProgressIndicator()
-                  : Text("Alat tidak ada"))
+                  child: isLoading
+                      ? CircularProgressIndicator()
+                      : Text("Alat tidak ada"))
               : Padding(
                   padding: const EdgeInsets.all(25.0),
                   child: listUsers.isEmpty && userProvider.isLoading
@@ -92,10 +92,10 @@ class _UsersPageState extends State<UsersPage> {
                             return Padding(
                               padding: const EdgeInsets.only(top: 10),
                               child: CardUsers(
-                                emailUser: userData!.emailUser,
+                                npkUser: userData!.npkUser,
                                 longNameUser:
                                     userData.namaLengkap ?? "Belum Mengisi",
-                                npkUser: userData.npkUser,
+                                passwordUser: userData.passwordUser,
                                 onPressedDelete: () {
                                   return showDialog(
                                     context: context,
@@ -104,16 +104,15 @@ class _UsersPageState extends State<UsersPage> {
                                       return ConfirmationBox(
                                         textTitle: "Hapus Akun",
                                         textDescription:
-                                            "Apakah kamu yakin ingin menghapus akun ${userData.emailUser}?",
+                                            "Apakah kamu yakin ingin menghapus akun ${userData.npkUser}?",
                                         textConfirm: "Iya",
                                         textCancel: "Tidak",
                                         onConfirm: () async {
-                                          await userProvider.deleteUserOnAuth(
-                                              userData.emailUser,
-                                              userData.npkUser);
+                                          await userProvider
+                                              .deleteUser(userData.npkUser);
                                           await userProvider.fetchUsers();
                                           Get.snackbar('Berhasil',
-                                              'Akun ${userData.emailUser} berhasil dihapus');
+                                              'Akun ${userData.npkUser} berhasil dihapus');
                                           Navigator.pop(context);
                                         },
                                         onCancel: () {

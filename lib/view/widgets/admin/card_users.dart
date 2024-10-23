@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class CardUsers extends StatefulWidget {
-  final String emailUser;
-  final String longNameUser;
   final String npkUser;
+  final String longNameUser;
+  final String passwordUser;
   final Future<void> Function() onPressedDelete;
 
   const CardUsers(
       {super.key,
-        required this.emailUser,
-        required this.longNameUser,
         required this.npkUser,
+        required this.longNameUser,
+        required this.passwordUser,
         required this.onPressedDelete});
 
   @override
@@ -48,7 +48,7 @@ class _CardUsersState extends State<CardUsers> {
                   ),
                 ),
                 Text(
-                  widget.emailUser,
+                  widget.npkUser,
                   overflow: TextOverflow.clip,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -67,7 +67,7 @@ class _CardUsersState extends State<CardUsers> {
                 ),
                 Expanded(
                   child: Text(
-                    widget.npkUser,
+                    widget.passwordUser,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,

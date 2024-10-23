@@ -16,32 +16,33 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final TextEditingController emailController = TextEditingController();
+  bool isPasswordVisiblePressed = true;
   final TextEditingController npkController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   void _login(BuildContext context) async {
     final usersProvider = Provider.of<UsersProvider>(context, listen: false);
 
-    String email = emailController.text;
     String npk = npkController.text;
+    String password = passwordController.text;
 
-    if (email.isEmpty && npk.isEmpty) {
+    if (npk.isEmpty && password.isEmpty) {
       Get.snackbar(
           'Perhatikan lagi', 'Silahkan Isi Email & NPK terlebih dahulu');
       return;
     }
 
-    if (email.isEmpty) {
+    if (npk.isEmpty) {
       Get.snackbar('Perhatikan lagi', 'Silahkan Isi Email terlebih dahulu');
       return;
     }
 
-    if (npk.isEmpty) {
+    if (password.isEmpty) {
       Get.snackbar('Perhatikan lagi', 'Silahkan Isi NPK terlebih dahulu');
       return;
     }
 
-    if (npk.length < 6) {
+    if (password.length < 6) {
       Get.snackbar('Perhatikan lagi', 'NPK tidak boleh kurang dari 6 karakter');
       return;
     }
@@ -53,17 +54,17 @@ class _LoginState extends State<Login> {
     }
 
     try {
-      bool loginSuccess = await usersProvider.loginUser(email, npk);
+      bool loginSuccess = await usersProvider.loginUser(npk, password);
 
       if (loginSuccess) {
         final bool? isAdminUser = await SharedPreferencesUsers.getIsAdmin();
         if (isAdminUser != null) {
-          if(isAdminUser) {
+          if (isAdminUser) {
             Get.off(const HomeAdmin());
-            Get.snackbar('Selamat datang admin ', emailController.text);
+            Get.snackbar('Selamat datang admin ', npkController.text);
           } else {
             Get.off(const HomeUser());
-            Get.snackbar('Selamat datang ', emailController.text);
+            Get.snackbar('Selamat datang ', npkController.text);
           }
         } else {
           Get.snackbar('Terjadi kesalahan', 'Password atau NPK salah');
@@ -86,7 +87,7 @@ class _LoginState extends State<Login> {
   }
 
   void _clearInputFields() {
-    npkController.clear();
+    passwordController.clear();
   }
 
   Future<bool> _checkInternetConnection() async {
@@ -109,8 +110,10 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+
     final userProvider = Provider.of<UsersProvider>(context, listen: true);
     final isLoading = userProvider.isLoading;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
@@ -142,11 +145,11 @@ class _LoginState extends State<Login> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextFormField(
-                            controller: emailController,
+                            controller: npkController,
                             enabled: !isLoading,
                             decoration: InputDecoration(
-                              labelText: 'Email',
-                              hintText: 'Masukkan Email Kamu',
+                              labelText: 'NPK',
+                              hintText: 'Masukkan NPK Kamu',
                               filled: true,
                               fillColor: const Color(0xfffbf0f3),
                               contentPadding: const EdgeInsets.symmetric(
@@ -165,9 +168,29 @@ class _LoginState extends State<Login> {
                             height: 10,
                           ),
                           TextFormField(
-                            controller: npkController,
+                            obscureText: isPasswordVisiblePressed,
+                            validator: (value) {
+                              if (value!.trim().isEmpty) {
+                                return 'Password is required';
+                              }
+                              return null;
+                            },
+                            controller: passwordController,
                             enabled: !isLoading,
                             decoration: InputDecoration(
+                              suffixIcon: Container(
+                                margin: EdgeInsets.all(5),
+                                child: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      isPasswordVisiblePressed = !isPasswordVisiblePressed;
+                                    });
+                                  },
+                                  icon: isPasswordVisiblePressed
+                                      ? Icon(Icons.visibility_off)
+                                      : Icon(Icons.visibility),
+                                ),
+                              ),
                               disabledBorder: themeTextForm(),
                               enabledBorder: themeTextForm(),
                               focusedBorder: OutlineInputBorder(
@@ -176,8 +199,8 @@ class _LoginState extends State<Login> {
                                   color: Colors.transparent,
                                 ),
                               ),
-                              labelText: 'NPK',
-                              hintText: 'Masukkan NPK Kamu',
+                              labelText: 'Password',
+                              hintText: 'Masukkan Password Kamu',
                               filled: true,
                               fillColor: const Color(0xfffbf0f3),
                               contentPadding: const EdgeInsets.symmetric(

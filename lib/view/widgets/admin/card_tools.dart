@@ -1,5 +1,6 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -14,12 +15,12 @@ class CardTools extends StatefulWidget {
   final Future<void> Function() onPressedDelete;
 
   const CardTools({
-    Key? key,
+    super.key,
     required this.namaAlat,
     required this.idAlat,
     required this.kuantitasAlat,
     required this.onPressedDelete,
-  }) : super(key: key);
+  });
 
   @override
   State<CardTools> createState() => _CardToolsState();
@@ -37,7 +38,6 @@ class _CardToolsState extends State<CardTools> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-
           contentPadding: const EdgeInsets.all(20),
           content: SingleChildScrollView(
             child: Column(
@@ -68,11 +68,13 @@ class _CardToolsState extends State<CardTools> {
                                 size: 200.0,
                                 gapless: true,
                               ),
-                              Text(
-                                widget.namaAlat,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
+                              Center(
+                                child: Text(
+                                  widget.namaAlat,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                  ),
                                 ),
                               ),
                             ],
@@ -84,7 +86,9 @@ class _CardToolsState extends State<CardTools> {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(_lightBlue), foregroundColor: WidgetStatePropertyAll(Colors.white)),
+                  style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(_lightBlue),
+                      foregroundColor: WidgetStatePropertyAll(Colors.white)),
                   onPressed: () async {
                     var status = await Permission.storage.request();
                     if (status.isGranted) {
@@ -92,12 +96,11 @@ class _CardToolsState extends State<CardTools> {
                           await screenshotController.capture(pixelRatio: 3.0);
                       if (image != null) {
                         await saveImage(image, widget.namaAlat);
+                        Navigator.pop(context);
+                        Get.snackbar('Berhasil', 'Menyimpan QR ke galeri');
                       }
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('Izin penyimpanan ditolak')),
-                      );
+                      Get.snackbar('Gagal', 'Izin penyimpanan ditolak');
                     }
                   },
                   child: const Text("Simpan ke Galeri"),
@@ -189,11 +192,17 @@ class _CardToolsState extends State<CardTools> {
                         ],
                       ),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text("ID Alat: "),
-                          Text(
-                            widget.idAlat,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Text(
+                                widget.idAlat,
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
                           ),
                         ],
                       ),

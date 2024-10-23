@@ -21,6 +21,10 @@ dependencies:
   screenshot: ^3.0.0
   path_provider: ^2.1.4
   permission_handler: ^11.3.1
+  intl_utils: ^2.8.7
+
+  # QR Reader
+  qr_code_scanner_plus: ^2.0.6
 
   # Image Saver
   image_gallery_saver_plus: ^3.0.5

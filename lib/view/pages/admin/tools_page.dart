@@ -107,7 +107,7 @@ class _ToolsPageState extends State<ToolsPage> {
                                               toolData.namaAlat);
                                           await toolsProvider.fetchTools();
                                           Get.snackbar('Berhasil',
-                                              'Akun ${toolData.namaAlat} berhasil dihapus');
+                                              'Barang ${toolData.namaAlat} berhasil dihapus');
                                           Navigator.pop(context);
                                         },
                                         onCancel: () {

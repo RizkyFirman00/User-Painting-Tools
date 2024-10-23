@@ -12,8 +12,8 @@ class AddUsersAdmin extends StatelessWidget {
     final userProvider = Provider.of<UsersProvider>(context, listen: true);
     bool isLoading = userProvider.isLoading;
 
-    final TextEditingController emailController = TextEditingController();
     final TextEditingController npkController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
 
     final Color _lightBlue = Color(0xFF0099FF);
     return SafeArea(
@@ -44,13 +44,13 @@ class AddUsersAdmin extends StatelessWidget {
                     child: Column(
                       children: [
                         TextField(
-                          controller: emailController,
+                          controller: npkController,
                           decoration: InputDecoration(
                             icon: Icon(
-                              Icons.email,
+                              Icons.numbers,
                               color: _lightBlue,
                             ),
-                            hintText: "Email",
+                            hintText: "NPK",
                             border: const OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
@@ -60,10 +60,10 @@ class AddUsersAdmin extends StatelessWidget {
                           height: 25,
                         ),
                         TextField(
-                          controller: npkController,
+                          controller: passwordController,
                           decoration: InputDecoration(
-                            icon: Icon(Icons.numbers, color: _lightBlue),
-                            hintText: "NPK",
+                            icon: Icon(Icons.password, color: _lightBlue),
+                            hintText: "Password",
                             border: OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
@@ -81,12 +81,12 @@ class AddUsersAdmin extends StatelessWidget {
                 onPressed: isLoading
                     ? null
                     : () async {
-                        if (npkController.text.length < 6) {
-                          npkController.text = '';
+                        if (passwordController.text.length < 6) {
+                          passwordController.text = '';
                           Get.snackbar('Gagal',
                               'NPK tidak boleh kurang dari 6 karakter');
                         } else {
-                          await userProvider.addUserToAuth(emailController.text, npkController.text);
+                          await userProvider.addUser(npkController.text, passwordController.text);
                           Get.snackbar(
                               'Sukses', 'Berhasil menambahkan user baru');
                         }

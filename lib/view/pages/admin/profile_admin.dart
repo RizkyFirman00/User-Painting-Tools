@@ -17,20 +17,20 @@ class ProfileAdmin extends StatefulWidget {
 
 class _ProfileAdminState extends State<ProfileAdmin> {
   final Color _lightBlue = const Color(0xFF0099FF);
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController namaLengkapController = TextEditingController();
   final TextEditingController npkController = TextEditingController();
+  final TextEditingController namaLengkapController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   Future<void> loadCurrentUserData() async {
     try {
-      String? npkUser = await SharedPreferencesUsers.getNpk();
-      if (npkUser != null && npkUser.isNotEmpty) {
+      String? passwordUser = await SharedPreferencesUsers.getNpk();
+      if (passwordUser != null && passwordUser.isNotEmpty) {
         final userProvider = Provider.of<UsersProvider>(context, listen: false);
-        await userProvider.fetchUserDataWithNpk(npkUser);
+        await userProvider.fetchUserDataWithNpk(passwordUser);
 
         if (userProvider.currentUser != null) {
-          emailController.text = userProvider.currentUser!.emailUser;
           npkController.text = userProvider.currentUser!.npkUser;
+          passwordController.text = userProvider.currentUser!.passwordUser;
           namaLengkapController.text = userProvider.currentUser!.namaLengkap!;
         }
       } else {
@@ -52,7 +52,7 @@ class _ProfileAdminState extends State<ProfileAdmin> {
   }
 
   bool isThereLongName() {
-    if (emailController.text.isNotEmpty) {
+    if (npkController.text.isNotEmpty) {
       return true;
     } else {
       return false;
@@ -61,7 +61,7 @@ class _ProfileAdminState extends State<ProfileAdmin> {
 
   void logoutUser() async {
     await SharedPreferencesUsers.clearLoginData();
-    Get.off(() => const Login());
+    Get.offAll(() => const Login());
   }
 
   @override
@@ -133,14 +133,14 @@ class _ProfileAdminState extends State<ProfileAdmin> {
                     child: Column(
                       children: [
                         TextField(
-                          controller: emailController,
+                          controller: npkController,
                           enabled: isThereLongName() ? false : true,
                           decoration: InputDecoration(
                             icon: Icon(
-                              Icons.email,
+                              Icons.numbers,
                               color: _lightBlue,
                             ),
-                            hintText: "Email",
+                            hintText: "NPK",
                             border: const OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
@@ -163,11 +163,11 @@ class _ProfileAdminState extends State<ProfileAdmin> {
                           height: 25,
                         ),
                         TextField(
-                          controller: npkController,
+                          controller: passwordController,
                           enabled: isThereLongName() ? false : true,
                           decoration: InputDecoration(
-                            icon: Icon(Icons.numbers, color: _lightBlue),
-                            hintText: "NPK",
+                            icon: Icon(Icons.password, color: _lightBlue),
+                            hintText: "Password",
                             border: const OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),

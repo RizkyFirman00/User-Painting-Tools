@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Users {
-  final String emailUser;
   final String npkUser;
+  final String passwordUser;
   final String? namaLengkap;
   final bool isAdmin;
 
   Users({
-    required this.emailUser,
     required this.npkUser,
+    required this.passwordUser,
     this.namaLengkap = "",
     this.isAdmin = false,
   });
@@ -16,8 +16,8 @@ class Users {
   factory Users.fromDocument(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return Users(
-      emailUser: data['email'] ?? '',
       npkUser: data['npk'] ?? '',
+      passwordUser: data['password'] ?? '',
       namaLengkap:
           data.containsKey('nama_lengkap') ? data['nama_lengkap'] : null,
       isAdmin: data['isAdmin'] ?? false,
@@ -26,8 +26,8 @@ class Users {
 
   Map<String, dynamic> toMap() {
     return {
-      'email': emailUser,
       'npk': npkUser,
+      'password': passwordUser,
       if (namaLengkap != null) 'nama_lengkap': namaLengkap,
       'isAdmin': isAdmin,
     };
