@@ -40,4 +40,22 @@ class ToolsServices {
       return [];
     }
   }
+
+  Future<void> deleteTools(String idAlat, String namaAlat) async {
+    try {
+      QuerySnapshot querySnapshot = await _firestore
+          .collection('tools')
+          .where('id_alat', isEqualTo: idAlat)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        await querySnapshot.docs.first.reference.delete();
+        _simpleLogger.info('User deleted from Firestore: $idAlat');
+      }
+
+    } catch(e) {
+      _simpleLogger.severe('Error deleting user: $e');
+    }
+  }
 }

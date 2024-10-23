@@ -8,16 +8,26 @@ environment:
 
 dependencies:
   get: ^4.6.6
+  http: ^1.0.0
   google_fonts: ^6.2.1
   firebase_core: 3.6.0
   cloud_firestore: 5.4.4
   simple_logger: ^1.9.0+3
   provider: ^6.1.2
   firebase_auth: ^5.3.1
-  flutter:
-    sdk: flutter
   shared_preferences: ^2.3.2
   persistent_bottom_nav_bar: ^6.2.1
+  qr_flutter: ^4.1.0
+  screenshot: ^3.0.0
+  path_provider: ^2.1.4
+  permission_handler: ^11.3.1
+
+  # Image Saver
+  image_gallery_saver_plus: ^3.0.5
+
+  flutter:
+    sdk: flutter
+
 
 
 dev_dependencies:

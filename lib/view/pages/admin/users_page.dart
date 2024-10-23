@@ -42,12 +42,19 @@ class _UsersPageState extends State<UsersPage> {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: _lightBlue,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 1,
+                  blurRadius: 3,
+                  offset: Offset(0, 3),
+                ),
+              ],
             ),
             child: IconButton(
               onPressed: () async {
                 await Get.to(() => AddUsersAdmin());
-                Provider.of<UsersProvider>(context, listen: false)
-                    .fetchUsers();
+                Provider.of<UsersProvider>(context, listen: false).fetchUsers();
               },
               icon: Icon(
                 Icons.add,
@@ -59,11 +66,14 @@ class _UsersPageState extends State<UsersPage> {
         body: Consumer<UsersProvider>(
             builder: (BuildContext context, userProvider, child) {
           final listUsers = userProvider.listUsers;
+          final isLoading = userProvider.isLoading;
           bool isThereQuery = userProvider.filteredUser.isEmpty;
+
           return isThereQuery
               ? Center(
-                  child: Text("User tersebut tidak ada"),
-                )
+              child: isLoading
+                  ? CircularProgressIndicator()
+                  : Text("Alat tidak ada"))
               : Padding(
                   padding: const EdgeInsets.all(25.0),
                   child: listUsers.isEmpty && userProvider.isLoading
@@ -73,7 +83,9 @@ class _UsersPageState extends State<UsersPage> {
                           physics: const BouncingScrollPhysics(),
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2, childAspectRatio: 1.2),
+                            crossAxisCount: 2,
+                            childAspectRatio: 1,
+                          ),
                           shrinkWrap: true,
                           itemBuilder: (BuildContext context, int index) {
                             final userData = listUsers[index];

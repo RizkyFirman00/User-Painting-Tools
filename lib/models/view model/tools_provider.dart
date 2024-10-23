@@ -30,20 +30,22 @@ class ToolsProvider with ChangeNotifier {
           .where((tool) =>
           tool.namaAlat.toLowerCase().contains(query.toLowerCase()))
           .toList();
+      notifyListeners();
     } else {
       _filteredTools = _listTools;
     }
     notifyListeners();
   }
 
-  Future<void> addToolToFirestore(String idBarang, String namaBarang, int kuantitasBarang) async {
+  Future<void> addToolToFirestore(String idTools, String nameTools, int qtyTools) async {
     _setLoading(true);
     try {
-      if (idBarang.isNotEmpty &&
-          namaBarang.isNotEmpty &&
-          kuantitasBarang != 0) {
-        await toolsServices.addToolsToFirestore(idBarang, namaBarang, kuantitasBarang);
+      if (idTools.isNotEmpty &&
+          nameTools.isNotEmpty &&
+          qtyTools != 0) {
+        await toolsServices.addToolsToFirestore(idTools, nameTools, qtyTools);
       }
+      notifyListeners();
     } catch (e) {
       _simpleLogger.info("Gagal menyimpan user ke Firestore: ${e.toString()}");
     } finally {
@@ -59,6 +61,20 @@ class ToolsProvider with ChangeNotifier {
       notifyListeners();
     } catch (e) {
       _simpleLogger.info(e);
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  Future<void> deleteTools(String idTools, String nameTools) async {
+    _setLoading(true);
+    try {
+      await toolsServices.deleteTools(idTools, nameTools);
+      _simpleLogger.info("Success delete tool $nameTools");
+      await fetchTools();
+      notifyListeners();
+    } catch(e) {
+      _simpleLogger.severe('Error deleting user: $e');
     } finally {
       _setLoading(false);
     }

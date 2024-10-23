@@ -8,10 +8,10 @@ class CardUsers extends StatefulWidget {
 
   const CardUsers(
       {super.key,
-      required this.emailUser,
-      required this.longNameUser,
-      required this.npkUser,
-      required this.onPressedDelete});
+        required this.emailUser,
+        required this.longNameUser,
+        required this.npkUser,
+        required this.onPressedDelete});
 
   @override
   State<CardUsers> createState() => _CardUsersState();
@@ -23,82 +23,96 @@ class _CardUsersState extends State<CardUsers> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      splashColor: Colors.white.withOpacity(0.3),
+      borderRadius: BorderRadius.circular(15),
       onTap: () {
         setState(() {
           isCardPressed = !isCardPressed;
         });
       },
       child: Card(
-        child: isCardPressed
-            ? Stack(
-                alignment: Alignment.center,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          widget.onPressedDelete().then((_) {
-                            setState(() {
-                              isCardPressed = false;
-                            });
-                          });
-                        },
-                        icon: Icon(
-                          Icons.delete,
-                          size: 40,
-                          color: Colors.red,
-                        ),
-                      ),
-                      Text("Delete", style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold
-                      ),),
-                    ],
-                  )
-                ],
-              )
-            : Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 15),
+          child: AnimatedCrossFade(
+            duration: Duration(milliseconds: 300),
+            firstChild: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Email: ",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    fontSize: 14,
+                  ),
+                ),
+                Text(
+                  widget.emailUser,
+                  overflow: TextOverflow.clip,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "NPK: ",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    fontSize: 14,
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    widget.npkUser,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            secondChild: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: 100,
+              ),
+              child: Center(
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Email: ",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w300,
-                        fontSize: 14,
+                    IconButton(
+                      onPressed: () {
+                        widget.onPressedDelete().then((_) {
+                          setState(() {
+                            isCardPressed = false;
+                          });
+                        });
+                      },
+                      icon: Icon(
+                        Icons.delete,
+                        size: 40,
+                        color: Colors.red,
                       ),
                     ),
                     Text(
-                      widget.emailUser,
-                      overflow: TextOverflow.clip,
+                      "Delete",
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "NPK: ",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w300,
-                        fontSize: 14,
-                      ),
-                    ),
-                    Text(
-                      widget.npkUser,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
+                          fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
               ),
+            ),
+            crossFadeState: isCardPressed
+                ? CrossFadeState.showSecond
+                : CrossFadeState.showFirst,
+          ),
+        ),
       ),
     );
   }

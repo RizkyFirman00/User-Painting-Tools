@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 
 class CardAvailTools extends StatelessWidget {
-  const CardAvailTools({super.key});
+  final String nameTools;
+  final String idTools;
+  final int qtyTools;
+
+  const CardAvailTools(
+      {super.key,
+      required this.nameTools,
+      required this.idTools,
+      required this.qtyTools});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +32,7 @@ class CardAvailTools extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Nama Barang",
+                      nameTools,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
@@ -42,7 +50,7 @@ class CardAvailTools extends StatelessWidget {
                         ),
                         SizedBox(width: 5),
                         Text(
-                          "10",
+                          qtyTools.toString(),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
@@ -53,7 +61,7 @@ class CardAvailTools extends StatelessWidget {
                   ],
                 ),
               ),
-              Text("X512AA"),
+              Text(idTools),
             ],
           ),
         ),

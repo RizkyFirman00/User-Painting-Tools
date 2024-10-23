@@ -5,6 +5,7 @@ import 'package:user_painting_tools/models/view%20model/tools_provider.dart';
 import 'package:user_painting_tools/view/pages/admin/add_tools_admin.dart';
 import 'package:user_painting_tools/view/widgets/admin/card_tools.dart';
 import 'package:user_painting_tools/view/widgets/admin/top_app_bar_admin.dart';
+import 'package:user_painting_tools/view/widgets/confirmation_box.dart';
 
 class ToolsPage extends StatefulWidget {
   const ToolsPage({super.key});
@@ -20,7 +21,6 @@ class _ToolsPageState extends State<ToolsPage> {
   void initState() {
     super.initState();
     Provider.of<ToolsProvider>(context, listen: false).fetchTools();
-    print("LIST TOOLS ${Provider.of<ToolsProvider>(context, listen: false).listTools}");
   }
 
   @override
@@ -42,16 +42,23 @@ class _ToolsPageState extends State<ToolsPage> {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: _lightBlue,
-            ),
-            child: Center(
-              child: IconButton(
-                onPressed: () {
-                  Get.to(() => const AddToolsAdmin());
-                },
-                icon: Icon(
-                  Icons.add,
-                  color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 1,
+                  blurRadius: 3,
+                  offset: Offset(0, 3),
                 ),
+              ],
+            ),
+            child: IconButton(
+              onPressed: () async {
+                await Get.to(() => AddToolsAdmin());
+                toolsProvider.fetchTools();
+              },
+              icon: Icon(
+                Icons.add,
+                color: Colors.white,
               ),
             ),
           ),
@@ -59,10 +66,14 @@ class _ToolsPageState extends State<ToolsPage> {
         body: Consumer<ToolsProvider>(
             builder: (BuildContext context, toolsProvider, child) {
           final listTools = toolsProvider.listTools;
-          print("Isi daftar barang: $listTools");
+          final isLoading = toolsProvider.isLoading;
+
           bool isThereQuery = toolsProvider.filteredUser.isEmpty;
           return isThereQuery
-              ? Center(child: Text("Alat tersebut tidak ada"))
+              ? Center(
+                  child: isLoading
+                      ? CircularProgressIndicator()
+                      : Text("Alat tidak ada"))
               : Padding(
                   padding: EdgeInsets.all(25),
                   child: listTools.isEmpty && toolsProvider.isLoading
@@ -76,9 +87,37 @@ class _ToolsPageState extends State<ToolsPage> {
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 10),
                               child: CardTools(
-                                  namaAlat: toolData.namaAlat,
-                                  idAlat: toolData.idAlat,
-                                  kuantitasAlat: toolData.kuantitasAlat),
+                                namaAlat: toolData.namaAlat,
+                                idAlat: toolData.idAlat,
+                                kuantitasAlat: toolData.kuantitasAlat,
+                                onPressedDelete: () {
+                                  return showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (BuildContext context) {
+                                      return ConfirmationBox(
+                                        textTitle: "Hapus Akun",
+                                        textDescription:
+                                            "Apakah kamu yakin ingin menghapus data barang ${toolData.idAlat}?",
+                                        textConfirm: "Iya",
+                                        textCancel: "Tidak",
+                                        onConfirm: () async {
+                                          await toolsProvider.deleteTools(
+                                              toolData.idAlat,
+                                              toolData.namaAlat);
+                                          await toolsProvider.fetchTools();
+                                          Get.snackbar('Berhasil',
+                                              'Akun ${toolData.namaAlat} berhasil dihapus');
+                                          Navigator.pop(context);
+                                        },
+                                        onCancel: () {
+                                          Navigator.pop(context);
+                                        },
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
                             );
                           },
                         ));
