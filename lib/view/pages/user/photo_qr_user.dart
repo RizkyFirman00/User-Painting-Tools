@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
+import 'package:user_painting_tools/view/pages/user/filling_data_user.dart';
 
 class PhotoQrUser extends StatefulWidget {
   const PhotoQrUser({super.key});
@@ -24,6 +26,13 @@ class _PhotoQrUserState extends State<PhotoQrUser> {
 
   @override
   Widget build(BuildContext context) {
+
+    if (qrCodeResult != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Get.to(FillingDataUser(), arguments: {'idBarang': qrCodeResult});
+      });
+    }
+
     return Scaffold(
       body: Column(
         children: <Widget>[
@@ -45,7 +54,7 @@ class _PhotoQrUserState extends State<PhotoQrUser> {
             flex: 1,
             child: Center(
               child: (qrCodeResult != null)
-                  ? Text('Hasil: $qrCodeResult')
+                ? const Text('Navigating...')
                   : const Text('Pindai kode QR untuk mendapatkan hasil.'),
             ),
           )
