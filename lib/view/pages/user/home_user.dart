@@ -27,7 +27,7 @@ class _HomeUserState extends State<HomeUser> {
   final List<Widget> _pages = [
     const AvailTools(),
     const PhotoQrUser(),
-    const BorrowTools(),
+    const LoansTools(),
   ];
 
   void _onItemTapped(int index) {

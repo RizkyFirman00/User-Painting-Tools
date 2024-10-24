@@ -1,19 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:user_painting_tools/models/view%20model/loans_provider.dart';
+import 'package:user_painting_tools/models/view%20model/tools_provider.dart';
 import 'package:user_painting_tools/view/widgets/confirmation_box.dart';
+import 'package:intl/intl.dart';
 
-class CardBorrowTools extends StatefulWidget {
-  const CardBorrowTools({super.key});
+import '../../../helper/shared_preferences.dart';
+
+class CardLoanTools extends StatefulWidget {
+  final String toolName;
+  final String toolId;
+  final DateTime loanDate;
+  final DateTime loanDateReturn;
+  final VoidCallback onConfirm;
+  final VoidCallback onCancel;
+
+  const CardLoanTools({
+    super.key,
+    required this.toolName,
+    required this.toolId,
+    required this.loanDate,
+    required this.loanDateReturn,
+    required this.onConfirm,
+    required this.onCancel,
+  });
 
   @override
-  State<CardBorrowTools> createState() => _CardBorrowToolsState();
+  State<CardLoanTools> createState() => _CardLoanToolsState();
 }
 
-class _CardBorrowToolsState extends State<CardBorrowTools> {
+class _CardLoanToolsState extends State<CardLoanTools> {
   bool light = true;
   bool isCompleted = false;
 
   @override
   Widget build(BuildContext context) {
+    String parsedLoanDate = DateFormat('dd-MM-yyyy').format(widget.loanDate);
+    String parsedReturnDate =
+        DateFormat('dd-MM-yyyy').format(widget.loanDateReturn);
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
       child: Card(
@@ -34,28 +59,58 @@ class _CardBorrowToolsState extends State<CardBorrowTools> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Row(
+                    Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          "Pemecah Kacang",
-                          style: TextStyle(
+                          widget.toolName,
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
                           ),
                         ),
                       ],
                     ),
-                    Text("X512AA"),
-                    Container(
-                      child: const Text(
-                        "10.09.2024 - 10.09.2024",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w300,
-                          fontSize: 14,
-                        ),
-                      ),
+                    Text(widget.toolId),
+                    SizedBox(
+                      height: 10,
                     ),
+                    Row(
+                      children: [
+                        Text(
+                          "From ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                        Text(
+                          parsedLoanDate,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w300,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "to ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                        Text(
+                          parsedReturnDate,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w300,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    )
                   ],
                 ),
                 Container(
@@ -74,32 +129,38 @@ class _CardBorrowToolsState extends State<CardBorrowTools> {
                             : (bool value) {
                                 if (value == false) {
                                   showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return ConfirmationBox(
-                                            textTitle: "Pengembalian Barang",
-                                            textDescription:
-                                                "Apakah kamu yakin sudah selesai menggunakan barang?",
-                                            textConfirm: "Sudah",
-                                            textCancel: "Belum",
-                                            onConfirm: () async {
-                                              setState(() {
-                                                light = false;
-                                                isCompleted = true;
-                                              });
-                                              Navigator.pop(context);
-                                            },
-                                            onCancel: () {
-                                              setState(() {
-                                                light = true;
-                                              });
-                                              Navigator.pop(context);
-                                            });
-                                      });
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return ConfirmationBox(
+                                        textTitle: "Pengembalian Barang",
+                                        textDescription:
+                                            "Apakah kamu yakin sudah selesai menggunakan barang?",
+                                        textConfirm: "Sudah",
+                                        textCancel: "Belum",
+                                        onConfirm: () async {
+                                          widget.onConfirm();
+                                          setState(() {
+                                            light = false;
+                                            isCompleted = true;
+                                          });
+                                          Navigator.pop(context);
+                                        },
+                                        onCancel: () {
+                                          widget.onCancel();
+                                          setState(() {
+                                            light = true;
+                                          });
+                                          Navigator.pop(context);
+                                        },
+                                      );
+                                    },
+                                  );
                                 } else {
-                                  setState(() {
-                                    light = true;
-                                  });
+                                  setState(
+                                    () {
+                                      light = true;
+                                    },
+                                  );
                                 }
                               },
                       ),

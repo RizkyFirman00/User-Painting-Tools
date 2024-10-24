@@ -1,16 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+import 'package:user_painting_tools/models/loans.dart';
+import 'package:user_painting_tools/models/view%20model/loans_provider.dart';
 import 'package:user_painting_tools/view/widgets/user/card_loan_tools.dart';
 import 'package:user_painting_tools/view/widgets/confirmation_box.dart';
 
-class BorrowTools extends StatefulWidget {
-  const BorrowTools({super.key});
+import '../../../helper/shared_preferences.dart';
+
+class LoansTools extends StatefulWidget {
+  const LoansTools({super.key});
 
   @override
-  State<BorrowTools> createState() => _BorrowToolsState();
+  State<LoansTools> createState() => _LoansToolsState();
 }
 
-class _BorrowToolsState extends State<BorrowTools> {
+class _LoansToolsState extends State<LoansTools> {
+  Future<void> _loadData() async {
+    final loadProvider = Provider.of<LoansProvider>(context, listen: false);
+    String? npk = await SharedPreferencesUsers.getNpk();
+
+    if (npk != null) {
+      loadProvider.fetchUserLoans(npk);
+    }
+  }
+
+  @override
+  void initState() {
+    _loadData();
+    super.initState();
+  }
+
+  void _handleLoanReturn(Loans loan) {
+    final loansProvider = Provider.of<LoansProvider>(context, listen: false);
+    loansProvider.returnLoan(loan);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -59,24 +83,29 @@ class _BorrowToolsState extends State<BorrowTools> {
         Container(
           padding: const EdgeInsets.only(left: 25, right: 25, bottom: 5),
           height: MediaQuery.of(context).size.height - 208,
-          child: const Expanded(
-            child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: Column(
-                children: [
-                  CardBorrowTools(),
-                  CardBorrowTools(),
-                  CardBorrowTools(),
-                  CardBorrowTools(),
-                  CardBorrowTools(),
-                  CardBorrowTools(),
-                  CardBorrowTools(),
-                  CardBorrowTools(),
-                  CardBorrowTools(),
-                  CardBorrowTools(),
-                ],
-              ),
-            ),
+          child: Expanded(
+            child: Consumer<LoansProvider>(
+                builder: (BuildContext context, loanProvider, child) {
+              final listLoans = loanProvider.loansUserList;
+              final isLoading = loanProvider.isLoading;
+              return isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : ListView.builder(
+                      itemCount: listLoans.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final loanData = listLoans[index];
+                        return CardLoanTools(
+                          toolName: loanData.userNpk,
+                          toolId: loanData.toolId,
+                          loanDate: loanData.loanDate,
+                          loanDateReturn: loanData.loanDateReturn!,
+                          onConfirm: () => _handleLoanReturn(loanData),
+                          onCancel: () {},
+                        );
+                      });
+            }),
           ),
         ),
       ],
