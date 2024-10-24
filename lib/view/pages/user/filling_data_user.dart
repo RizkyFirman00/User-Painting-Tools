@@ -98,7 +98,7 @@ class _FillingDataUserState extends State<FillingDataUser> {
         Get.snackbar(
           "Berhasil",
           "Peminjaman alat berhasil dilakukan!",
-          snackPosition: SnackPosition.BOTTOM,
+          snackPosition: SnackPosition.TOP,
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
@@ -107,7 +107,7 @@ class _FillingDataUserState extends State<FillingDataUser> {
         Get.snackbar(
           "Gagal",
           "Format tanggal tidak valid!",
-          snackPosition: SnackPosition.BOTTOM,
+          snackPosition: SnackPosition.TOP,
           backgroundColor: Colors.red,
           colorText: Colors.white,
         );
@@ -116,7 +116,7 @@ class _FillingDataUserState extends State<FillingDataUser> {
       Get.snackbar(
         "Gagal",
         "Pastikan semua data diisi dengan benar!",
-        snackPosition: SnackPosition.BOTTOM,
+        snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
@@ -289,10 +289,10 @@ class _FillingDataUserState extends State<FillingDataUser> {
                       child: ElevatedButton(
                         style: ButtonStyle(
                           foregroundColor:
-                              MaterialStateProperty.all(Colors.white),
+                              WidgetStateProperty.all(Colors.white),
                           backgroundColor:
-                              MaterialStateProperty.all(Color(0xffDF042C)),
-                          shape: MaterialStateProperty.all(
+                              WidgetStateProperty.all(Color(0xffDF042C)),
+                          shape: WidgetStateProperty.all(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
                             ),

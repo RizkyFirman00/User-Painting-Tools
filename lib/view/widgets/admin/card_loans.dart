@@ -8,6 +8,7 @@ class CardLoans extends StatelessWidget {
   final String userNpk;
   final DateTime loanDate;
   final DateTime loanReturnDate;
+  final String status;
 
   const CardLoans(
       {super.key,
@@ -16,7 +17,8 @@ class CardLoans extends StatelessWidget {
       required this.userName,
       required this.userNpk,
       required this.loanDate,
-      required this.loanReturnDate});
+      required this.loanReturnDate,
+      required this.status});
 
   @override
   Widget build(BuildContext context) {
@@ -49,12 +51,12 @@ class CardLoans extends StatelessWidget {
               children: [
                 Text(
                   "ID Alat: ",
-                  style: TextStyle(fontWeight: FontWeight.w300, fontSize: 14),
+                  style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12),
                 ),
                 Expanded(
                   child: Text(
                     toolId,
-                    style: TextStyle(fontWeight: FontWeight.w300, fontSize: 14),
+                    style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12),
                   ),
                 ),
               ],
@@ -82,11 +84,44 @@ class CardLoans extends StatelessWidget {
               children: [
                 Text(
                   "NPK Peminjam: ",
-                  style: TextStyle(fontWeight: FontWeight.w300, fontSize: 14),
+                  style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12),
                 ),
                 Expanded(
                   child: Text(
                     userNpk,
+                    style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "From: ",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                ),
+                Expanded(
+                  child: Text(
+                    parsedLoanDate,
+                    style: TextStyle(fontWeight: FontWeight.w300, fontSize: 14),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "To: ",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                ),
+                Expanded(
+                  child: Text(
+                    parsedReturnDate,
                     style: TextStyle(fontWeight: FontWeight.w300, fontSize: 14),
                   ),
                 ),
@@ -95,13 +130,26 @@ class CardLoans extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            Text(
-              parsedLoanDate,
-              style: TextStyle(fontWeight: FontWeight.w300, fontSize: 14),
-            ),
-            Text(
-              parsedReturnDate,
-              style: TextStyle(fontWeight: FontWeight.w300, fontSize: 14),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Status: ",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                ),
+                Expanded(
+                  child: Text(
+                    status,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      color: (status == 'Dipinjam')
+                          ? Color(0xff27fb2f)
+                          : Color(0xFFDF042C),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

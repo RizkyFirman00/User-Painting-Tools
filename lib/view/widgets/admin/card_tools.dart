@@ -162,7 +162,7 @@ class _CardToolsState extends State<CardTools> {
       },
       child: Card(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
           child: AnimatedCrossFade(
             duration: const Duration(milliseconds: 300),
             firstChild: Row(
@@ -176,6 +176,28 @@ class _CardToolsState extends State<CardTools> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          const Text(
+                            "ID Alat: ",
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Text(
+                                widget.idAlat,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 12),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           const Text("Nama Alat: "),
                           Expanded(
                             child: Padding(
@@ -186,21 +208,6 @@ class _CardToolsState extends State<CardTools> {
                                 maxLines: 2,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("ID Alat: "),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: Text(
-                                widget.idAlat,
-                                style: const TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
@@ -225,22 +232,25 @@ class _CardToolsState extends State<CardTools> {
                   splashColor: Colors.white.withOpacity(0.3),
                   borderRadius: BorderRadius.circular(15),
                   child: Ink(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 13, vertical: 13),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       color: lightBlue,
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(Icons.qr_code_outlined, color: Colors.white),
-                        Text(
-                          "QR Code",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.white),
-                        ),
-                      ],
+                    child: Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(Icons.qr_code_outlined, color: Colors.white),
+                          Text(
+                            "QR Code",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

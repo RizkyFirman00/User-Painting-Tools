@@ -50,8 +50,6 @@ class ToolsServices {
       if (doc.exists) {
         await _firestore.collection('tools').doc(idAlat).update({
           'nama_alat': namaAlat,
-          'kuantitas_alat': kuantitasAlat,
-          'kuantitas_alat_tersedia': kuantitasAlat,
         });
         _simpleLogger.info("Tool $namaAlat berhasil diperbarui.");
       } else {

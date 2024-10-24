@@ -14,6 +14,7 @@ class CardLoanTools extends StatefulWidget {
   final DateTime loanDate;
   final DateTime loanDateReturn;
   final String status;
+  final int kuantitas_alat;
   final VoidCallback onConfirm;
   final VoidCallback onCancel;
 
@@ -26,6 +27,7 @@ class CardLoanTools extends StatefulWidget {
     required this.onConfirm,
     required this.onCancel,
     required this.status,
+    required this.kuantitas_alat,
   });
 
   @override
@@ -64,13 +66,20 @@ class _CardLoanToolsState extends State<CardLoanTools> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
                           widget.toolName,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
+                          ),
+                        ),
+                        Text(
+                          ' x${widget.kuantitas_alat}',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w300,
+                            fontSize: 12,
                           ),
                         ),
                       ],

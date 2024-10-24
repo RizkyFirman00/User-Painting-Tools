@@ -75,56 +75,57 @@ class _UsersPageState extends State<UsersPage> {
                       ? CircularProgressIndicator()
                       : Text("Alat tidak ada"))
               : Padding(
-                  padding: const EdgeInsets.all(25.0),
+                  padding: const EdgeInsets.all(20),
                   child: listUsers.isEmpty && userProvider.isLoading
                       ? Center(child: CircularProgressIndicator())
-                      : GridView.builder(
-                          itemCount: listUsers.length,
-                          physics: const BouncingScrollPhysics(),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 1,
-                          ),
-                          shrinkWrap: true,
-                          itemBuilder: (BuildContext context, int index) {
-                            final userData = listUsers[index];
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 10),
-                              child: CardUsers(
-                                npkUser: userData!.npkUser,
-                                longNameUser:
-                                    userData.namaLengkap ?? "Belum Mengisi",
-                                passwordUser: userData.passwordUser,
-                                onPressedDelete: () {
-                                  return showDialog(
-                                    context: context,
-                                    barrierDismissible: false,
-                                    builder: (BuildContext context) {
-                                      return ConfirmationBox(
-                                        textTitle: "Hapus Akun",
-                                        textDescription:
-                                            "Apakah kamu yakin ingin menghapus akun ${userData.npkUser}?",
-                                        textConfirm: "Iya",
-                                        textCancel: "Tidak",
-                                        onConfirm: () async {
-                                          await userProvider
-                                              .deleteUser(userData.npkUser);
-                                          await userProvider.fetchUsers();
-                                          Get.snackbar('Berhasil',
-                                              'Akun ${userData.npkUser} berhasil dihapus');
-                                          Get.back();
-                                        },
-                                        onCancel: () {
-                                          Get.back();
+                      : listUsers.isEmpty
+                          ? Center(child: Text('Tidak ada data user'))
+                          : GridView.builder(
+                              itemCount: listUsers.length,
+                              physics: const BouncingScrollPhysics(),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                childAspectRatio: 1,
+                              ),
+                              shrinkWrap: true,
+                              itemBuilder: (BuildContext context, int index) {
+                                final userData = listUsers[index];
+                                return Padding(
+                                  padding: const EdgeInsets.only(top: 10, right: 10),
+                                  child: CardUsers(
+                                    npkUser: userData!.npkUser,
+                                    longNameUser: userData.namaLengkap ?? "Belum Mengisi",
+                                    passwordUser: userData.passwordUser,
+                                    onPressedDelete: () {
+                                      return showDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (BuildContext context) {
+                                          return ConfirmationBox(
+                                            textTitle: "Hapus Akun",
+                                            textDescription:
+                                                "Apakah kamu yakin ingin menghapus akun ${userData.npkUser}?",
+                                            textConfirm: "Iya",
+                                            textCancel: "Tidak",
+                                            onConfirm: () async {
+                                              await userProvider
+                                                  .deleteUser(userData.npkUser);
+                                              await userProvider.fetchUsers();
+                                              Get.snackbar('Berhasil',
+                                                  'Akun ${userData.npkUser} berhasil dihapus');
+                                              Get.back();
+                                            },
+                                            onCancel: () {
+                                              Get.back();
+                                            },
+                                          );
                                         },
                                       );
                                     },
-                                  );
-                                },
-                              ),
-                            );
-                          }),
+                                  ),
+                                );
+                              }),
                 );
         }),
       ),

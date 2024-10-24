@@ -6,7 +6,7 @@
 
 
     <application
-        android:label="user_painting_tools"
+        android:label="Painting Tools"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

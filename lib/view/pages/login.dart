@@ -28,12 +28,12 @@ class _LoginState extends State<Login> {
 
     if (npk.isEmpty && password.isEmpty) {
       Get.snackbar(
-          'Perhatikan lagi', 'Silahkan Isi Email & NPK terlebih dahulu');
+          'Perhatikan lagi', 'Silahkan Isi NPK & Password terlebih dahulu');
       return;
     }
 
     if (npk.isEmpty) {
-      Get.snackbar('Perhatikan lagi', 'Silahkan Isi Email terlebih dahulu');
+      Get.snackbar('Perhatikan lagi', 'Silahkan Isi NPK terlebih dahulu');
       return;
     }
 
@@ -43,7 +43,7 @@ class _LoginState extends State<Login> {
     }
 
     if (password.length < 6) {
-      Get.snackbar('Perhatikan lagi', 'NPK tidak boleh kurang dari 6 karakter');
+      Get.snackbar('Perhatikan lagi', 'Password tidak boleh kurang dari 6 karakter');
       return;
     }
 
@@ -252,13 +252,26 @@ class _LoginState extends State<Login> {
                     Image.asset("assets/images/bg_bawah.png"),
                     const Padding(
                       padding: EdgeInsets.only(bottom: 20),
-                      child: Text(
-                        "Tools Painting I",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w300,
-                        ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Created by ",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                          Text(
+                            "Ikhwan Fadhilah",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

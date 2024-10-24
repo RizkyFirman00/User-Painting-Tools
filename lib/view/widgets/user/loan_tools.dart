@@ -117,7 +117,7 @@ class _LoansToolsState extends State<LoansTools> {
                               loanDateReturn: loanData.loanDateReturn!,
                               onConfirm: () => _handleLoanReturn(loanData),
                               onCancel: () {},
-                              status: loanData.status,
+                              status: loanData.status, kuantitas_alat: loanData.toolsQty,
                             );
                           });
             }),

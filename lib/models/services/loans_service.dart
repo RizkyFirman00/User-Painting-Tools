@@ -24,15 +24,13 @@ class LoansService {
   }
 
   Future<void> addLoan(Loans loan) async {
-    DocumentReference docRef =
-        await _firestore.collection('loans').add(loan.toMap());
+    DocumentReference docRef = await _firestore.collection('loans').add(loan.toMap());
     loan.loanId = docRef.id;
     await updateToolQuantityOnLoan(loan.toolId, loan.toolsQty);
   }
 
   Future<void> updateToolQuantityOnLoan(String toolId, int quantity) async {
-    DocumentSnapshot doc =
-        await _firestore.collection('tools').doc(toolId).get();
+    DocumentSnapshot doc = await _firestore.collection('tools').doc(toolId).get();
     Tools tool = Tools.fromDocument(doc);
 
     int updatedQtyAvailable = tool.kuantitasTersediaAlat - quantity;

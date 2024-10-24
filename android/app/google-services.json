@@ -1,36 +1,26 @@
 {
   "project_info": {
-    "project_number": "420190579067",
-    "project_id": "tools-painting",
-    "storage_bucket": "tools-painting.appspot.com"
+    "project_number": "1010189134317",
+    "project_id": "painting-tools-aeac4",
+    "storage_bucket": "painting-tools-aeac4.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:420190579067:android:32ada7cedb4ba49b06b5de",
+        "mobilesdk_app_id": "1:1010189134317:android:50479679bce083bff39fe4",
         "android_client_info": {
           "package_name": "com.paintingtools.usertools.user_painting_tools"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "420190579067-h3tgrm9jv87t4qfpamc4ro4tfe27lj5m.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDWRuZnQUAPHj0emwJdui5oJ_ioA6XFcOU"
+          "current_key": "AIzaSyDUbc0lynok_VTJUxYhSr44hEG5WrmRqB0"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "420190579067-h3tgrm9jv87t4qfpamc4ro4tfe27lj5m.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

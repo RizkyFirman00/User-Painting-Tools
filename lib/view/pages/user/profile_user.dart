@@ -97,7 +97,8 @@ class _ProfileUserState extends State<ProfileUser> {
                   builder: (BuildContext context) {
                     return ConfirmationBox(
                       textTitle: "Logout",
-                      textDescription: "Apakah kamu yakin ingin keluar dari akun ini?",
+                      textDescription:
+                          "Apakah kamu yakin ingin keluar dari akun ini?",
                       textConfirm: "Iya",
                       textCancel: "Tidak",
                       onConfirm: () async {
@@ -124,9 +125,10 @@ class _ProfileUserState extends State<ProfileUser> {
           children: [
             isLoading
                 ? const Expanded(
-                    child: Center(child: CircularProgressIndicator(
-                      color: Color(0xFFDF042C),
-                    )))
+                    child: Center(
+                        child: CircularProgressIndicator(
+                    color: Color(0xFFDF042C),
+                  )))
                 : Padding(
                     padding: const EdgeInsets.all(30.0),
                     child: Column(
@@ -165,7 +167,8 @@ class _ProfileUserState extends State<ProfileUser> {
                           controller: passwordController,
                           enabled: isThereLongName() ? false : true,
                           decoration: InputDecoration(
-                            icon: Icon(Icons.password, color: Color(0xffDF042C)),
+                            icon:
+                                Icon(Icons.password, color: Color(0xffDF042C)),
                             hintText: "Password",
                             border: OutlineInputBorder(
                                 borderRadius:
@@ -210,12 +213,26 @@ class _ProfileUserState extends State<ProfileUser> {
                 ),
                 Container(
                   padding: EdgeInsets.only(bottom: 20),
-                  child: Text(
-                    "Tools Painting I",
-                    style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Created by ",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                      Text(
+                        "Ikhwan Fadhilah",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],

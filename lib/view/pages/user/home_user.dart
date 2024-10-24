@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:user_painting_tools/firebase_options.dart';
 import 'package:user_painting_tools/view/pages/user/photo_qr_user.dart';
 import 'package:user_painting_tools/view/pages/user/profile_user.dart';
 import 'package:user_painting_tools/view/widgets/user/avail_tools.dart';

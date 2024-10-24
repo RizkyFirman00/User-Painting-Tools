@@ -137,7 +137,7 @@ class _AddToolsAdminState extends State<AddToolsAdmin> {
                   String generatedId = generateToolId(namaBarangController.text);
                   await toolsProvider.addToolToFirestore(generatedId, namaBarangController.text, int.parse(kuantitasController.text));
                   Get.snackbar(
-                      'Sukses', 'Berhasil menambahkan user baru');
+                      'Sukses', 'Berhasil menambahkan barang baru');
                   clearController();
                 }
               },

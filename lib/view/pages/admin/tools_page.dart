@@ -72,54 +72,58 @@ class _ToolsPageState extends State<ToolsPage> {
           return isThereQuery
               ? Center(
                   child: isLoading
-                      ? CircularProgressIndicator()
-                      : Text("Alat tidak ada"))
+                      ? CircularProgressIndicator(
+                    color: const Color(0xff0099FF),
+                  )
+                      : Text("Tidak ada data alat"))
               : Padding(
-                  padding: EdgeInsets.all(25),
+                  padding: EdgeInsets.all(20),
                   child: listTools.isEmpty && toolsProvider.isLoading
                       ? Center(child: CircularProgressIndicator())
-                      : ListView.builder(
-                          itemCount: listTools.length,
-                          physics: const BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (BuildContext context, int index) {
-                            final toolData = listTools[index];
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 10),
-                              child: CardTools(
-                                namaAlat: toolData.namaAlat,
-                                idAlat: toolData.idAlat,
-                                kuantitasAlat: toolData.kuantitasAlat,
-                                onPressedDelete: () {
-                                  return showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return ConfirmationBox(
-                                        textTitle: "Hapus Akun",
-                                        textDescription:
-                                            "Apakah kamu yakin ingin menghapus data barang ${toolData.idAlat}?",
-                                        textConfirm: "Iya",
-                                        textCancel: "Tidak",
-                                        onConfirm: () async {
-                                          await toolsProvider.deleteTools(
-                                              toolData.idAlat,
-                                              toolData.namaAlat);
-                                          await toolsProvider.fetchTools();
-                                          Get.snackbar('Berhasil',
-                                              'Barang ${toolData.namaAlat} berhasil dihapus');
-                                          Get.back();
-                                        },
-                                        onCancel: () {
-                                          Get.back();
+                      : listTools.isEmpty
+                          ? Center(child: Text('Tidak ada data barang'))
+                          : ListView.builder(
+                              itemCount: listTools.length,
+                              physics: const BouncingScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder: (BuildContext context, int index) {
+                                final toolData = listTools[index];
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 10),
+                                  child: CardTools(
+                                    namaAlat: toolData.namaAlat,
+                                    idAlat: toolData.idAlat,
+                                    kuantitasAlat: toolData.kuantitasTersediaAlat,
+                                    onPressedDelete: () {
+                                      return showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return ConfirmationBox(
+                                            textTitle: "Hapus Akun",
+                                            textDescription:
+                                                "Apakah kamu yakin ingin menghapus data barang ${toolData.idAlat}?",
+                                            textConfirm: "Iya",
+                                            textCancel: "Tidak",
+                                            onConfirm: () async {
+                                              await toolsProvider.deleteTools(
+                                                  toolData.idAlat,
+                                                  toolData.namaAlat);
+                                              await toolsProvider.fetchTools();
+                                              Get.snackbar('Berhasil',
+                                                  'Barang ${toolData.namaAlat} berhasil dihapus');
+                                              Get.back();
+                                            },
+                                            onCancel: () {
+                                              Get.back();
+                                            },
+                                          );
                                         },
                                       );
                                     },
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                        ));
+                                  ),
+                                );
+                              },
+                            ));
         }),
       ),
     );
