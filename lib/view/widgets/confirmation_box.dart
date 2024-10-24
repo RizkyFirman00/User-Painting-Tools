@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 class ConfirmationBox extends StatefulWidget {
   final String textTitle;
   final String textDescription;
@@ -28,12 +29,15 @@ class _ConfirmationBoxState extends State<ConfirmationBox> {
     setState(() {
       _isLoading = true;
     });
-
-    await widget.onConfirm();
-
-    setState(() {
-      _isLoading = false;
-    });
+    try {
+      await widget.onConfirm();
+    } catch (e) {
+      Get.snackbar("Gagal", "Terjadi kesalahan: $e");
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override

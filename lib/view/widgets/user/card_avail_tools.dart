@@ -61,7 +61,10 @@ class CardAvailTools extends StatelessWidget {
                   ],
                 ),
               ),
-              Text(idTools),
+              Expanded(child: Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Text(idTools),
+              )),
             ],
           ),
         ),

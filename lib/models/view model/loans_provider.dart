@@ -13,14 +13,18 @@ class LoansProvider with ChangeNotifier {
 
   // List Param
   List<Loans> _loansList = [];
+
   List<Loans> get loansList => _loansList;
-  
+
   List<Loans> _loansUserList = [];
+
   List<Loans> get loansUserList => _loansUserList;
 
   List<Loans> _filteredList = [];
-  List<Loans> get filteredList => _loansList.isEmpty ? _loansList : _filteredList;
-  
+
+  List<Loans> get filteredList =>
+      _loansList.isEmpty ? _loansList : _filteredList;
+
   void _setLoading(bool value) {
     _isLoading = value;
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -32,7 +36,7 @@ class LoansProvider with ChangeNotifier {
     if (query.isNotEmpty) {
       _filteredList = _loansList
           .where((loan) =>
-          loan.userNpk.toLowerCase().contains(query.toLowerCase()))
+              loan.userNpk.toLowerCase().contains(query.toLowerCase()))
           .toList();
       notifyListeners();
     } else {
@@ -47,7 +51,7 @@ class LoansProvider with ChangeNotifier {
       _loansUserList = await _loansService.getUserLoans(npkUser);
       _simpleLogger.info('Fetching data user loan: $_loansUserList');
       notifyListeners();
-    } catch(e) {
+    } catch (e) {
       _simpleLogger.info('Eror fetching data user loan: $_loansUserList');
     } finally {
       _setLoading(false);
@@ -60,10 +64,10 @@ class LoansProvider with ChangeNotifier {
       _loansList = await _loansService.getAllLoans();
       _simpleLogger.info('Fetching data user loan: $_loansList');
       notifyListeners();
-    } catch(e) {
+    } catch (e) {
       _simpleLogger.info('Error fetching all data loan: $_loansList');
     } finally {
-     _setLoading(false);
+      _setLoading(false);
     }
   }
 
@@ -74,8 +78,27 @@ class LoansProvider with ChangeNotifier {
       _loansList.add(loan);
       _simpleLogger.info('Success adding new loan: $_loansList');
       notifyListeners();
-    } catch(e) {
+    } catch (e) {
       _simpleLogger.info('Error adding new loan: $_loansList');
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  Future<void> deleteFinishedLoans(String userNpk) async {
+    _setLoading(true);
+    try {
+      List<Loans> _list = await _loansService.getUserLoans(userNpk);
+      var finishedLoans = _list.where((loan) => loan.status == 'Dikembalikan').toList();
+      for (var loan in finishedLoans) {
+        await _loansService.deleteLoan(loan.loanId);
+      }
+      _loansUserList.removeWhere((loan) => loan.status == 'Dikembalikan');
+      _simpleLogger.info('Success deleting loans: $_loansUserList');
+      _loansUserList = _list;
+      notifyListeners();
+    } catch (e) {
+      print('Error deleting finished loans: $e');
     } finally {
       _setLoading(false);
     }
@@ -85,11 +108,10 @@ class LoansProvider with ChangeNotifier {
     _setLoading(true);
     try {
       await _loansService.returnLoan(loan);
-      _loansList.removeWhere((l) => l.toolId == loan.toolId && l.status == 'Dipinjam');
-      _simpleLogger.info('Success adding new loan: $_loansList');
+      _simpleLogger.info('Success returning loan');
       notifyListeners();
-    } catch(e) {
-      _simpleLogger.info('Error adding new loan: $_loansList');
+    } catch (e) {
+      _simpleLogger.info('Error returning loan');
     } finally {
       _setLoading(false);
     }

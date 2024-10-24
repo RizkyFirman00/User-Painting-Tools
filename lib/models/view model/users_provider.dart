@@ -105,7 +105,7 @@ class UsersProvider with ChangeNotifier {
     if (_currentUser != null) {
       _setLoading(true);
       try {
-        String npk = _currentUser!.passwordUser;
+        String npk = _currentUser!.npkUser;
 
         await _usersServices.updateLongName(npk, namaLengkap);
 

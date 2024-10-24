@@ -85,7 +85,7 @@ class _FillingDataUserState extends State<FillingDataUser> {
           toolName: toolsNameController.text,
           userName: usersNameController.text,
           userNpk: userNpkController.text,
-          toolsQty: toolsQty.toString(),
+          toolsQty: toolsQty,
           loanDate: parsedLoanDate,
           loanDateReturn: parsedReturnDate,
           status: "Dipinjam",
@@ -131,10 +131,12 @@ class _FillingDataUserState extends State<FillingDataUser> {
 
   @override
   Widget build(BuildContext context) {
-    final isLoading =
+    final isLoadingUser =
         Provider.of<UsersProvider>(context, listen: true).isLoading;
-    final toolData =
-        Provider.of<ToolsProvider>(context, listen: true).selectedTool;
+    final isLoadingTool =
+        Provider.of<ToolsProvider>(context, listen: true).isLoading;
+    final isLoadingLoan =
+        Provider.of<LoansProvider>(context, listen: true).isLoading;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -150,7 +152,7 @@ class _FillingDataUserState extends State<FillingDataUser> {
           ),
         ),
       ),
-      body: isLoading || toolData == null
+      body: isLoadingUser || isLoadingTool || isLoadingLoan
           ? const Center(child: CircularProgressIndicator())
           : SafeArea(
               child: Container(
@@ -296,7 +298,10 @@ class _FillingDataUserState extends State<FillingDataUser> {
                             ),
                           ),
                         ),
-                        onPressed: isLoading ? null : _submitLoan,
+                        onPressed:
+                            isLoadingUser || isLoadingTool || isLoadingLoan
+                                ? null
+                                : _submitLoan,
                         child: const Text(
                           "Submit Data",
                           style: TextStyle(fontWeight: FontWeight.w600),

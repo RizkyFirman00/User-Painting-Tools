@@ -14,18 +14,25 @@ class LoansService {
     return snapshot.docs.map((doc) => Loans.fromDocument(doc)).toList();
   }
 
+  Future<void> deleteLoan(String loanId) async {
+    await _firestore.collection('loans').doc(loanId).delete();
+  }
+
   Future<List<Loans>> getAllLoans() async {
     QuerySnapshot snapshot = await _firestore.collection('loans').get();
     return snapshot.docs.map((doc) => Loans.fromDocument(doc)).toList();
   }
 
   Future<void> addLoan(Loans loan) async {
-    await _firestore.collection('loans').add(loan.toMap());
-    await updateToolQuantityOnLoan(loan.toolId, int.parse(loan.toolsQty));
+    DocumentReference docRef =
+        await _firestore.collection('loans').add(loan.toMap());
+    loan.loanId = docRef.id;
+    await updateToolQuantityOnLoan(loan.toolId, loan.toolsQty);
   }
 
   Future<void> updateToolQuantityOnLoan(String toolId, int quantity) async {
-    DocumentSnapshot doc = await _firestore.collection('tools').doc(toolId).get();
+    DocumentSnapshot doc =
+        await _firestore.collection('tools').doc(toolId).get();
     Tools tool = Tools.fromDocument(doc);
 
     int updatedQtyAvailable = tool.kuantitasTersediaAlat - quantity;
@@ -33,22 +40,21 @@ class LoansService {
     String status = updatedQtyAvailable > 0 ? 'Tersedia' : 'Tidak Tersedia';
 
     await _firestore.collection('tools').doc(toolId).update({
-      'kuantitas_tersedia_alat': updatedQtyAvailable,
+      'kuantitas_alat_tersedia': updatedQtyAvailable,
       'status': status,
     });
   }
 
   Future<void> returnLoan(Loans loan) async {
-    await _firestore
-        .collection('loans')
-        .doc(loan.toolId)
-        .update({'status': 'Dikembalikan', 'tanggal_pengembalian': DateTime.now()});
+    await _firestore.collection('loans').doc(loan.loanId).update(
+        {'status': 'Dikembalikan', 'tanggal_pengembalian': DateTime.now()});
 
-    await updateToolQuantityOnReturn(loan.toolId, int.parse(loan.toolsQty));
+    await updateToolQuantityOnReturn(loan.toolId, loan.toolsQty);
   }
 
   Future<void> updateToolQuantityOnReturn(String toolId, int quantity) async {
-    DocumentSnapshot doc = await _firestore.collection('tools').doc(toolId).get();
+    DocumentSnapshot doc =
+        await _firestore.collection('tools').doc(toolId).get();
     Tools tool = Tools.fromDocument(doc);
 
     int updatedQtyAvailable = tool.kuantitasTersediaAlat + quantity;
@@ -56,7 +62,7 @@ class LoansService {
     String status = updatedQtyAvailable > 0 ? 'Tersedia' : 'Tidak Tersedia';
 
     await _firestore.collection('tools').doc(toolId).update({
-      'kuantitas_tersedia_alat': updatedQtyAvailable,
+      'kuantitas_alat_tersedia': updatedQtyAvailable,
       'status': status,
     });
   }

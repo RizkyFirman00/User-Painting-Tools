@@ -28,10 +28,10 @@ class _ProfileUserState extends State<ProfileUser> {
 
   Future<void> loadCurrentUserData() async {
     try {
-      String? passwordUser = await SharedPreferencesUsers.getNpk();
-      if (passwordUser != null && passwordUser.isNotEmpty) {
+      String? npkUser = await SharedPreferencesUsers.getNpk();
+      if (npkUser != null && npkUser.isNotEmpty) {
         final userProvider = Provider.of<UsersProvider>(context, listen: false);
-        await userProvider.fetchUserDataWithNpk(passwordUser);
+        await userProvider.fetchUserDataWithNpk(npkUser);
 
         if (userProvider.currentUser != null) {
           npkController.text = userProvider.currentUser!.npkUser;
@@ -105,7 +105,7 @@ class _ProfileUserState extends State<ProfileUser> {
                         Get.snackbar('Logout', 'Akun berhasil keluar');
                       },
                       onCancel: () {
-                        Navigator.pop(context);
+                        Get.back();
                       },
                     );
                   },
@@ -124,7 +124,9 @@ class _ProfileUserState extends State<ProfileUser> {
           children: [
             isLoading
                 ? const Expanded(
-                    child: Center(child: CircularProgressIndicator()))
+                    child: Center(child: CircularProgressIndicator(
+                      color: Color(0xFFDF042C),
+                    )))
                 : Padding(
                     padding: const EdgeInsets.all(30.0),
                     child: Column(

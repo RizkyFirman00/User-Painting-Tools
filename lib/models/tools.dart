@@ -21,7 +21,7 @@ class Tools {
       idAlat: data['id_alat'],
       namaAlat: data['nama_alat'],
       kuantitasAlat: data['kuantitas_alat'],
-      kuantitasTersediaAlat: data.containsKey('kuantitas_tersedia_alat') ? data['kuantitas_tersedia_alat'] : 0,
+      kuantitasTersediaAlat: data.containsKey('kuantitas_alat_tersedia') ? data['kuantitas_alat_tersedia'] : 0,
       status: data['status'] ?? 'Tidak Tersedia',
     );
   }
@@ -31,7 +31,7 @@ class Tools {
       'id_alat': idAlat,
       'nama_alat': namaAlat,
       'kuantitas_alat': kuantitasAlat,
-      'kuantitas_tersedia_alat': kuantitasTersediaAlat,
+      'kuantitas_alat_tersedia': kuantitasTersediaAlat,
       'status': status,
     };
   }

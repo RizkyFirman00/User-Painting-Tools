@@ -23,10 +23,10 @@ class _ProfileAdminState extends State<ProfileAdmin> {
 
   Future<void> loadCurrentUserData() async {
     try {
-      String? passwordUser = await SharedPreferencesUsers.getNpk();
-      if (passwordUser != null && passwordUser.isNotEmpty) {
+      String? npkUser = await SharedPreferencesUsers.getNpk();
+      if (npkUser != null && npkUser.isNotEmpty) {
         final userProvider = Provider.of<UsersProvider>(context, listen: false);
-        await userProvider.fetchUserDataWithNpk(passwordUser);
+        await userProvider.fetchUserDataWithNpk(npkUser);
 
         if (userProvider.currentUser != null) {
           npkController.text = userProvider.currentUser!.npkUser;
@@ -109,7 +109,7 @@ class _ProfileAdminState extends State<ProfileAdmin> {
                           Get.snackbar('Logout', 'Akun berhasil keluar');
                         },
                         onCancel: () {
-                          Navigator.pop(context);
+                          Get.back();
                         },
                       );
                     },

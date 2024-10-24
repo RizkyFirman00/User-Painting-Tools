@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:user_painting_tools/models/loans.dart';
 import 'package:user_painting_tools/models/view%20model/loans_provider.dart';
@@ -33,10 +34,13 @@ class _LoansToolsState extends State<LoansTools> {
   void _handleLoanReturn(Loans loan) {
     final loansProvider = Provider.of<LoansProvider>(context, listen: false);
     loansProvider.returnLoan(loan);
+    _loadData();
+    Get.back();
   }
 
   @override
   Widget build(BuildContext context) {
+    final loansProvider = Provider.of<LoansProvider>(context, listen: false);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,14 +65,21 @@ class _LoansToolsState extends State<LoansTools> {
                           builder: (BuildContext context) {
                             return ConfirmationBox(
                               textDescription:
-                                  "Apakah kamu yakin ingin menghapus daftar data yang sudah dikembalikan?",
+                                  "Apakah kamu yakin ingin menghapus daftar barang yang sudah dikembalikan?",
                               textTitle: "Hapus Data Pinjam",
                               textConfirm: "Iya",
                               textCancel: "Tidak",
                               onCancel: () {
-                                Navigator.pop(context);
+                                _loadData();
+                                Get.back();
                               },
-                              onConfirm: () async {},
+                              onConfirm: () async {
+                                String? npk =
+                                    await SharedPreferencesUsers.getNpk();
+                                loansProvider.deleteFinishedLoans(npk!);
+                                _loadData();
+                                Get.back();
+                              },
                             );
                           },
                         );
@@ -80,31 +91,35 @@ class _LoansToolsState extends State<LoansTools> {
             ],
           ),
         ),
-        Container(
-          padding: const EdgeInsets.only(left: 25, right: 25, bottom: 5),
-          height: MediaQuery.of(context).size.height - 208,
-          child: Expanded(
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 25, right: 25, bottom: 5),
             child: Consumer<LoansProvider>(
                 builder: (BuildContext context, loanProvider, child) {
               final listLoans = loanProvider.loansUserList;
               final isLoading = loanProvider.isLoading;
               return isLoading
                   ? Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(
+                        color: Color(0xFFDF042C),
+                      ),
                     )
-                  : ListView.builder(
-                      itemCount: listLoans.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final loanData = listLoans[index];
-                        return CardLoanTools(
-                          toolName: loanData.userNpk,
-                          toolId: loanData.toolId,
-                          loanDate: loanData.loanDate,
-                          loanDateReturn: loanData.loanDateReturn!,
-                          onConfirm: () => _handleLoanReturn(loanData),
-                          onCancel: () {},
-                        );
-                      });
+                  : listLoans.isEmpty
+                      ? Center(child: Text('Tidak ada barang yang dipinjam'))
+                      : ListView.builder(
+                          itemCount: listLoans.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final loanData = listLoans[index];
+                            return CardLoanTools(
+                              toolName: loanData.toolName,
+                              toolId: loanData.toolId,
+                              loanDate: loanData.loanDate,
+                              loanDateReturn: loanData.loanDateReturn!,
+                              onConfirm: () => _handleLoanReturn(loanData),
+                              onCancel: () {},
+                              status: loanData.status,
+                            );
+                          });
             }),
           ),
         ),

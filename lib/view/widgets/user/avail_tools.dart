@@ -11,7 +11,6 @@ class AvailTools extends StatefulWidget {
 }
 
 class _AvailToolsState extends State<AvailTools> {
-
   @override
   void initState() {
     super.initState();
@@ -44,22 +43,26 @@ class _AvailToolsState extends State<AvailTools> {
                 final isLoading = toolsProvider.isLoading;
                 return isLoading
                     ? Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(
+                          color: Color(0xFFDF042C),
+                        ),
                       )
-                    : ListView.builder(
-                        itemCount: listTools.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final toolData = listTools[index];
-                          return Padding(
-                            padding: EdgeInsets.only(bottom: 10),
-                            child: CardAvailTools(
-                              nameTools: toolData.namaAlat,
-                              idTools: toolData.idAlat,
-                              qtyTools: toolData.kuantitasAlat,
-                            ),
+                    : listTools.isEmpty
+                        ? Center(child: Text('Tidak ada data barang'))
+                        : ListView.builder(
+                            itemCount: listTools.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final toolData = listTools[index];
+                              return Padding(
+                                padding: EdgeInsets.only(bottom: 10),
+                                child: CardAvailTools(
+                                  nameTools: toolData.namaAlat,
+                                  idTools: toolData.idAlat,
+                                  qtyTools: toolData.kuantitasTersediaAlat,
+                                ),
+                              );
+                            },
                           );
-                        },
-                      );
               },
             ),
           ),

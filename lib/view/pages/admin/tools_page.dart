@@ -93,7 +93,6 @@ class _ToolsPageState extends State<ToolsPage> {
                                 onPressedDelete: () {
                                   return showDialog(
                                     context: context,
-                                    barrierDismissible: false,
                                     builder: (BuildContext context) {
                                       return ConfirmationBox(
                                         textTitle: "Hapus Akun",
@@ -108,10 +107,10 @@ class _ToolsPageState extends State<ToolsPage> {
                                           await toolsProvider.fetchTools();
                                           Get.snackbar('Berhasil',
                                               'Barang ${toolData.namaAlat} berhasil dihapus');
-                                          Navigator.pop(context);
+                                          Get.back();
                                         },
                                         onCancel: () {
-                                          Navigator.pop(context);
+                                          Get.back();
                                         },
                                       );
                                     },

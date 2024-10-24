@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Loans {
+  String loanId;
   final String toolId;
   final String toolName;
-  final String toolsQty;
+  final int toolsQty;
   final String userName;
   final String userNpk;
   final DateTime loanDate;
@@ -11,6 +12,7 @@ class Loans {
   final String status;
 
   Loans({
+    this.loanId = '',
     required this.toolId,
     required this.toolName,
     required this.toolsQty,
@@ -24,6 +26,7 @@ class Loans {
   factory Loans.fromDocument(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return Loans(
+      loanId: doc.id,
       toolId: data['id_alat'],
       toolName: data['nama_alat'],
       toolsQty: data['kuantitas_alat'],

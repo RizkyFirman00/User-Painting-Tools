@@ -113,10 +113,10 @@ class _UsersPageState extends State<UsersPage> {
                                           await userProvider.fetchUsers();
                                           Get.snackbar('Berhasil',
                                               'Akun ${userData.npkUser} berhasil dihapus');
-                                          Navigator.pop(context);
+                                          Get.back();
                                         },
                                         onCancel: () {
-                                          Navigator.pop(context);
+                                          Get.back();
                                         },
                                       );
                                     },

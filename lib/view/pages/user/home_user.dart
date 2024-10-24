@@ -51,16 +51,11 @@ class _HomeUserState extends State<HomeUser> {
         appBar: AppBar(
           title: Container(
             padding: const EdgeInsets.only(left: 10),
-            child: InkWell(
-              onTap: () {
-                // Get.to(FillingData());
-              },
-              child: const Text(
-                "Halaman Persediaan Barang",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
+            child: const Text(
+              "Halaman Persediaan Barang",
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),

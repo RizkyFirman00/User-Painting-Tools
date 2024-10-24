@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:user_painting_tools/models/view%20model/loans_provider.dart';
 import 'package:user_painting_tools/models/view%20model/tools_provider.dart';
@@ -12,6 +13,7 @@ class CardLoanTools extends StatefulWidget {
   final String toolId;
   final DateTime loanDate;
   final DateTime loanDateReturn;
+  final String status;
   final VoidCallback onConfirm;
   final VoidCallback onCancel;
 
@@ -23,6 +25,7 @@ class CardLoanTools extends StatefulWidget {
     required this.loanDateReturn,
     required this.onConfirm,
     required this.onCancel,
+    required this.status,
   });
 
   @override
@@ -30,11 +33,12 @@ class CardLoanTools extends StatefulWidget {
 }
 
 class _CardLoanToolsState extends State<CardLoanTools> {
-  bool light = true;
-  bool isCompleted = false;
 
   @override
   Widget build(BuildContext context) {
+    bool light = (widget.status == 'Dipinjam');
+    bool isCompleted = (widget.status == 'Dipinjam') ? false : true;
+
     String parsedLoanDate = DateFormat('dd-MM-yyyy').format(widget.loanDate);
     String parsedReturnDate =
         DateFormat('dd-MM-yyyy').format(widget.loanDateReturn);
@@ -143,14 +147,14 @@ class _CardLoanToolsState extends State<CardLoanTools> {
                                             light = false;
                                             isCompleted = true;
                                           });
-                                          Navigator.pop(context);
+                                          Get.back();
                                         },
                                         onCancel: () {
                                           widget.onCancel();
                                           setState(() {
                                             light = true;
                                           });
-                                          Navigator.pop(context);
+                                          Get.back();
                                         },
                                       );
                                     },

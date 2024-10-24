@@ -19,6 +19,7 @@ class ToolsServices {
             'id_alat': idBarang,
             'nama_alat': namaBarang,
             'kuantitas_alat': kuantitasBarang,
+            'kuantitas_alat_tersedia': kuantitasBarang,
           });
         }
       }
@@ -50,6 +51,7 @@ class ToolsServices {
         await _firestore.collection('tools').doc(idAlat).update({
           'nama_alat': namaAlat,
           'kuantitas_alat': kuantitasAlat,
+          'kuantitas_alat_tersedia': kuantitasAlat,
         });
         _simpleLogger.info("Tool $namaAlat berhasil diperbarui.");
       } else {
