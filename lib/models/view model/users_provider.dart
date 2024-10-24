@@ -92,6 +92,7 @@ class UsersProvider with ChangeNotifier {
     try {
       _currentUser = await _usersServices.getUserByNpk(npk);
       _simpleLogger.info("Data user ditemukan: ${_currentUser?.passwordUser}");
+      notifyListeners();
     } catch (e) {
       _simpleLogger.info("Gagal mengambil data user: ${e.toString()}");
     } finally {

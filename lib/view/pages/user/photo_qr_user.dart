@@ -19,7 +19,7 @@ class _PhotoQrUserState extends State<PhotoQrUser> {
   void reassemble() {
     super.reassemble();
     if (controller != null) {
-      controller!.pauseCamera();
+      controller!.stopCamera();
       controller!.resumeCamera();
     }
   }
@@ -29,7 +29,10 @@ class _PhotoQrUserState extends State<PhotoQrUser> {
 
     if (qrCodeResult != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        Get.to(FillingDataUser(), arguments: {'idBarang': qrCodeResult});
+        controller!.pauseCamera();
+        Get.to(FillingDataUser(), arguments: {'idBarang': qrCodeResult})!.then((_) {
+          controller!.resumeCamera();
+        });
       });
     }
 
@@ -54,7 +57,12 @@ class _PhotoQrUserState extends State<PhotoQrUser> {
             flex: 1,
             child: Center(
               child: (qrCodeResult != null)
-                ? const Text('Navigating...')
+                ? Column(
+                  children: [
+                    CircularProgressIndicator(),
+                    const Text('Processing...'),
+                  ],
+                )
                   : const Text('Pindai kode QR untuk mendapatkan hasil.'),
             ),
           )

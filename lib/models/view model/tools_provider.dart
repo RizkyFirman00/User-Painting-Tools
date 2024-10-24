@@ -17,6 +17,10 @@ class ToolsProvider with ChangeNotifier {
   List<Tools> _listTools = [];
   List<Tools> _filteredTools = [];
 
+  // Instance Tools Param
+  Tools? _selectedTool;
+  Tools? get selectedTool => _selectedTool;
+
   void _setLoading(bool value) {
     _isLoading = value;
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -35,6 +39,21 @@ class ToolsProvider with ChangeNotifier {
       _filteredTools = _listTools;
     }
     notifyListeners();
+  }
+
+  Future<void> updateTool(String idTools, String nameTools, int qtyTools) async {
+    _setLoading(true);
+    try {
+      if (idTools.isNotEmpty && nameTools.isNotEmpty && qtyTools != 0) {
+        await toolsServices.updateToolInFirestore(idTools, nameTools, qtyTools);
+        _simpleLogger.info("Tool $nameTools berhasil diperbarui.");
+        await fetchTools();
+      }
+    } catch (e) {
+      _simpleLogger.severe("Gagal memperbarui tool: ${e.toString()}");
+    } finally {
+      _setLoading(false);
+    }
   }
 
   Future<void> addToolToFirestore(String idTools, String nameTools, int qtyTools) async {
@@ -61,6 +80,20 @@ class ToolsProvider with ChangeNotifier {
       notifyListeners();
     } catch (e) {
       _simpleLogger.info(e);
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  // Fetch tool data by NPK
+  Future<void> fetchToolDataWithId(String toolsId) async {
+    _setLoading(true);
+    try {
+       _selectedTool = await toolsServices.getToolById(toolsId);
+      _simpleLogger.info("Data user ditemukan: ${_selectedTool?.namaAlat}");
+       notifyListeners();
+    } catch (e) {
+      _simpleLogger.info("Gagal mengambil data user: ${e.toString()}");
     } finally {
       _setLoading(false);
     }

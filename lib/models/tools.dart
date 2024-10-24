@@ -10,7 +10,7 @@ class Tools {
   Tools({
     required this.idAlat,
     required this.namaAlat,
-    this.kuantitasAlat = 0,
+    required this.kuantitasAlat,
     this.kuantitasTersediaAlat = 0,
     this.status = "Tidak Tersedia",
   });
