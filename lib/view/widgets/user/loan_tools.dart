@@ -70,13 +70,14 @@ class _LoansToolsState extends State<LoansTools> {
                               textConfirm: "Iya",
                               textCancel: "Tidak",
                               onCancel: () {
-                                _loadData();
                                 Get.back();
                               },
                               onConfirm: () async {
-                                String? npk =
-                                    await SharedPreferencesUsers.getNpk();
-                                loansProvider.deleteFinishedLoans(npk!);
+                                String? npk = await SharedPreferencesUsers.getNpk();
+                                if (npk != null) {
+                                  await loansProvider.deleteFinishedLoans(npk);
+                                  await loansProvider.fetchUserLoans(npk);
+                                }
                                 _loadData();
                                 Get.back();
                               },

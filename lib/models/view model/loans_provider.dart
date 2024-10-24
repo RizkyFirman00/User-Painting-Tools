@@ -92,10 +92,10 @@ class LoansProvider with ChangeNotifier {
       var finishedLoans = _list.where((loan) => loan.status == 'Dikembalikan').toList();
       for (var loan in finishedLoans) {
         await _loansService.deleteLoan(loan.loanId);
+        notifyListeners();
       }
       _loansUserList.removeWhere((loan) => loan.status == 'Dikembalikan');
       _simpleLogger.info('Success deleting loans: $_loansUserList');
-      _loansUserList = _list;
       notifyListeners();
     } catch (e) {
       print('Error deleting finished loans: $e');

@@ -160,9 +160,6 @@ class _CardLoanToolsState extends State<CardLoanTools> {
                                         },
                                         onCancel: () {
                                           widget.onCancel();
-                                          setState(() {
-                                            light = true;
-                                          });
                                           Get.back();
                                         },
                                       );
