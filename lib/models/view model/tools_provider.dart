@@ -56,6 +56,22 @@ class ToolsProvider with ChangeNotifier {
     }
   }
 
+  Future<void> updateToolWithQty(String idTools, String nameTools, int qtyTools, int newQtyTools, int qtyAvailTools) async {
+    _setLoading(true);
+    try {
+      if (idTools.isNotEmpty && nameTools.isNotEmpty && newQtyTools != 0) {
+        int newQtyCalculated = newQtyTools - qtyTools + qtyAvailTools;
+        await toolsServices.updateToolInFirestoreWithNewQty(idTools, nameTools, newQtyTools, newQtyCalculated);
+        _simpleLogger.info("Tool $nameTools berhasil diperbarui.");
+        await fetchTools();
+      }
+    } catch (e) {
+      _simpleLogger.severe("Gagal memperbarui tool: ${e.toString()}");
+    } finally {
+      _setLoading(false);
+    }
+  }
+
   Future<void> addToolToFirestore(String idTools, String nameTools, int qtyTools) async {
     _setLoading(true);
     try {

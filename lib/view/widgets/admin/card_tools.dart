@@ -13,6 +13,7 @@ class CardTools extends StatefulWidget {
   final String idAlat;
   final int kuantitasAlat;
   final Future<void> Function() onPressedDelete;
+  final VoidCallback onPressedEdit;
 
   const CardTools({
     super.key,
@@ -20,6 +21,7 @@ class CardTools extends StatefulWidget {
     required this.idAlat,
     required this.kuantitasAlat,
     required this.onPressedDelete,
+    required this.onPressedEdit,
   });
 
   @override
@@ -259,24 +261,49 @@ class _CardToolsState extends State<CardTools> {
             secondChild: Container(
               height: 100,
               child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    IconButton(
-                      onPressed: () {
-                        widget.onPressedDelete().then((_) {
-                          setState(() {
-                            isCardPressed = false;
-                          });
-                        });
-                      },
-                      icon:
-                          const Icon(Icons.delete, size: 40, color: Colors.red),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            widget.onPressedDelete().then((_) {
+                              setState(() {
+                                isCardPressed = false;
+                              });
+                            });
+                          },
+                          icon: const Icon(Icons.delete,
+                              size: 40, color: Colors.red),
+                        ),
+                        const Text(
+                          "Delete",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
-                    const Text(
-                      "Delete",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                              setState(() {
+                                widget.onPressedEdit();
+                                isCardPressed = false;
+                              });
+                          },
+                          icon: const Icon(Icons.edit,
+                              size: 40, color: Colors.blue),
+                        ),
+                        const Text(
+                          "Edit",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
                   ],
                 ),

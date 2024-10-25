@@ -152,166 +152,196 @@ class _FillingDataUserState extends State<FillingDataUser> {
           ),
         ),
       ),
-      body: isLoadingUser || isLoadingTool || isLoadingLoan
-          ? const Center(child: CircularProgressIndicator())
-          : SafeArea(
-              child: Container(
-                padding: const EdgeInsets.all(30.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      children: [
-                        TextFormField(
-                          enabled: false,
-                          controller: toolsNameController,
-                          decoration: const InputDecoration(
-                            labelText: "Nama Alat",
-                            border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        TextFormField(
-                          controller: toolsIdController,
-                          enabled: false,
-                          decoration: const InputDecoration(
-                            labelText: "ID Alat",
-                            border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        TextFormField(
-                          controller: toolsQtyController,
-                          keyboardType: TextInputType.number,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Kuantitas tidak boleh kosong';
-                            }
-                            if (int.tryParse(value) == null) {
-                              return 'Harus berupa angka';
-                            }
-                            return null;
-                          },
-                          decoration: const InputDecoration(
-                            labelText: "Kuantitas Alat",
-                            border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        TextFormField(
-                          controller: usersNameController,
-                          enabled: false,
-                          decoration: const InputDecoration(
-                            icon: Icon(Icons.person, color: Color(0xffDF042C)),
-                            labelText: "Nama Peminjam",
-                            border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        TextFormField(
-                          controller: userNpkController,
-                          enabled: false,
-                          decoration: const InputDecoration(
-                            icon: Icon(Icons.numbers, color: Color(0xffDF042C)),
-                            labelText: "NPK Peminjam",
-                            border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        TextFormField(
-                          controller: loanDateController,
-                          readOnly: true,
-                          onTap: () async {
-                            DateTime? pickedDate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2101),
-                            );
-                            if (pickedDate != null) {
-                              String formattedDate =
-                                  "${pickedDate.day}-${pickedDate.month}-${pickedDate.year}";
-                              setState(() {
-                                loanDateController.text = formattedDate;
-                              });
-                            }
-                          },
-                          decoration: const InputDecoration(
-                            icon: Icon(Icons.date_range,
-                                color: Color(0xffDF042C)),
-                            labelText: "Tanggal Pinjam",
-                            border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        TextFormField(
-                          controller: loanDateReturnController,
-                          readOnly: true,
-                          onTap: () async {
-                            DateTime? pickedDate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2101),
-                            );
-                            if (pickedDate != null) {
-                              String formattedDate =
-                                  "${pickedDate.day}-${pickedDate.month}-${pickedDate.year}";
-                              setState(() {
-                                loanDateReturnController.text = formattedDate;
-                              });
-                            }
-                          },
-                          decoration: const InputDecoration(
-                            icon: Icon(Icons.loop, color: Color(0xffDF042C)),
-                            labelText: "Tanggal Pengembalian",
-                            border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                          ),
-                        ),
-                      ],
+      body: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.all(30.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  TextFormField(
+                    enabled: false,
+                    controller: toolsNameController,
+                    decoration: const InputDecoration(
+                      labelText: "Nama Alat",
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
                     ),
-                    Container(
-                      width: 200,
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          foregroundColor:
-                              WidgetStateProperty.all(Colors.white),
-                          backgroundColor:
-                              WidgetStateProperty.all(Color(0xffDF042C)),
-                          shape: WidgetStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                          ),
-                        ),
-                        onPressed:
-                            isLoadingUser || isLoadingTool || isLoadingLoan
-                                ? null
-                                : _submitLoan,
-                        child: const Text(
-                          "Submit Data",
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: toolsIdController,
+                    enabled: false,
+                    decoration: const InputDecoration(
+                      labelText: "ID Alat",
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: toolsQtyController,
+                    enabled: !isLoadingUser || !isLoadingTool || !isLoadingLoan,
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Kuantitas tidak boleh kosong';
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Harus berupa angka';
+                      }
+                      return null;
+                    },
+                    decoration: const InputDecoration(
+                      labelText: "Kuantitas Alat",
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: usersNameController,
+                    enabled: false,
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.person, color: Color(0xffDF042C)),
+                      labelText: "Nama Peminjam",
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: userNpkController,
+                    enabled: false,
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.numbers, color: Color(0xffDF042C)),
+                      labelText: "NPK Peminjam",
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: loanDateController,
+                    readOnly: true,
+                    enabled: !isLoadingUser || !isLoadingTool || !isLoadingLoan,
+                    onTap: () async {
+                      DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2101),
+                      );
+                      if (pickedDate != null) {
+                        TimeOfDay? pickedTime = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.now(),
+                        );
+
+                        if (pickedTime != null) {
+                          DateTime finalDateTime = DateTime(
+                            pickedDate.year,
+                            pickedDate.month,
+                            pickedDate.day,
+                            pickedTime.hour,
+                            pickedTime.minute,
+                          );
+
+                          String formattedDateTime =
+                              DateFormat('dd-MM-yyyy | HH:mm')
+                                  .format(finalDateTime);
+
+                          setState(() {
+                            loanDateController.text = formattedDateTime;
+                          });
+                        }
+                      }
+                    },
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.date_range, color: Color(0xffDF042C)),
+                      labelText: "Tanggal Pinjam",
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: loanDateReturnController,
+                    enabled: !isLoadingUser || !isLoadingTool || !isLoadingLoan,
+                    readOnly: true,
+                    onTap: () async {
+                      DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2101),
+                      );
+                      if (pickedDate != null) {
+                        TimeOfDay? pickedTime = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.now(),
+                        );
+
+                        if (pickedTime != null) {
+                          DateTime finalDateTime = DateTime(
+                            pickedDate.year,
+                            pickedDate.month,
+                            pickedDate.day,
+                            pickedTime.hour,
+                            pickedTime.minute,
+                          );
+
+                          String formattedDateTime =
+                              DateFormat('dd-MM-yyyy | HH:mm')
+                                  .format(finalDateTime);
+
+                          setState(() {
+                            loanDateReturnController.text = formattedDateTime;
+                          });
+                        }
+                      }
+                    },
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.loop, color: Color(0xffDF042C)),
+                      labelText: "Tanggal Pengembalian",
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: 200,
+                child: ElevatedButton(
+                    style: ButtonStyle(
+                      foregroundColor: WidgetStateProperty.all(Colors.white),
+                      backgroundColor:
+                          WidgetStateProperty.all(Color(0xffDF042C)),
+                      shape: WidgetStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
                         ),
                       ),
                     ),
-                  ],
-                ),
+                    onPressed: isLoadingUser || isLoadingTool || isLoadingLoan
+                        ? null
+                        : _submitLoan,
+                    child: isLoadingUser || isLoadingTool || isLoadingLoan
+                        ? Container(
+                            height: 20,
+                            width: 20,
+                            child:
+                                CircularProgressIndicator(color: Colors.white))
+                        : Text(
+                            "Submit Data",
+                            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                          )),
               ),
-            ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

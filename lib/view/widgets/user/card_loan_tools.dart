@@ -41,9 +41,8 @@ class _CardLoanToolsState extends State<CardLoanTools> {
     bool light = (widget.status == 'Dipinjam');
     bool isCompleted = (widget.status == 'Dipinjam') ? false : true;
 
-    String parsedLoanDate = DateFormat('dd-MM-yyyy').format(widget.loanDate);
-    String parsedReturnDate =
-        DateFormat('dd-MM-yyyy').format(widget.loanDateReturn);
+    String parsedLoanDate = DateFormat('dd-MM-yyyy | HH:mm').format(widget.loanDate);
+    String parsedReturnDate = DateFormat('dd-MM-yyyy | HH:mm').format(widget.loanDateReturn);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 class CardLoans extends StatelessWidget {
   final String toolName;
   final String toolId;
+  final int toolQty;
   final String userName;
   final String userNpk;
   final DateTime loanDate;
@@ -14,6 +15,7 @@ class CardLoans extends StatelessWidget {
       {super.key,
       required this.toolName,
       required this.toolId,
+      required this.toolQty,
       required this.userName,
       required this.userNpk,
       required this.loanDate,
@@ -43,6 +45,10 @@ class CardLoans extends StatelessWidget {
                     toolName,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                   ),
+                ),
+                Text(
+                  'x${toolQty.toString()}',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                 ),
               ],
             ),

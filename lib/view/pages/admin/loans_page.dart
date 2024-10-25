@@ -91,7 +91,7 @@ class _LoansPageState extends State<LoansPage> {
                     userNpk: loanData.userNpk,
                     loanDate: loanData.loanDate,
                     loanReturnDate: loanData.loanDateReturn!,
-                    status: loanData.status,);
+                    status: loanData.status, toolQty: loanData.toolsQty,);
                 },
               ),
             );

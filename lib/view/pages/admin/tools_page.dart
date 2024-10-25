@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:user_painting_tools/models/view%20model/tools_provider.dart';
 import 'package:user_painting_tools/view/pages/admin/add_tools_admin.dart';
+import 'package:user_painting_tools/view/pages/admin/edit_tools_admin.dart';
 import 'package:user_painting_tools/view/widgets/admin/card_tools.dart';
 import 'package:user_painting_tools/view/widgets/admin/top_app_bar_admin.dart';
 import 'package:user_painting_tools/view/widgets/confirmation_box.dart';
@@ -73,8 +74,8 @@ class _ToolsPageState extends State<ToolsPage> {
               ? Center(
                   child: isLoading
                       ? CircularProgressIndicator(
-                    color: const Color(0xff0099FF),
-                  )
+                          color: const Color(0xff0099FF),
+                        )
                       : Text("Tidak ada data alat"))
               : Padding(
                   padding: EdgeInsets.all(20),
@@ -93,13 +94,14 @@ class _ToolsPageState extends State<ToolsPage> {
                                   child: CardTools(
                                     namaAlat: toolData.namaAlat,
                                     idAlat: toolData.idAlat,
-                                    kuantitasAlat: toolData.kuantitasTersediaAlat,
+                                    kuantitasAlat:
+                                        toolData.kuantitasTersediaAlat,
                                     onPressedDelete: () {
                                       return showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
                                           return ConfirmationBox(
-                                            textTitle: "Hapus Akun",
+                                            textTitle: "Hapus Barang",
                                             textDescription:
                                                 "Apakah kamu yakin ingin menghapus data barang ${toolData.idAlat}?",
                                             textConfirm: "Iya",
@@ -119,6 +121,9 @@ class _ToolsPageState extends State<ToolsPage> {
                                           );
                                         },
                                       );
+                                    },
+                                    onPressedEdit: () {
+                                      Get.to(() => const EditToolsAdmin(), arguments: toolData.idAlat);
                                     },
                                   ),
                                 );

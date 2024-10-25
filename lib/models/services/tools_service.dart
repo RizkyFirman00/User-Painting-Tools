@@ -46,10 +46,30 @@ class ToolsServices {
       String idAlat, String namaAlat, int kuantitasAlat) async {
     try {
       DocumentSnapshot doc =
-      await _firestore.collection('tools').doc(idAlat).get();
+          await _firestore.collection('tools').doc(idAlat).get();
       if (doc.exists) {
         await _firestore.collection('tools').doc(idAlat).update({
           'nama_alat': namaAlat,
+        });
+        _simpleLogger.info("Tool $namaAlat berhasil diperbarui.");
+      } else {
+        throw Exception("Tool tidak ditemukan.");
+      }
+    } catch (e) {
+      _simpleLogger.severe("Error updating tool in Firestore: ${e.toString()}");
+    }
+  }
+
+  Future<void> updateToolInFirestoreWithNewQty(String idAlat, String namaAlat,
+      int kuantitasAlatBaru, int kuantitasAlatTersediaBaru) async {
+    try {
+      DocumentSnapshot doc =
+          await _firestore.collection('tools').doc(idAlat).get();
+      if (doc.exists) {
+        await _firestore.collection('tools').doc(idAlat).update({
+          'nama_alat': namaAlat,
+          'kuantitas_alat': kuantitasAlatBaru,
+          'kuantitas_alat_tersedia': kuantitasAlatTersediaBaru,
         });
         _simpleLogger.info("Tool $namaAlat berhasil diperbarui.");
       } else {
@@ -91,8 +111,7 @@ class ToolsServices {
         await querySnapshot.docs.first.reference.delete();
         _simpleLogger.info('User deleted from Firestore: $idAlat');
       }
-
-    } catch(e) {
+    } catch (e) {
       _simpleLogger.severe('Error deleting user: $e');
     }
   }
