@@ -49,7 +49,6 @@ class _CardUsersState extends State<CardUsers> {
                 ),
                 Text(
                   widget.npkUser,
-                  overflow: TextOverflow.clip,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 14,

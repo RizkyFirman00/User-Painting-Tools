@@ -183,12 +183,10 @@ class _CardToolsState extends State<CardTools> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(right: 10),
-                          child: Flexible(
-                            child: Text(
-                              widget.idAlat,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 12),
-                            ),
+                          child: Text(
+                            widget.idAlat,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 12),
                           ),
                         ),
                       ],
@@ -202,14 +200,12 @@ class _CardToolsState extends State<CardTools> {
                         const Text("Nama Alat: "),
                         Padding(
                           padding: const EdgeInsets.only(right: 10),
-                          child: Flexible(
-                            child: Text(
-                              widget.namaAlat,
-                              overflow: TextOverflow.clip,
-                              maxLines: 2,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold),
-                            ),
+                          child: Text(
+                            widget.namaAlat,
+                            overflow: TextOverflow.clip,
+                            maxLines: 2,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold),
                           ),
                         ),
                       ],

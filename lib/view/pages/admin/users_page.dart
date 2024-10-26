@@ -19,8 +19,10 @@ class _UsersPageState extends State<UsersPage> {
 
   @override
   void initState() {
-    Provider.of<UsersProvider>(context, listen: false).fetchUsers();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<UsersProvider>(context, listen: false).fetchUsers();
+    });
   }
 
   @override
