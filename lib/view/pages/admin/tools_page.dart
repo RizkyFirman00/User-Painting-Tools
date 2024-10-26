@@ -20,8 +20,8 @@ class _ToolsPageState extends State<ToolsPage> {
 
   @override
   void initState() {
-    super.initState();
     Provider.of<ToolsProvider>(context, listen: false).fetchTools();
+    super.initState();
   }
 
   @override
@@ -48,16 +48,16 @@ class _ToolsPageState extends State<ToolsPage> {
                   color: Colors.grey.withOpacity(0.5),
                   spreadRadius: 1,
                   blurRadius: 3,
-                  offset: Offset(0, 3),
+                  offset: const Offset(0, 3),
                 ),
               ],
             ),
             child: IconButton(
               onPressed: () async {
-                await Get.to(() => AddToolsAdmin());
+                await Get.to(() => const AddToolsAdmin());
                 toolsProvider.fetchTools();
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.add,
                 color: Colors.white,
               ),
@@ -68,21 +68,20 @@ class _ToolsPageState extends State<ToolsPage> {
             builder: (BuildContext context, toolsProvider, child) {
           final listTools = toolsProvider.listTools;
           final isLoading = toolsProvider.isLoading;
-
           bool isThereQuery = toolsProvider.filteredUser.isEmpty;
           return isThereQuery
               ? Center(
                   child: isLoading
-                      ? CircularProgressIndicator(
-                          color: const Color(0xff0099FF),
+                      ? const CircularProgressIndicator(
+                          color: Color(0xff0099FF),
                         )
-                      : Text("Tidak ada data alat"))
+                      : const Text("Tidak ada data alat"))
               : Padding(
                   padding: EdgeInsets.all(20),
                   child: listTools.isEmpty && toolsProvider.isLoading
-                      ? Center(child: CircularProgressIndicator())
+                      ? const Center(child: CircularProgressIndicator())
                       : listTools.isEmpty
-                          ? Center(child: Text('Tidak ada data barang'))
+                          ? const Center(child: Text('Tidak ada data barang'))
                           : ListView.builder(
                               itemCount: listTools.length,
                               physics: const BouncingScrollPhysics(),
@@ -123,7 +122,8 @@ class _ToolsPageState extends State<ToolsPage> {
                                       );
                                     },
                                     onPressedEdit: () {
-                                      Get.to(() => const EditToolsAdmin(), arguments: toolData.idAlat);
+                                      Get.to(() => const EditToolsAdmin(),
+                                          arguments: toolData.idAlat);
                                     },
                                   ),
                                 );

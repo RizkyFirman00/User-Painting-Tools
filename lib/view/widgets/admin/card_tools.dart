@@ -170,62 +170,60 @@ class _CardToolsState extends State<CardTools> {
             firstChild: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "ID Alat: ",
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: Text(
-                                widget.idAlat,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 12),
-                              ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "ID Alat: ",
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: Flexible(
+                            child: Text(
+                              widget.idAlat,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 12),
                             ),
                           ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("Nama Alat: "),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: Text(
-                                widget.namaAlat,
-                                overflow: TextOverflow.clip,
-                                maxLines: 2,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Nama Alat: "),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: Flexible(
+                            child: Text(
+                              widget.namaAlat,
+                              overflow: TextOverflow.clip,
+                              maxLines: 2,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          const Text("Quantity: "),
-                          Text(
-                            widget.kuantitasAlat.toString(),
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Text("Quantity: "),
+                        Text(
+                          widget.kuantitasAlat.toString(),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
                 InkWell(
                   onTap: () {
@@ -240,19 +238,17 @@ class _CardToolsState extends State<CardTools> {
                       borderRadius: BorderRadius.circular(15),
                       color: lightBlue,
                     ),
-                    child: Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(Icons.qr_code_outlined, color: Colors.white),
-                          Text(
-                            "QR Code",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
-                        ],
-                      ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.qr_code_outlined, color: Colors.white),
+                        Text(
+                          "QR Code",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ],
                     ),
                   ),
                 ),

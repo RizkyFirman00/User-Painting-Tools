@@ -98,15 +98,9 @@ class _LoansToolsState extends State<LoansTools> {
             child: Consumer<LoansProvider>(
                 builder: (BuildContext context, loanProvider, child) {
               final listLoans = loanProvider.loansUserList;
-              final isLoading = loanProvider.isLoading;
-              return isLoading
-                  ? Center(
-                      child: CircularProgressIndicator(
-                        color: Color(0xFFDF042C),
-                      ),
-                    )
-                  : listLoans.isEmpty
-                      ? Center(child: Text('Tidak ada barang yang dipinjam'))
+
+              return listLoans.isEmpty
+                      ? Center(child: Text('Tidak ada barang yang dipinjam', style: TextStyle(fontWeight: FontWeight.bold),))
                       : ListView.builder(
                           itemCount: listLoans.length,
                           itemBuilder: (BuildContext context, int index) {

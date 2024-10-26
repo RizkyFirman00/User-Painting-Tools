@@ -13,17 +13,18 @@ class HomeAdmin extends StatefulWidget {
   State<HomeAdmin> createState() => _HomeAdminState();
 }
 
- void _setStatusBarColor() {
+void _setStatusBarColor() {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Color(0xFF0099FF),
+    statusBarColor: const Color(0xFF0099FF), // Light Blue
   ));
 }
 
 class _HomeAdminState extends State<HomeAdmin> {
   final Color _lightBlue = const Color(0xff0099FF);
   final PersistentTabController _bottomNavBarController =
-      PersistentTabController(initialIndex: 0);
+  PersistentTabController(initialIndex: 0);
 
+  // List of pages to navigate to
   final List<Widget> _screens = [
     const UsersPage(),
     const ToolsPage(),
@@ -38,44 +39,54 @@ class _HomeAdminState extends State<HomeAdmin> {
 
   @override
   Widget build(BuildContext context) {
+    double iconSize = MediaQuery.of(context).size.width * 0.07; // Adjust icon size based on screen width
+    double bottomNavBarHeight = MediaQuery.of(context).orientation == Orientation.portrait
+        ? kBottomNavigationBarHeight
+        : kBottomNavigationBarHeight * 1.5; // Adjust for landscape
+
     return SafeArea(
       child: PersistentTabView(
-        resizeToAvoidBottomInset: false,
         context,
         controller: _bottomNavBarController,
         screens: _screens,
         hideNavigationBarWhenKeyboardAppears: true,
         backgroundColor: Colors.white,
         confineToSafeArea: true,
-        navBarHeight: kBottomNavigationBarHeight,
-        navBarStyle: NavBarStyle.style10,
+        navBarHeight: bottomNavBarHeight, // Adjust nav bar height based on orientation
+        navBarStyle: NavBarStyle.style10, // Customize style as needed
         items: [
           PersistentBottomNavBarItem(
-            icon: const Icon(Icons.person),
+            icon: Icon(Icons.person, size: iconSize), // Use relative size for icons
             title: 'Pengguna',
             activeColorPrimary: _lightBlue,
             activeColorSecondary: CupertinoColors.white,
             inactiveColorPrimary: CupertinoColors.systemGrey,
-            textStyle:
-                const TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
+            textStyle: TextStyle(
+              fontSize: MediaQuery.of(context).size.width * 0.035, // Responsive text size
+              fontWeight: FontWeight.w400,
+            ),
           ),
           PersistentBottomNavBarItem(
-            icon: const Icon(Icons.inventory_2),
+            icon: Icon(Icons.inventory_2, size: iconSize),
             title: 'Barang',
             activeColorPrimary: _lightBlue,
             activeColorSecondary: CupertinoColors.white,
             inactiveColorPrimary: CupertinoColors.systemGrey,
-            textStyle:
-                const TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
+            textStyle: TextStyle(
+              fontSize: MediaQuery.of(context).size.width * 0.035,
+              fontWeight: FontWeight.w400,
+            ),
           ),
           PersistentBottomNavBarItem(
-            icon: const Icon(Icons.loop),
+            icon: Icon(Icons.loop, size: iconSize),
             title: 'Peminjaman',
             activeColorPrimary: _lightBlue,
             activeColorSecondary: CupertinoColors.white,
             inactiveColorPrimary: CupertinoColors.systemGrey,
-            textStyle:
-                const TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
+            textStyle: TextStyle(
+              fontSize: MediaQuery.of(context).size.width * 0.035,
+              fontWeight: FontWeight.w400,
+            ),
           ),
         ],
       ),

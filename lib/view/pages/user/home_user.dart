@@ -13,21 +13,26 @@ class HomeUser extends StatefulWidget {
   State<HomeUser> createState() => _HomeUserState();
 }
 
-Future<void> _setStatusBarColor() async {
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Color(0xFFDF042C),
-  ));
-}
-
 class _HomeUserState extends State<HomeUser> {
-
   int _selectedPage = 0;
-  
+
   final List<Widget> _pages = [
     const AvailTools(),
     const PhotoQrUser(),
     const LoansTools(),
   ];
+
+  @override
+  void initState() {
+    _setStatusBarColor();
+    super.initState();
+  }
+
+  Future<void> _setStatusBarColor() async {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Color(0xFFDF042C),
+    ));
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -36,14 +41,7 @@ class _HomeUserState extends State<HomeUser> {
   }
 
   @override
-  void initState() {
-    _setStatusBarColor();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    _setStatusBarColor();
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -73,7 +71,7 @@ class _HomeUserState extends State<HomeUser> {
           backgroundColor: const Color(0xFFDF042C),
         ),
         bottomNavigationBar: Container(
-          height: 60,
+          height: MediaQuery.of(context).size.height * 0.1,
           decoration: const BoxDecoration(
             color: Color(0xffDF042C),
             borderRadius: BorderRadius.only(
@@ -93,17 +91,21 @@ class _HomeUserState extends State<HomeUser> {
                       onPressed: () {
                         _onItemTapped(0);
                       },
-                      icon: const Column(
+                      icon: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Icon(
                             Icons.inventory_2_outlined,
-                            color: Colors.white,
+                            color: _selectedPage == 0
+                                ? Colors.white
+                                : Colors.white70,
                           ),
                           Text(
                             'Persediaan',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: _selectedPage == 0
+                                  ? Colors.white
+                                  : Colors.white70,
                               fontSize: 10,
                               fontWeight: FontWeight.w500,
                             ),
@@ -113,34 +115,30 @@ class _HomeUserState extends State<HomeUser> {
                     ),
                   ),
                   Expanded(
-                    child: Container(
-                      clipBehavior: Clip.hardEdge,
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(100),
-                              topRight: Radius.circular(20))),
-                      child: IconButton(
-                        splashRadius: 20,
-                        onPressed: () {
-                          _onItemTapped(2);
-                        },
-                        icon: const Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(
-                              Icons.repeat_outlined,
-                              color: Colors.white,
+                    child: IconButton(
+                      onPressed: () {
+                        _onItemTapped(2);
+                      },
+                      icon: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(
+                            Icons.repeat_outlined,
+                            color: _selectedPage == 2
+                                ? Colors.white
+                                : Colors.white70,
+                          ),
+                          Text(
+                            'Pengembalian',
+                            style: TextStyle(
+                              color: _selectedPage == 2
+                                  ? Colors.white
+                                  : Colors.white70,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w500,
                             ),
-                            Text(
-                              'Pengembalian',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 10,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -190,8 +188,9 @@ class _HomeUserState extends State<HomeUser> {
           ),
         ),
         body: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: _pages[_selectedPage]),
+          height: MediaQuery.of(context).size.height,
+          child: _pages[_selectedPage],
+        ),
       ),
     );
   }

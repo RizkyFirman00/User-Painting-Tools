@@ -77,8 +77,8 @@ class _FillingDataUserState extends State<FillingDataUser> {
 
     if (toolsQty > 0 && loanDate.isNotEmpty && returnDate.isNotEmpty) {
       try {
-        DateTime parsedLoanDate = DateFormat('dd-MM-yyyy').parse(loanDate);
-        DateTime parsedReturnDate = DateFormat('dd-MM-yyyy').parse(returnDate);
+        DateTime parsedLoanDate = DateFormat('dd-MM-yyyy | HH:mm').parse(loanDate);
+        DateTime parsedReturnDate = DateFormat('dd-MM-yyyy | HH:mm').parse(returnDate);
 
         final loan = Loans(
           toolId: toolsId,
@@ -138,6 +138,8 @@ class _FillingDataUserState extends State<FillingDataUser> {
     final isLoadingLoan =
         Provider.of<LoansProvider>(context, listen: true).isLoading;
 
+    final loading = isLoadingUser || isLoadingTool || isLoadingLoan;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -182,7 +184,7 @@ class _FillingDataUserState extends State<FillingDataUser> {
                   const SizedBox(height: 10),
                   TextFormField(
                     controller: toolsQtyController,
-                    enabled: !isLoadingUser || !isLoadingTool || !isLoadingLoan,
+                    enabled: !loading,
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -225,7 +227,7 @@ class _FillingDataUserState extends State<FillingDataUser> {
                   TextFormField(
                     controller: loanDateController,
                     readOnly: true,
-                    enabled: !isLoadingUser || !isLoadingTool || !isLoadingLoan,
+                    enabled: !loading,
                     onTap: () async {
                       DateTime? pickedDate = await showDatePicker(
                         context: context,
@@ -268,7 +270,7 @@ class _FillingDataUserState extends State<FillingDataUser> {
                   const SizedBox(height: 10),
                   TextFormField(
                     controller: loanDateReturnController,
-                    enabled: !isLoadingUser || !isLoadingTool || !isLoadingLoan,
+                    enabled: !loading,
                     readOnly: true,
                     onTap: () async {
                       DateTime? pickedDate = await showDatePicker(
@@ -316,18 +318,17 @@ class _FillingDataUserState extends State<FillingDataUser> {
                 child: ElevatedButton(
                     style: ButtonStyle(
                       foregroundColor: WidgetStateProperty.all(Colors.white),
-                      backgroundColor:
-                          WidgetStateProperty.all(Color(0xffDF042C)),
+                      backgroundColor: loading ? WidgetStateProperty.all(Colors.grey) : WidgetStateProperty.all(Color(0xffDF042C)),
                       shape: WidgetStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
                         ),
                       ),
                     ),
-                    onPressed: isLoadingUser || isLoadingTool || isLoadingLoan
+                    onPressed: loading
                         ? null
                         : _submitLoan,
-                    child: isLoadingUser || isLoadingTool || isLoadingLoan
+                    child: loading
                         ? Container(
                             height: 20,
                             width: 20,

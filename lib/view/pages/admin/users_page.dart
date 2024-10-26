@@ -19,8 +19,8 @@ class _UsersPageState extends State<UsersPage> {
 
   @override
   void initState() {
-    super.initState();
     Provider.of<UsersProvider>(context, listen: false).fetchUsers();
+    super.initState();
   }
 
   @override
@@ -72,7 +72,7 @@ class _UsersPageState extends State<UsersPage> {
           return isThereQuery
               ? Center(
                   child: isLoading
-                      ? CircularProgressIndicator()
+                      ? CircularProgressIndicator(color: Color(0xff0099FF))
                       : Text("Alat tidak ada"))
               : Padding(
                   padding: const EdgeInsets.all(20),
@@ -83,8 +83,7 @@ class _UsersPageState extends State<UsersPage> {
                           : GridView.builder(
                               itemCount: listUsers.length,
                               physics: const BouncingScrollPhysics(),
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
                                 childAspectRatio: 1,
                               ),

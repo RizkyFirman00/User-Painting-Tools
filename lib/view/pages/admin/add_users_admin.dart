@@ -86,9 +86,14 @@ class AddUsersAdmin extends StatelessWidget {
                           Get.snackbar('Gagal',
                               'Password tidak boleh kurang dari 6 karakter');
                         } else {
-                          await userProvider.addUser(npkController.text, passwordController.text);
-                          Get.snackbar(
-                              'Sukses', 'Berhasil menambahkan user baru');
+                          if(userProvider.statusMessage == 'User Berhasil Ditambahkan') {
+                            await userProvider.addUser(npkController.text, passwordController.text);
+                            Get.snackbar(
+                                'Sukses', 'Berhasil menambahkan user baru');
+                          } else {
+                            Get.snackbar('Gagal',
+                                'User sudah terdaftar di database, silahkan ganti NPK');
+                          }
                         }
                       },
                 style: ElevatedButton.styleFrom(

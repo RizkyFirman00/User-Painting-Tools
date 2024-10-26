@@ -19,13 +19,22 @@ class _AvailToolsState extends State<AvailTools> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final screenHeight = mediaQuery.size.height;
+    final screenWidth = mediaQuery.size.width;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 30, right: 30, top: 35),
-          child: Text(
+        Padding(
+          padding: EdgeInsets.only(
+            left: screenWidth * 0.08,
+            right: screenWidth * 0.08,
+            top: screenHeight * 0.04,
+            // bottom: screenHeight * 0.04,
+          ),
+          child: const Text(
             "Barang yang tersedia :",
             style: TextStyle(
               color: Colors.black,
@@ -33,36 +42,42 @@ class _AvailToolsState extends State<AvailTools> {
             ),
           ),
         ),
-        Container(
-          padding: EdgeInsets.only(left: 30, right: 30, top: 10),
-          height: MediaQuery.of(context).size.height - 208,
-          child: Expanded(
+
+        Expanded(
+          child: Container(
+            padding: EdgeInsets.only(
+              left: screenWidth * 0.08,
+              right: screenWidth * 0.08,
+              top: screenHeight * 0.015,
+            ),
+            height: screenHeight - (screenHeight * 0.2),
             child: Consumer<ToolsProvider>(
               builder: (BuildContext context, toolsProvider, child) {
                 final listTools = toolsProvider.listTools;
                 final isLoading = toolsProvider.isLoading;
+          
                 return isLoading
-                    ? Center(
-                        child: CircularProgressIndicator(
-                          color: Color(0xFFDF042C),
-                        ),
-                      )
+                    ? const Center(
+                  child: CircularProgressIndicator(
+                    color: Color(0xFFDF042C),
+                  ),
+                )
                     : listTools.isEmpty
-                        ? Center(child: Text('Tidak ada data barang'))
-                        : ListView.builder(
-                            itemCount: listTools.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              final toolData = listTools[index];
-                              return Padding(
-                                padding: EdgeInsets.only(bottom: 10),
-                                child: CardAvailTools(
-                                  nameTools: toolData.namaAlat,
-                                  idTools: toolData.idAlat,
-                                  qtyTools: toolData.kuantitasTersediaAlat,
-                                ),
-                              );
-                            },
-                          );
+                    ? const Center(child: Text('Tidak ada data barang'))
+                    : ListView.builder(
+                  itemCount: listTools.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final toolData = listTools[index];
+                    return Padding(
+                      padding: EdgeInsets.only(bottom: screenHeight * 0.005),
+                      child: CardAvailTools(
+                        nameTools: toolData.namaAlat,
+                        idTools: toolData.idAlat,
+                        qtyTools: toolData.kuantitasTersediaAlat,
+                      ),
+                    );
+                  },
+                );
               },
             ),
           ),

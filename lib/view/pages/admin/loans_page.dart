@@ -32,29 +32,29 @@ class _LoansPageState extends State<LoansPage> {
           centerTitle: true,
           title: isSearchIconPressed
               ? Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: Container(
-              height: 40,
-              decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
-              child: TextField(
-                controller: searchController,
-                onChanged: (value) {
-                  loanProvider.filterLoans(value);
-                },
-                decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.fromLTRB(16, 20, 16, 8),
-                    border: InputBorder.none,
-                    hintText: "Cari NPK User..."),
-              ),
-            ),
-          )
-              : Text(
-            "Daftar Peminjaman Barang",
-            style: const TextStyle(
-                fontSize: 14, fontWeight: FontWeight.w600),
-          ),
+                  padding: const EdgeInsets.only(right: 20),
+                  child: Container(
+                    height: 40,
+                    decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    child: TextField(
+                      controller: searchController,
+                      onChanged: (value) {
+                        loanProvider.filterLoans(value);
+                      },
+                      decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.fromLTRB(16, 20, 16, 8),
+                          border: InputBorder.none,
+                          hintText: "Cari NPK User..."),
+                    ),
+                  ),
+                )
+              : const Text(
+                  "Daftar Peminjaman Barang",
+                  style: TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.w600),
+                ),
           leading: Padding(
             padding: const EdgeInsets.only(left: 10.0),
             child: IconButton(
@@ -64,8 +64,8 @@ class _LoansPageState extends State<LoansPage> {
                   });
                 },
                 icon: isSearchIconPressed
-                    ? Icon(Icons.clear)
-                    : Icon(Icons.search)),
+                    ? const Icon(Icons.clear)
+                    : const Icon(Icons.search)),
           ),
         ),
         body: Consumer<LoansProvider>(
@@ -75,25 +75,27 @@ class _LoansPageState extends State<LoansPage> {
             return Padding(
               padding: const EdgeInsets.all(20),
               child: isLoading
-                  ? Center(child: CircularProgressIndicator())
+                  ? const Center(child: CircularProgressIndicator())
                   : listLoans.isEmpty
-                  ? Center(child: Text('Tidak ada barang yang dipinjam'))
-                  : ListView.builder(
-                itemCount: listLoans.length,
-                physics: const BouncingScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (BuildContext context, int index) {
-                  final loanData = listLoans[index];
-                  return CardLoans(
-                    toolName: loanData.userNpk,
-                    toolId: loanData.toolId,
-                    userName: loanData.userName,
-                    userNpk: loanData.userNpk,
-                    loanDate: loanData.loanDate,
-                    loanReturnDate: loanData.loanDateReturn!,
-                    status: loanData.status, toolQty: loanData.toolsQty,);
-                },
-              ),
+                      ? const Center(child: Text('Tidak ada barang yang dipinjam'))
+                      : ListView.builder(
+                          itemCount: listLoans.length,
+                          physics: const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (BuildContext context, int index) {
+                            final loanData = listLoans[index];
+                            return CardLoans(
+                              toolName: loanData.userNpk,
+                              toolId: loanData.toolId,
+                              userName: loanData.userName,
+                              userNpk: loanData.userNpk,
+                              loanDate: loanData.loanDate,
+                              loanReturnDate: loanData.loanDateReturn!,
+                              status: loanData.status,
+                              toolQty: loanData.toolsQty,
+                            );
+                          },
+                        ),
             );
           },
         ),

@@ -34,14 +34,14 @@ class _CardUsersState extends State<CardUsers> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 15),
           child: AnimatedCrossFade(
-            duration: Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             firstChild: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "Email: ",
+                const Text(
+                  "NPK: ",
                   style: TextStyle(
                     fontWeight: FontWeight.w300,
                     fontSize: 14,
@@ -50,34 +50,32 @@ class _CardUsersState extends State<CardUsers> {
                 Text(
                   widget.npkUser,
                   overflow: TextOverflow.clip,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                Text(
-                  "NPK: ",
+                const Text(
+                  "Password: ",
                   style: TextStyle(
                     fontWeight: FontWeight.w300,
                     fontSize: 14,
                   ),
                 ),
-                Expanded(
-                  child: Text(
-                    widget.passwordUser,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                    ),
+                Text(
+                  widget.passwordUser,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
                   ),
                 ),
               ],
             ),
             secondChild: ConstrainedBox(
-              constraints: BoxConstraints(
+              constraints: const BoxConstraints(
                 maxHeight: 100,
               ),
               child: Center(
@@ -93,13 +91,13 @@ class _CardUsersState extends State<CardUsers> {
                           });
                         });
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.delete,
                         size: 40,
                         color: Colors.red,
                       ),
                     ),
-                    Text(
+                    const Text(
                       "Delete",
                       style: TextStyle(
                           fontSize: 18, fontWeight: FontWeight.bold),

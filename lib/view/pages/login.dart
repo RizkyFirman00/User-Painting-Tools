@@ -43,7 +43,8 @@ class _LoginState extends State<Login> {
     }
 
     if (password.length < 6) {
-      Get.snackbar('Perhatikan lagi', 'Password tidak boleh kurang dari 6 karakter');
+      Get.snackbar(
+          'Perhatikan lagi', 'Password tidak boleh kurang dari 6 karakter');
       return;
     }
 
@@ -110,7 +111,6 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-
     final userProvider = Provider.of<UsersProvider>(context, listen: true);
     final isLoading = userProvider.isLoading;
 
@@ -183,7 +183,8 @@ class _LoginState extends State<Login> {
                                 child: IconButton(
                                   onPressed: () {
                                     setState(() {
-                                      isPasswordVisiblePressed = !isPasswordVisiblePressed;
+                                      isPasswordVisiblePressed =
+                                          !isPasswordVisiblePressed;
                                     });
                                   },
                                   icon: isPasswordVisiblePressed
@@ -213,9 +214,11 @@ class _LoginState extends State<Login> {
                             height: 50,
                           ),
                           ElevatedButton(
-                            onPressed: () {
-                              _login(context);
-                            },
+                            onPressed: isLoading
+                                ? null
+                                : () {
+                                    _login(context);
+                                  },
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.white,
                               backgroundColor: const Color(0xffDF042C),

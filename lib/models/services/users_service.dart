@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+import 'package:get/get_common/get_reset.dart';
 import 'package:simple_logger/simple_logger.dart';
 import 'package:user_painting_tools/models/users.dart';
 
@@ -6,19 +8,27 @@ class UsersServices {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final SimpleLogger _simpleLogger = SimpleLogger();
 
-  Future<void> addDataUserToFirestore(String npkUser, String passwordUser) async {
+  Future<bool> addDataUserToFirestore(String npkUser, String passwordUser) async {
     try {
-      await _firestore.collection('users').add({
-        'npk': npkUser,
-        'password': passwordUser,
-        'isAdmin': false,
-      });
+      Users? isNpkRegistered = await getUserByNpk(npkUser);
+      if (isNpkRegistered != null) {
+        await _firestore.collection('users').add({
+          'npk': npkUser,
+          'password': passwordUser,
+          'isAdmin': false,
+        });
+        return true;
+      } else {
+        print("User sudah terdaftar di database");
+        return false;
+      }
     } catch (e) {
       _simpleLogger.severe("Error adding user to Firestore: ${e.toString()}");
+      return false;
     }
   }
 
-  Future<Users> getUserByNpk(String npk) async {
+  Future<Users?> getUserByNpk(String npk) async {
     try {
       QuerySnapshot snapshot = await _firestore
           .collection('users')

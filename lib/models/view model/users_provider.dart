@@ -23,6 +23,9 @@ class UsersProvider with ChangeNotifier {
   List<Users?> _filteredUsers = [];
   List<Users?> get filteredUser => _filteredUsers;
 
+  String get statusMessage => _statusMessage;
+  String _statusMessage = '';
+
   final SimpleLogger _simpleLogger = SimpleLogger();
 
   void _setLoading(bool value) {
@@ -34,7 +37,7 @@ class UsersProvider with ChangeNotifier {
     if (query.isNotEmpty) {
       _filteredUsers = _listUsers
           .where((user) =>
-          user!.npkUser.toLowerCase().contains(query.toLowerCase()))
+          user.npkUser.toLowerCase().contains(query.toLowerCase()))
           .toList();
     } else {
       _filteredUsers = _listUsers;
@@ -48,6 +51,7 @@ class UsersProvider with ChangeNotifier {
     try {
       _listUsers = await _usersServices.fetchAllUsers();
       _filteredUsers = _listUsers;
+      _simpleLogger.info('Fetch Users Success: ${_listUsers.length} users fetched');
       notifyListeners();
     } catch (e) {
       _simpleLogger.info(e);
@@ -59,9 +63,9 @@ class UsersProvider with ChangeNotifier {
   Future<bool> loginUser(String npkUser, String passwordUser) async {
     _setLoading(true);
     try {
-      Users user = await _usersServices.getUserByNpk(npkUser);
+      Users? user = await _usersServices.getUserByNpk(npkUser);
 
-      if (user.passwordUser == passwordUser) {
+      if (user?.passwordUser == passwordUser) {
         _currentUser = user;
 
         await SharedPreferencesUsers.saveLoginData(
@@ -145,7 +149,8 @@ class UsersProvider with ChangeNotifier {
     _setLoading(true);
     try {
       if (npkUser.isNotEmpty && passwordUser.isNotEmpty) {
-        await _usersServices.addDataUserToFirestore(npkUser, passwordUser);
+        bool success =  await _usersServices.addDataUserToFirestore(npkUser, passwordUser);
+        _statusMessage = success ? "User Berhasil Ditambahkan" : "User sudah terdaftar di database.";
       }
     } catch (e) {
       _simpleLogger.info("Gagal menambah user: ${e.toString()}");
