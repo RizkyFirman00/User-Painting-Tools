@@ -32,6 +32,7 @@ class _UsersPageState extends State<UsersPage> {
       child: Scaffold(
         appBar: TopAppBarAdmin(
           title: "Halaman Pengguna",
+          subTitle: "Pengguna",
           onSearchChanged: (query) {
             userProvider.filterUsers(query);
           },

@@ -31,6 +31,7 @@ class _ToolsPageState extends State<ToolsPage> {
       child: Scaffold(
         appBar: TopAppBarAdmin(
           title: "Halaman Alat",
+          subTitle: "Barang",
           onSearchChanged: (query) {
             toolsProvider.filterTools(query);
           },
